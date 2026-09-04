@@ -2,7 +2,7 @@
   "name": "Budget Planner",
   "short_name": "Budget",
   "description": "A private, low-friction budget and expense planner.",
-  "start_url": "./budget_planner_mobile_app_ready(2)(1).html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#F7F5F1",
