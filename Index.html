@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F7F5F1"/>
+<meta name="google-client-id" content=""/>
+<meta name="microsoft-client-id" content=""/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
+<title>Budget Planner</title>
+<style>
+:root{
+ --blush:#F9C8C2; --rose:#C69491; --sage:#96ACA0;
+ --blue:#7D9094; --olive:#60665A; --ivory:#F7F5F1;
+ --white:#FFFFFF; --ink:#4F554D; --muted:#7B827B; --line:#DDE2DD;
+ --shadow:0 14px 35px rgba(96,102,90,.10);
+}
+*{box-sizing:border-box}
+body{
+ margin:0;color:var(--ink);
+ background:
+   radial-gradient(circle at 8% 12%,rgba(249,200,194,.45),transparent 20%),
+   radial-gradient(circle at 92% 22%,rgba(150,172,160,.30),transparent 23%),
+   radial-gradient(circle at 15% 82%,rgba(198,148,145,.16),transparent 18%),
+   var(--ivory);
+ font-family:"Century Gothic","Avenir Next",Arial,sans-serif;
+}
+.app{width:100%;max-width:1180px;margin:auto;min-height:100vh;padding:calc(18px + env(safe-area-inset-top)) clamp(16px,3vw,36px) calc(104px + env(safe-area-inset-bottom))}
+.screen{display:none}.screen.active{display:block}
+.brand{font-family:"Segoe UI",Arial,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.17em;font-weight:700;color:var(--blue)}
+h1,h2,h3,.home-title{font-family:"Segoe UI",Arial,sans-serif}
+h1{font-size:34px;line-height:1.05;margin:8px 0;letter-spacing:-.035em}
+h2{font-size:27px;line-height:1.08;margin:4px 0;letter-spacing:-.025em}
+h3{font-size:17px;margin:0}
+p{color:var(--muted);line-height:1.5}
+.hero{margin:18px 0 22px;padding:26px;border-radius:30px;background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(249,200,194,.60));border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow)}
+.grid{display:grid;gap:13px}
+.mainbtn{border:0;border-radius:22px;padding:19px 18px;text-align:left;font-weight:900;font-size:17px;color:#fff;background:var(--olive);box-shadow:var(--shadow)}
+.mainbtn.sage{background:var(--sage)} .mainbtn.blue{background:var(--blue)}
+.mainbtn span{font-size:21px;margin-right:9px}
+
+/* Main page — warm editorial dashboard inspired by the supplied reference. */
+#home.active{max-width:430px;min-height:calc(100vh - 122px);margin:0 auto;padding:8px 12px 18px;border-radius:28px;background-image:linear-gradient(rgba(255,255,255,.18),rgba(255,255,255,.18)),url('ff1277350113b895c3e20ad27f01a362.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
+.home-masthead{position:relative;padding:20px 10px 8px}
+.home-title{font-size:35px;line-height:1.08;font-weight:400;letter-spacing:.005em;color:#202521}
+.home-tagline{margin:7px 0 0;font-family:"Century Gothic",Arial,sans-serif;font-size:15px;font-style:italic;color:#7B8177}
+.home-welcome{text-align:center;margin:27px 0 24px}
+.home-greeting{font-family:"Segoe Script","Snell Roundhand","Brush Script MT",cursive;font-size:35px;line-height:1.15;font-weight:400;color:#3E4740}
+.home-sun{color:#F19A48;font-family:"Century Gothic",Arial,sans-serif;font-size:27px;vertical-align:2px;margin-left:4px}
+.home-quote{max-width:360px;margin:8px auto 0;font-family:"Segoe Script","Snell Roundhand","Brush Script MT",cursive;font-size:20px;line-height:1.35;color:#D96F73}
+.home-month-card{overflow:hidden;margin:0 0 14px;background:rgba(255,255,255,.55);border:1px solid #D4D8D3;border-radius:15px;box-shadow:0 3px 10px rgba(96,102,90,.035)}
+.home-month-row{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid #E1E3DF}
+.home-calendar{font-size:19px;color:#4F554D}
+.home-summary-selectors{display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:8px;flex:1}
+#homeMonth,#homeYear{width:100%;height:auto;padding:4px 2px;border:0;border-radius:0;background:transparent;font-weight:800;box-shadow:none}
+.home-kpis{padding:7px 15px 10px}
+.home-kpi{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:16px;color:#202521}
+.home-kpi.remaining{margin-top:4px;padding-top:12px;border-top:1px solid #D8DBD6}
+.home-kpi strong{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
+.home-kpi.remaining strong{color:#287746}
+.home-nav{display:grid;gap:11px}
+.home-nav-card{display:grid;grid-template-columns:76px 1fr 22px;align-items:center;gap:14px;min-height:96px;width:100%;padding:13px 18px 13px 13px;border:0;border-radius:22px;text-align:left;color:#202521;box-shadow:0 8px 18px rgba(96,102,90,.08);cursor:pointer}
+.home-nav-card.expense{background:linear-gradient(110deg,#F8C9C7,#F5D3D1)}
+.home-nav-card.analytics{background:linear-gradient(110deg,#A9C1B4,#B9CCBF)}
+.home-nav-card.setup{background:linear-gradient(110deg,#94AABD,#AABAC8)}
+.home-nav-icon{width:64px;height:64px;display:grid;place-items:center;border-radius:50%;background:#FFFDF9;color:#657163}
+.home-nav-icon svg{width:31px;height:31px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.home-nav-copy strong{display:block;font-size:19px;line-height:1.15}
+.home-nav-copy small{display:block;margin-top:3px;font-size:13px;line-height:1.35;color:inherit;font-weight:700}
+.home-nav-card.analytics .home-nav-copy,.home-nav-card.setup .home-nav-copy{color:#fff}
+.home-chevron{font-size:34px;font-weight:300;color:currentColor;line-height:1}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid rgba(96,102,90,.12)}
+.back{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.9);color:var(--olive);font-size:22px;font-weight:900;box-shadow:0 5px 14px rgba(96,102,90,.07)}
+.card{background:rgba(255,255,255,.78);border:1px solid rgba(96,102,90,.18);border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 7px 22px rgba(96,102,90,.055)}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.actions button{border:0;background:transparent;color:var(--rose);font-size:18px;font-weight:900}
+label{display:block;margin:12px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:var(--blue)}
+input,select{width:100%;border:1px solid var(--line);background:#FFFDFB;color:var(--ink);padding:13px;border-radius:14px;font:inherit;font-size:15px;outline:none}
+input:focus,select:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(150,172,160,.13)}
+.month-card{background:linear-gradient(145deg,#fff,#F7FBF8);border:1px solid rgba(150,172,160,.34);border-radius:20px;padding:15px;margin-bottom:14px}
+.month-card label{margin-top:0}
+.category-name{border:0;background:transparent;padding:2px 0;font-size:18px;font-weight:900}
+.itemrow{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(110px,1fr) 42px;gap:8px;margin:8px 0}
+.itemrow input,.itemrow select{font-size:14px;padding:10px 11px}
+.remove{border:0;border-radius:12px;background:#FAECEA;color:var(--rose);font-weight:900}
+.addline{width:100%;margin-top:8px;padding:10px;border:1px dashed var(--sage);border-radius:13px;background:#F6FAF7;color:var(--olive);font-weight:900}
+.note{padding:12px 14px;border-radius:14px;background:#EDF3EF;color:var(--olive);font-size:12px;margin:10px 0}
+.toolbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(13px + env(safe-area-inset-bottom));width:min(560px,calc(100vw - 28px));display:flex;justify-content:center;gap:12px;padding:10px;background:rgba(250,248,244,.9);backdrop-filter:blur(18px);border:1px solid rgba(96,102,90,.14);border-radius:22px;box-shadow:0 12px 34px rgba(96,102,90,.14);z-index:30}
+.tool{width:48px;height:48px;border:0;border-radius:15px;background:var(--olive);color:#fff;font-size:21px;display:grid;place-items:center}
+.tool.sage{background:var(--sage)} .tool.blue{background:var(--blue)} .tool.rose{background:var(--rose)} .tool:disabled{opacity:.35}
+.table-wrap{overflow:auto;border-radius:18px;box-shadow:0 8px 22px rgba(96,102,90,.06)}
+table{width:100%;border-collapse:collapse;background:#fff;font-size:12px;min-width:620px}
+th,td{padding:10px 8px;border-bottom:1px solid #ECEFEB;text-align:left}
+th{background:var(--olive);color:#fff;position:sticky;top:0}
+td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
+.data-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.data-actions button{border:0;border-radius:15px;padding:12px;font-weight:900}
+.excel-btn{background:var(--blue);color:#fff}.setup-btn{background:var(--sage);color:#fff}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.metric{padding:16px;border-radius:20px;background:#fff;border:1px solid rgba(150,172,160,.25)}
+.metric small{display:block;color:var(--muted);font-weight:700}.metric strong{display:block;font-size:22px;margin-top:4px}
+.chart-card{background:#fff;border-radius:23px;padding:15px;margin:14px 0;box-shadow:0 8px 24px rgba(96,102,90,.07)}
+.chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.legend{font-size:11px;color:var(--muted);text-align:right}.canvas-wrap{position:relative;height:280px}canvas{width:100%;height:100%}
+.segmented{display:flex;background:#EDEFEA;padding:4px;border-radius:14px;margin:12px 0}.segmented button{flex:1;border:0;background:transparent;padding:9px;border-radius:11px;font-weight:900;color:var(--muted)}.segmented button.active{background:#fff;color:var(--olive)}
+
+.expense-welcome{
+ background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(249,200,194,.28));
+ border:1px solid rgba(198,148,145,.20);
+ border-radius:22px;
+ padding:18px 16px;
+ margin:0 0 14px;
+ text-align:center;
+ box-shadow:0 8px 22px rgba(96,102,90,.06)
+}
+.expense-greeting{
+ font-family:"Segoe Script","Snell Roundhand","Brush Script MT",cursive;
+ font-size:38px;
+ line-height:1.05;
+ color:var(--olive);
+ font-weight:400;
+ margin:0 0 4px
+}
+.expense-quote{
+ font-family:"Segoe Script","Snell Roundhand","Brush Script MT",cursive;
+ font-size:21px;
+ line-height:1.25;
+ color:var(--rose);
+ font-weight:400;
+ margin:7px auto 0;
+ max-width:360px
+}
+.expense-form label{margin-top:0}
+.field{
+ display:grid;
+ grid-template-columns:108px minmax(0,1fr);
+ gap:10px;
+ align-items:center;
+ margin:10px 0
+}
+.field label{
+ margin:0;
+ min-height:48px;
+ display:flex;
+ align-items:center
+}
+.field input,.field select{
+ height:48px;
+ min-height:48px;
+ padding:0 13px;
+ border-radius:14px
+}
+.month-card select{height:48px;min-height:48px}
+@media(max-width:390px){
+ .field{grid-template-columns:94px minmax(0,1fr);gap:8px}
+}
+
+@media(max-width:390px){.itemrow{grid-template-columns:minmax(0,1.4fr) minmax(96px,1fr) 40px}.remove{min-height:42px}.metric-grid{grid-template-columns:1fr}}
+
+#entryDateShort{height:48px;min-height:48px}
+
+
+.page-signature{
+  margin-top:28px;
+  padding:10px 0 4px;
+  text-align:center;
+  font-size:9px;
+  line-height:1;
+  letter-spacing:.08em;
+  color:#B8BCB8;
+  font-weight:600;
+  user-select:none;
+}
+
+
+.delete-data-btn{
+ border:0;border-radius:14px;padding:11px 13px;font:inherit;font-weight:800;
+ background:rgba(198,148,145,.14);color:#8E6664;cursor:pointer
+}
+.row-check{width:18px;height:18px;accent-color:#C69491}
+.select-col{width:42px;text-align:center}
+
+/* Responsive editorial-finance layout inspired by the supplied reference. */
+#setup .topbar>div:last-child,#entry .topbar>div:last-child,#analytics .topbar>div:last-child{flex:1;text-align:center;padding-right:44px}
+#setup .topbar .brand,#entry .topbar .brand,#analytics .topbar .brand{display:none}
+#setup h2,#entry h2,#analytics h2{font-size:22px;font-weight:700;letter-spacing:-.015em}
+#setup .month-card{max-width:720px;margin:0 auto 14px;background:transparent;border:0;padding:0;box-shadow:none}
+#setup .month-card p{display:none}
+#setupMonth{background:#fff;border-color:rgba(96,102,90,.22)}
+.setup-actions{max-width:720px;margin:0 auto 12px;display:flex;justify-content:flex-end}
+.duplicate-trigger{border:1px solid rgba(96,102,90,.2);background:#fff;color:var(--olive);border-radius:14px;padding:11px 14px;font:inherit;font-size:14px;font-weight:800;box-shadow:0 5px 14px rgba(96,102,90,.05)}
+.duplicate-trigger[aria-expanded="true"]{background:#FBE8E5;color:#9B6664;border-color:#F0C8C3}
+#duplicatePanel{max-width:720px;margin:0 auto 16px;background:#FFFDFC}
+#categories,#setup>.addline{max-width:720px;margin-left:auto;margin-right:auto}
+#categories .card{padding:0;overflow:hidden}
+#categories .card-head{padding:13px 14px;background:linear-gradient(90deg,#F0F5F1,#FFFDFC);border-bottom:1px solid rgba(96,102,90,.12)}
+#categories .card>label,#categories .card>select,#categories .card>[id^="items-"],#categories .card>.addline{margin-left:14px;margin-right:14px;width:calc(100% - 28px)}
+#categories .card>label{margin-top:12px}
+#categories .card>.addline{margin-bottom:14px;color:#E86469;border-color:#F1B4B5;background:#FFF9F8}
+.category-name{color:#315B47}
+.amount-field{text-align:right;font-variant-numeric:tabular-nums}
+.itemrow:before{content:"Item";display:none}
+
+@media(min-width:760px){
+ body{background:linear-gradient(135deg,#F8F6F2 0%,#FBF1EF 52%,#EEF3EF 100%)}
+ .screen.active{animation:screenIn .22s ease-out}
+ #home.active{max-width:960px;margin:2vh auto 0}
+ #home .home-masthead{padding-left:20px;padding-right:20px}
+ #home .home-welcome{margin:36px 0 28px}
+ #home .home-month-card{max-width:620px;margin:0 auto 22px}
+ #home .home-nav{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+ #home .home-nav-card{grid-template-columns:64px 1fr 18px;min-height:132px;padding:18px 14px}
+ #home .home-nav-copy strong{font-size:18px}
+ #setup.active{display:grid;grid-template-columns:minmax(250px,330px) minmax(0,720px);column-gap:28px;align-items:start}
+ #setup .topbar{grid-column:1/-1}
+ #setup .month-card,#setup .setup-actions,#setup #duplicatePanel{grid-column:1}
+ #setup #categories,#setup>.addline{grid-column:2;grid-row:auto / span 4;width:100%;margin-top:0}
+ #setup #categories{grid-row:2 / span 6}
+ #setup>.addline{grid-row:8}
+ #setup .page-signature{grid-column:1/-1}
+ #entry.active{max-width:800px;margin:auto}
+ #budgetData.active,#expenseData.active,#analytics.active{max-width:1040px;margin:auto}
+ .expense-form{padding:24px 28px}
+ .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:1040px){
+ #home.active{max-width:1080px}
+ #home .home-nav-card{grid-template-columns:72px 1fr 20px;padding:22px 20px}
+ #home .home-nav-icon{width:68px;height:68px}
+}
+@media(min-width:1100px){
+ #analytics .chart-card{padding:24px}.canvas-wrap{height:390px}
+}
+@keyframes screenIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.screen.active{animation:none}}
+.sync-bar{position:sticky;top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 auto 12px;padding:9px 12px;max-width:720px;border:1px solid rgba(96,102,90,.18);border-radius:14px;background:rgba(255,255,255,.94);box-shadow:0 6px 18px rgba(96,102,90,.08);font-size:12px}
+.sync-dot{display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%;background:#C69491}.sync-dot.ok{background:#4C9367}.sync-dot.busy{background:#D19A45}.sync-action{border:0;border-radius:10px;padding:7px 10px;background:#EDF3EF;color:var(--olive);font:inherit;font-weight:800}
+.toast-stack{position:fixed;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));z-index:100;display:grid;gap:8px;max-width:min(360px,calc(100vw - 32px))}.toast{padding:12px 14px;border-radius:14px;background:#315B47;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.18);font-size:14px}.toast.error{background:#A33F45}
+.modal{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:18px;background:rgba(40,45,41,.42);backdrop-filter:blur(5px)}.modal[hidden]{display:none}.modal-card{width:min(520px,100%);max-height:90vh;overflow:auto;padding:22px;border-radius:24px;background:#FFFDFB;box-shadow:0 24px 70px rgba(0,0,0,.24)}.modal-card h2{margin-bottom:8px}.provider-list{display:grid;gap:10px;margin:18px 0}.provider{width:100%;display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--ink);font:inherit;text-align:left}.provider.primary{border-color:#96ACA0;background:#F3F8F5}.provider strong{display:block}.provider small{display:block;color:var(--muted);margin-top:2px}.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:16px}.modal-actions button,.pdf-actions button{border:0;border-radius:13px;padding:11px 14px;font:inherit;font-weight:800}.primary-btn{background:var(--olive);color:#fff}.secondary-btn{background:#EEF1ED;color:var(--olive)}.error-text{color:#B3262D!important;font-weight:700}.pdf-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.pdf-actions button{background:var(--blue);color:#fff}
+.guide-link{display:flex;align-items:center;justify-content:center;gap:7px;width:max-content;margin:18px auto 4px;padding:9px 14px;border:1px solid rgba(96,102,90,.2);border-radius:999px;background:rgba(255,255,255,.72);color:var(--olive);font-size:13px;font-weight:800;text-decoration:none}.guide-intro{display:grid;gap:10px;margin:16px 0}.guide-step{padding:12px 14px;border-radius:14px;background:#F3F7F4}.guide-step strong{display:block;margin-bottom:3px}.guide-step span{font-size:13px;line-height:1.45;color:var(--muted)}
+.cloud-more{margin-top:8px;border-top:1px solid var(--line);padding-top:10px}.cloud-more summary{cursor:pointer;padding:11px 4px;color:var(--olive);font-weight:800}.cloud-more .provider-list{margin:8px 0 0}
+@media(max-width:560px){.data-actions{grid-template-columns:1fr}.sync-bar{margin-left:0;margin-right:0}.modal-card{padding:18px}.pdf-actions button{flex:1 1 100%}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="sync-bar"><span><span id="syncDot" class="sync-dot"></span><span id="syncText">Offline copy ready</span></span><button class="sync-action" onclick="openCloudSetup()">Cloud storage</button></div>
+
+<section id="home" class="screen active">
+  <header class="home-masthead">
+    <div class="home-title">BUDGET PLANNER</div>
+    <div class="home-tagline">Spend Intentionally. Live Freely.</div>
+  </header>
+
+  <div class="home-welcome">
+    <div id="homeGreeting" class="home-greeting">Good Morning, Gigi! <span class="home-sun">☼</span></div>
+    <div id="homeQuote" class="home-quote">“Discipline today,<br>freedom tomorrow.”</div>
+  </div>
+
+  <div class="home-nav">
+    <button class="home-nav-card expense" onclick="nav('entry')" aria-label="Open New Expense"><span class="home-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 8h6M9 12h3M16 12v4M14 14h4"/></svg></span><span class="home-nav-copy"><strong>New Expense</strong><small>Record spending quickly and easily.</small></span><span class="home-chevron" aria-hidden="true">›</span></button>
+    <button class="home-nav-card analytics" onclick="nav('analytics')" aria-label="Open Analytics"><span class="home-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7M3 20h18"/></svg></span><span class="home-nav-copy"><strong>Analytics</strong><small>Track your budget and spending performance.</small></span><span class="home-chevron" aria-hidden="true">›</span></button>
+    <button class="home-nav-card setup" onclick="nav('setup')" aria-label="Open Budget Setup"><span class="home-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h18v13H3zM5 7V4h9l2 3M15 12h6v5h-6a2.5 2.5 0 0 1 0-5Z"/><circle cx="16" cy="14.5" r=".7" fill="currentColor" stroke="none"/></svg></span><span class="home-nav-copy"><strong>Budget Setup</strong><small>Manage monthly budgets and categories.</small></span><span class="home-chevron" aria-hidden="true">›</span></button>
+  </div>
+  <a class="guide-link" href="user-guide.html" target="_blank" rel="noopener">? Open User Guide</a>
+
+  <div class="page-signature">RCCampo | PH | 2026</div>
+</section>
+
+<section id="setup" class="screen">
+  <div class="topbar"><button class="back" onclick="goBack()">‹</button><div><div class="brand">Budget Setup</div><h2>Budget Setup</h2></div></div>
+
+  <div class="month-card">
+    <label>Budget Month</label>
+    <select id="setupMonth" onchange="onSetupMonthChange()"></select>
+    <label>Budget Year</label>
+    <select id="setupYear" onchange="onSetupMonthChange()"></select>
+    <p style="margin:8px 0 0;font-size:12px">This month and year become the default for every new budget row shown below.</p>
+  </div>
+
+  <div class="setup-actions">
+    <button id="duplicateTrigger" class="duplicate-trigger" type="button" aria-expanded="false" aria-controls="duplicatePanel" onclick="toggleDuplicatePanel()">⧉ Duplicate Month Entry</button>
+  </div>
+
+  <div id="duplicatePanel" class="card" hidden>
+    <div class="brand">Duplicate Month</div>
+    <h3 style="margin-top:4px">Copy this month's budget</h3>
+    <p style="margin:6px 0 10px;font-size:12px">Copy every category together with its <b>Item</b> and <b>Amount</b> from the selected month into a new month.</p>
+    <div class="field">
+      <label>Copy To</label>
+      <select id="duplicateTargetMonth"></select>
+    </div>
+    <div class="note" style="margin-top:10px">
+      <b>Columns duplicated:</b> Category · Item · Amount
+    </div>
+    <button class="addline" onclick="duplicateMonthEntries()">⧉ Duplicate Month Entry</button>
+  </div>
+
+  <div id="categories"></div>
+  <button class="addline" onclick="addCategory()">＋ Add Category</button>
+
+  <div class="toolbar">
+    <button class="tool" title="Save Budget Setup" onclick="saveBudget()">✓</button>
+    <button id="budgetDataBtn" class="tool blue" title="Show MyBudget data" onclick="showBudgetData()" disabled>▦</button>
+    <button id="exportBudgetBtn" class="tool sage" title="Save/Export Budget File" onclick="exportWorkbook()" disabled>⇩</button>
+  </div>
+
+  <div class="page-signature">RCCampo | PH | 2026</div>
+</section>
+
+<section id="entry" class="screen">
+  <div class="topbar"><button class="back" onclick="goHome()" title="Home" aria-label="Go to main page">⌂</button><div><div class="brand">Daily Spending</div><h2>New Expense</h2></div></div>
+
+  <div class="month-card">
+    <label>Month</label>
+    <select id="entryMonth" onchange="onEntryMonthChange()"></select>
+  </div>
+
+  <div class="card expense-form">
+    <div class="field">
+      <label>Date</label>
+      <input id="entryDateShort" type="text" inputmode="numeric" placeholder="MM/DD/YYYY" maxlength="10" onblur="syncDateFromShort()" />
+      <input id="entryDate" type="hidden">
+    </div>
+    <div class="field">
+      <label>Paid For</label><input id="paidFor" type="text" placeholder="e.g. Cash, GCash, BPI">
+    </div>
+    <div class="field">
+      <label>Amount</label><input id="entryAmount" type="number" inputmode="decimal" step="0.01" placeholder="₱ 0.00">
+    </div>
+    <div class="field">
+      <label>Category</label><select id="entryCategory" onchange="refreshItems()"></select>
+    </div>
+    <div class="field">
+      <label>Item</label><select id="entryItem"></select>
+    </div>
+  </div>
+  <div id="entryFilterNote" class="note"></div>
+
+  <div class="toolbar">
+    <button class="tool" title="Save Expense" onclick="saveExpense()">✓</button>
+    <button id="expenseDataBtn" class="tool blue" title="Show MyExpenses data" onclick="showExpenseData()" disabled>▦</button>
+    <button id="exportExpenseBtn" class="tool sage" title="Save/Export Budget File" onclick="exportWorkbook()" disabled>⇩</button>
+  </div>
+
+  <div class="page-signature">RCCampo | PH | 2026</div>
+</section>
+
+<section id="budgetData" class="screen">
+  <div class="topbar"><button class="back" onclick="goBack()">‹</button><div><div class="brand">Budget File</div><h2>MyBudget</h2></div></div>
+  <div class="data-actions">
+    <button id="editBudgetExcelBtn" class="excel-btn" onclick="toggleBudgetEdit()">Edit Data</button>
+    <button class="setup-btn" onclick="editBudgetOnSetup()">Edit on Setup</button>
+    <button class="delete-data-btn" onclick="toggleDeleteMode('budget')">🗑 Delete Rows</button>
+  </div>
+  <div id="budgetDeleteNote" class="note" style="display:none">Select one or more rows using the checkboxes, then tap the trash button below.</div>
+  <div id="budgetEditNote" class="note" style="display:none">Editing is enabled. Tap a cell, make changes, then press <b>Save Data</b>. Valid updates are stored offline and synchronized to the connected cloud account.</div>
+  <div class="table-wrap"><table id="budgetTable"></table></div>
+  <div class="toolbar">
+    <button id="budgetDeleteBtn" class="tool rose" title="Delete Selected Rows" onclick="deleteSelectedRows('budget')" style="display:none">🗑</button>
+    <button id="budgetInlineSaveBtn" class="tool rose" title="Save Data" onclick="saveBudgetTableEdits()" style="display:none">✓</button>
+    <button class="tool sage" title="Download latest Budget File" onclick="downloadWorkbook()">⇩</button>
+  </div>
+
+  <div class="page-signature">RCCampo | PH | 2026</div>
+</section>
+
+<section id="expenseData" class="screen">
+  <div class="topbar"><button class="back" onclick="goBack()">‹</button><div><div class="brand">Budget File</div><h2>MyExpenses</h2></div></div>
+  <div class="data-actions">
+    <button id="editExpenseExcelBtn" class="excel-btn" onclick="toggleExpenseEdit()">Edit Data</button>
+    <button class="setup-btn" onclick="editExpenseOnSetup()">Edit on Setup</button>
+    <button class="delete-data-btn" onclick="toggleDeleteMode('expense')">🗑 Delete Rows</button>
+  </div>
+  <div id="expenseDeleteNote" class="note" style="display:none">Select one or more rows using the checkboxes, then tap the trash button below.</div>
+  <div id="expenseEditNote" class="note" style="display:none">Editing is enabled. Tap a cell, make changes, then press <b>Save Data</b>. Valid updates are stored offline and synchronized to the connected cloud account.</div>
+  <div class="table-wrap"><table id="expenseTable"></table></div>
+  <div class="toolbar">
+    <button id="expenseDeleteBtn" class="tool rose" title="Delete Selected Rows" onclick="deleteSelectedRows('expense')" style="display:none">🗑</button>
+    <button id="expenseInlineSaveBtn" class="tool rose" title="Save Data" onclick="saveExpenseTableEdits()" style="display:none">✓</button>
+    <button class="tool sage" title="Download latest Budget File" onclick="downloadWorkbook()">⇩</button>
+  </div>
+
+  <div class="page-signature">RCCampo | PH | 2026</div>
+</section>
+
+<section id="analytics" class="screen">
+  <div class="topbar"><button class="back" onclick="goBack()">‹</button><div><div class="brand">KPI Report</div><h2>Analytics</h2></div></div>
+  <div class="metric-grid">
+    <div class="metric"><small>Total Budget</small><strong id="kpiBudget">₱0</strong></div>
+    <div class="metric"><small>Total Expenses</small><strong id="kpiExpense">₱0</strong></div>
+    <div class="metric"><small>Remaining</small><strong id="kpiRemaining">₱0</strong></div>
+    <div class="metric"><small>Budget Used</small><strong id="kpiUsed">0%</strong></div>
+  </div>
+  <div class="segmented">
+    <button id="monthTab" class="active" onclick="setAnalyticsMode('month')">By Month</button>
+    <button id="categoryTab" onclick="setAnalyticsMode('category')">By Category</button>
+  </div>
+  <div id="analyticsYearControl" class="month-card">
+    <label>Report Year</label>
+    <select id="analyticsYear" onchange="refreshAnalytics()"></select>
+  </div>
+  <div class="chart-card">
+    <div class="chart-head"><div><div class="brand">Budget vs Expenses</div><h3 id="chartTitle">Amounts per Month</h3></div><div class="legend">Columns = Budget<br>Line = Expenses<br><span style="color:#C69491;font-weight:900">Rose = over budget</span></div></div>
+    <div class="canvas-wrap"><canvas id="analyticsCanvas"></canvas></div>
+  </div>
+  <div class="pdf-actions" aria-label="Analytics PDF downloads">
+    <button onclick="downloadAnalyticsPdf('month')">Download By Month PDF</button>
+    <button onclick="downloadAnalyticsPdf('category')">Download By Category PDF</button>
+    <button onclick="downloadAnalyticsPdf('both')">Download Both PDF</button>
+  </div>
+
+  <div class="page-signature">RCCampo | PH | 2026</div>
+</section>
+
+</div>
+
+<div id="toastStack" class="toast-stack" aria-live="polite"></div>
+<div id="cloudModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="cloudTitle">
+ <div class="modal-card">
+  <div class="brand">Secure Sync</div><h2 id="cloudTitle">Connect cloud storage</h2>
+  <p>Choose where Budget Planner should create its <b>Budget Planner</b> folder. Your offline copy remains available during interruptions.</p>
+  <div class="provider-list">
+   <button class="provider primary" onclick="connectCloud('google')"><span>G</span><span><strong>Google Drive · Recommended</strong><small>Default automatic sync provider</small></span></button>
+  </div>
+  <details class="cloud-more"><summary>Other cloud options</summary><div class="provider-list">
+   <button class="provider" onclick="connectCloud('onedrive')"><span>▦</span><span><strong>Microsoft OneDrive</strong><small>Secondary option for Excel users</small></span></button>
+   <button class="provider" onclick="connectCloud('dropbox')"><span>◇</span><span><strong>Dropbox</strong><small>Available when configured by the publisher</small></span></button>
+   <button class="provider" onclick="connectCloud('other')"><span>⇩</span><span><strong>Other cloud storage</strong><small>Download and store through Files, Box, iCloud Drive, or another app</small></span></button>
+  </div></details>
+  <p id="cloudError" class="error-text" hidden></p>
+  <div class="modal-actions"><button class="secondary-btn" onclick="closeCloudSetup()">Use offline for now</button></div>
+ </div>
+</div>
+<div id="errorModal" class="modal" hidden role="alertdialog" aria-modal="true" aria-labelledby="errorTitle">
+ <div class="modal-card"><div class="brand error-text">Please correct this entry</div><h2 id="errorTitle">Data error</h2><p id="errorMessage" class="error-text"></p><div class="modal-actions"><button class="primary-btn" onclick="closeError()">Okay</button></div></div>
+</div>
+<div id="guideModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+ <div class="modal-card">
+  <div class="brand">Welcome</div><h2 id="guideTitle">Your Budget Planner User Guide</h2>
+  <p>Start with these four simple steps. The complete guide stays available offline from the main page.</p>
+  <div class="guide-intro">
+   <div class="guide-step"><strong>1. Connect storage</strong><span>Choose Google Drive, OneDrive, or offline use. Cloud sign-in keeps supported devices synchronized.</span></div>
+   <div class="guide-step"><strong>2. Set your budget</strong><span>Open Budget Setup, choose a month and year, then add categories, items, and amounts.</span></div>
+   <div class="guide-step"><strong>3. Record expenses</strong><span>Open New Expense. Today's date is ready automatically; enter the payment details and save.</span></div>
+   <div class="guide-step"><strong>4. Review and back up</strong><span>Use Analytics for reports and the Data pages to edit, download, or keep an offline Excel copy.</span></div>
+  </div>
+  <div class="modal-actions"><a class="secondary-btn" href="user-guide.html" target="_blank" rel="noopener" style="text-decoration:none">Read Full Guide</a><button class="primary-btn" onclick="finishGuide()">Start Planning</button></div>
+ </div>
+</div>
+
+<script>
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DEFAULTS=["Basic Necessities","Bills","School","Events","Goals"];
+const NOW=new Date();
+const CURRENT_MONTH=MONTHS[NOW.getMonth()];
+const CURRENT_YEAR=NOW.getFullYear();
+const YEARS=Array.from({length:11},(_,i)=>CURRENT_YEAR-5+i);
+let navStack=["home"], analyticsMode="month", budgetEditMode=false, expenseEditMode=false, budgetDeleteMode=false, expenseDeleteMode=false;
+let cloudToken="", cloudFolderId="", cloudFileId="", cloudProvider=sessionStorage.getItem("cloudProvider")||"", msalApp=null;
+
+function notify(message,type="success"){
+ const host=document.getElementById("toastStack"),el=document.createElement("div");
+ el.className=`toast ${type==="error"?"error":""}`;el.textContent=message;host.appendChild(el);
+ setTimeout(()=>el.remove(),3600);
+}
+function showError(message){document.getElementById("errorMessage").textContent=message;document.getElementById("errorModal").hidden=false}
+function closeError(){document.getElementById("errorModal").hidden=true}
+function setSyncStatus(text,state=""){
+ document.getElementById("syncText").textContent=text;
+ document.getElementById("syncDot").className=`sync-dot ${state}`;
+}
+function openCloudSetup(){document.getElementById("cloudError").hidden=true;document.getElementById("cloudModal").hidden=false}
+function closeCloudSetup(){document.getElementById("cloudModal").hidden=true;setSyncStatus(navigator.onLine?"Offline copy ready":"Offline · changes queued",navigator.onLine?"ok":"busy")}
+
+function openOfflineDb(){return new Promise((resolve,reject)=>{const req=indexedDB.open("BudgetPlannerOffline",1);req.onupgradeneeded=()=>req.result.createObjectStore("state");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+async function persistOffline(){
+ try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction("state","readwrite");tx.objectStore("state").put({budget,expenses,updatedAt:new Date().toISOString()},"latest");tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});setSyncStatus(navigator.onLine?"Saved offline · syncing":"Saved offline · sync queued","busy");if(navigator.onLine&&cloudToken){if(cloudProvider==="google")await syncToGoogleDrive();if(cloudProvider==="onedrive")await syncToOneDrive()}}catch(e){showError("Offline recovery could not be updated: "+e.message)}
+}
+async function restoreOffline(){
+ try{const db=await openOfflineDb();const saved=await new Promise((resolve,reject)=>{const tx=db.transaction("state");const req=tx.objectStore("state").get("latest");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});if(saved&&!localStorage.getItem("budgetSetup")){budget=saved.budget||freshBudget();expenses=saved.expenses||[];localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));notify("Recovered the latest offline copy.")}}catch(e){console.warn(e)}
+}
+
+function providerError(message){const el=document.getElementById("cloudError");el.textContent=message;el.hidden=false}
+async function connectCloud(provider){
+ cloudProvider=provider;sessionStorage.setItem("cloudProvider",provider);
+ if(provider==="google")return connectGoogleDrive();
+ if(provider==="onedrive")return connectOneDrive();
+ if(provider==="other"){closeCloudSetup();downloadWorkbook();return}
+ providerError("Dropbox needs its publisher App Key before customer sign-in can be activated. Google Drive remains the default; manual download works with any cloud-storage app.")
+}
+function loadScript(src){return new Promise((resolve,reject)=>{if(document.querySelector(`script[src="${src}"]`))return resolve();const s=document.createElement("script");s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error("Sign-in service could not be reached."));document.head.appendChild(s)})}
+async function connectGoogleDrive(){
+ const clientId=document.querySelector('meta[name="google-client-id"]')?.content;
+ if(!clientId)return providerError("Google Drive sign-in needs the publisher's Google OAuth Client ID. Add it before distributing the app.");
+ try{await loadScript("https://accounts.google.com/gsi/client");google.accounts.oauth2.initTokenClient({client_id:clientId,scope:"https://www.googleapis.com/auth/drive.file",prompt:"consent",callback:async r=>{if(r.error)return providerError("Google sign-in failed: "+r.error);cloudToken=r.access_token;await prepareGoogleFolder();}}).requestAccessToken()}catch(e){providerError(e.message)}
+}
+async function driveFetch(url,options={}){const r=await fetch(url,{...options,headers:{Authorization:`Bearer ${cloudToken}`,...(options.headers||{})}});if(!r.ok)throw new Error(`Google Drive returned ${r.status}. Please sign in again.`);return r}
+async function prepareGoogleFolder(){
+ try{setSyncStatus("Connecting to Google Drive","busy");const q=encodeURIComponent("name='Budget Planner' and mimeType='application/vnd.google-apps.folder' and trashed=false");let data=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`)).json();if(!data.files.length){data=await (await driveFetch("https://www.googleapis.com/drive/v3/files?fields=id",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget Planner",mimeType:"application/vnd.google-apps.folder"})})).json();cloudFolderId=data.id}else cloudFolderId=data.files[0].id;sessionStorage.setItem("cloudProvider","google");closeCloudSetup();await loadFromGoogleDrive();await syncToGoogleDrive();notify("Connected to the Budget Planner folder in Google Drive.");}catch(e){providerError(e.message);openCloudSetup()}
+}
+async function loadFromGoogleDrive(){
+ const q=encodeURIComponent(`name='Budget File.json' and '${cloudFolderId}' in parents and trashed=false`);const found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,modifiedTime)&orderBy=modifiedTime desc`)).json();if(!found.files.length)return;cloudFileId=found.files[0].id;const remote=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).json();if(remote.budget&&remote.expenses){budget=remote.budget;expenses=remote.expenses;localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));renderBudget();refreshHomeSummary();}}
+async function syncToGoogleDrive(){
+ if(!cloudToken||!cloudFolderId)return;try{setSyncStatus("Syncing to Google Drive","busy");const payload=JSON.stringify({schemaVersion:2,updatedAt:new Date().toISOString(),budget,expenses});const boundary="budget_planner_boundary";const metadata={name:"Budget File.json",mimeType:"application/json",parents:cloudFileId?undefined:[cloudFolderId]};const body=`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(metadata)}\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n${payload}\r\n--${boundary}--`;const url=cloudFileId?`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=multipart`:`https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart`;const saved=await (await driveFetch(url,{method:cloudFileId?"PATCH":"POST",headers:{"Content-Type":`multipart/related; boundary=${boundary}`},body})).json();cloudFileId=saved.id||cloudFileId;setSyncStatus("Saved to Google Drive","ok");}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}
+}
+async function connectOneDrive(){
+ const clientId=document.querySelector('meta[name="microsoft-client-id"]')?.content;if(!clientId)return providerError("OneDrive sign-in needs the publisher's Microsoft application ID. Add it before distributing the app.");
+ try{await loadScript("https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.28.1/lib/msal-browser.min.js");msalApp=new msal.PublicClientApplication({auth:{clientId,authority:"https://login.microsoftonline.com/common",redirectUri:location.origin+location.pathname},cache:{cacheLocation:"sessionStorage"}});await msalApp.initialize();const result=await msalApp.loginPopup({scopes:["Files.ReadWrite","User.Read"],prompt:"select_account"});cloudToken=result.accessToken;cloudProvider="onedrive";sessionStorage.setItem("cloudProvider","onedrive");closeCloudSetup();await loadFromOneDrive();await syncToOneDrive();notify("Connected to the Budget Planner folder in OneDrive.")}catch(e){providerError("OneDrive sign-in failed: "+e.message)}
+}
+async function graphFetch(url,options={}){const r=await fetch(url,{...options,headers:{Authorization:`Bearer ${cloudToken}`,...(options.headers||{})}});if(!r.ok&&r.status!==404)throw new Error(`OneDrive returned ${r.status}. Please sign in again.`);return r}
+async function loadFromOneDrive(){const r=await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.json:/content");if(r.status===404)return;const remote=await r.json();if(remote.budget&&remote.expenses){budget=remote.budget;expenses=remote.expenses;localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));renderBudget();refreshHomeSummary()}}
+async function syncToOneDrive(){if(!cloudToken)return;try{setSyncStatus("Syncing to OneDrive","busy");const payload=JSON.stringify({schemaVersion:2,updatedAt:new Date().toISOString(),budget,expenses});await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.json:/content",{method:"PUT",headers:{"Content-Type":"application/json"},body:payload});setSyncStatus("Saved to OneDrive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}}
+window.addEventListener("offline",()=>setSyncStatus("Offline · changes queued","busy"));window.addEventListener("online",()=>{setSyncStatus("Connection restored · syncing","busy");if(cloudToken){if(cloudProvider==="google")syncToGoogleDrive();if(cloudProvider==="onedrive")syncToOneDrive()}else notify("Connection restored. Sign in to resume cloud sync.")});
+
+function freshBudget(){
+ return DEFAULTS.map((name,i)=>({name,frequency:i===3?"Annual":"Monthly",items:[{item:"",month:CURRENT_MONTH,year:CURRENT_YEAR,amount:""}]}));
+}
+let budget=JSON.parse(localStorage.getItem("budgetSetup")||"null")||freshBudget();
+let expenses=JSON.parse(localStorage.getItem("expenses")||"[]");
+
+function initMonthSelectors(){
+ ["setupMonth","entryMonth","homeMonth"].forEach(id=>{
+   const s=document.getElementById(id);
+   if(!s)return;
+   s.innerHTML=MONTHS.map(m=>`<option ${m===CURRENT_MONTH?"selected":""}>${m}</option>`).join("");
+ });
+ const dup=document.getElementById("duplicateTargetMonth");
+ dup.innerHTML=MONTHS.map(m=>`<option ${m===MONTHS[(NOW.getMonth()+1)%12]?"selected":""}>${m}</option>`).join("");
+ ["setupYear","homeYear","analyticsYear"].forEach(id=>{
+   const s=document.getElementById(id);
+   if(s)s.innerHTML=YEARS.map(y=>`<option value="${y}" ${y===CURRENT_YEAR?"selected":""}>${y}</option>`).join("");
+ });
+}
+function nav(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ if(navStack[navStack.length-1]!==id)navStack.push(id);
+ if(id==="setup")renderBudget();
+ if(id==="entry"){prepareEntry();updateDailyMessage();}
+ if(id==="analytics")refreshAnalytics();
+ if(id==="home")refreshHomeSummary();
+ window.scrollTo(0,0);
+}
+function goHome(){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById("home").classList.add("active");
+ navStack=["home"];
+ refreshHomeSummary();
+ window.scrollTo(0,0);
+}
+
+function goBack(){
+ if(navStack.length>1)navStack.pop();
+ const prev=navStack[navStack.length-1]||"home";
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(prev).classList.add("active");
+ if(prev==="setup")renderBudget();
+ if(prev==="entry")prepareEntry(false);
+ if(prev==="analytics")refreshAnalytics();
+ window.scrollTo(0,0);
+}
+function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+function hasBudget(){return !!localStorage.getItem("budgetSetup")}
+
+function setupMonth(){return document.getElementById("setupMonth").value||CURRENT_MONTH}
+function setupYear(){return Number(document.getElementById("setupYear").value)||CURRENT_YEAR}
+function entryMonth(){return document.getElementById("entryMonth").value||CURRENT_MONTH}
+function entryYear(){
+ const iso=document.getElementById("entryDate").value;
+ return iso?Number(iso.slice(0,4)):CURRENT_YEAR;
+}
+
+function onSetupMonthChange(){renderBudget()}
+function toggleDuplicatePanel(force){
+ const panel=document.getElementById("duplicatePanel");
+ const trigger=document.getElementById("duplicateTrigger");
+ const open=typeof force==="boolean"?force:panel.hidden;
+ panel.hidden=!open;
+ trigger.setAttribute("aria-expanded",String(open));
+ if(open)panel.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function renderBudget(){
+ const month=setupMonth();
+ const year=setupYear();
+ const host=document.getElementById("categories");host.innerHTML="";
+ budget.forEach((c,ci)=>{
+   const monthItems=c.items.map((r,ri)=>({r,ri})).filter(x=>x.r.month===month&&(Number(x.r.year)||CURRENT_YEAR)===year);
+   const card=document.createElement("div");card.className="card";
+   card.innerHTML=`
+    <div class="card-head">
+      <input class="category-name" value="${esc(c.name)}" oninput="budget[${ci}].name=this.value">
+      <div class="actions"><button onclick="deleteCategory(${ci})">✕</button></div>
+    </div>
+    <label>Frequency Interval</label>
+    <select onchange="budget[${ci}].frequency=this.value">
+      ${["Annual","Monthly","Daily"].map(v=>`<option ${c.frequency===v?"selected":""}>${v}</option>`).join("")}
+    </select>
+    <label>Items</label>
+    <div id="items-${ci}"></div>
+    <button class="addline" onclick="addItem(${ci})">＋ Add Item</button>`;
+   host.appendChild(card);
+   renderItems(ci,monthItems);
+ });
+ updateActionButtons();
+}
+function renderItems(ci,monthItems){
+ const host=document.getElementById(`items-${ci}`);host.innerHTML="";
+ if(!monthItems.length){
+   host.innerHTML=`<div class="note">No entries for ${setupMonth()} ${setupYear()} yet.</div>`;
+   return;
+ }
+ monthItems.forEach(({r,ri})=>{
+   const row=document.createElement("div");row.className="itemrow";
+   row.innerHTML=`
+    <input placeholder="Item" value="${esc(r.item)}" oninput="budget[${ci}].items[${ri}].item=this.value">
+    <input class="amount-field" aria-label="Budget amount" type="number" step="0.01" inputmode="decimal" placeholder="Amount (₱)" value="${esc(r.amount)}" oninput="budget[${ci}].items[${ri}].amount=this.value">
+    <button class="remove" onclick="removeItem(${ci},${ri})">−</button>`;
+   host.appendChild(row);
+ });
+}
+function addCategory(){budget.push({name:"New Category",frequency:"Monthly",items:[{item:"",month:setupMonth(),year:setupYear(),amount:""}]});renderBudget()}
+function deleteCategory(i){if(confirm("Delete this category?")){budget.splice(i,1);renderBudget()}}
+function addItem(i){budget[i].items.push({item:"",month:setupMonth(),year:setupYear(),amount:""});renderBudget()}
+function removeItem(i,j){budget[i].items.splice(j,1);renderBudget()}
+function validateBudgetRows(rows){
+ const seen=new Set();
+ for(let i=0;i<rows.length;i++){const r=rows[i],line=i+1;if(!r.category.trim())return `Budget row ${line}: Category is required.`;if(!r.item.trim())return `Budget row ${line}: Item is required.`;if(!MONTHS.includes(r.month))return `Budget row ${line}: Month is invalid.`;if(!Number.isInteger(Number(r.year))||Number(r.year)<2000||Number(r.year)>2100)return `Budget row ${line}: Year must be between 2000 and 2100.`;if(!Number.isFinite(Number(r.amount))||Number(r.amount)<0)return `Budget row ${line}: Amount cannot be negative or malformed.`;const key=[r.category,r.item,r.month,r.year].map(v=>String(v).trim().toLowerCase()).join("|");if(seen.has(key))return `Budget row ${line}: Duplicate Category, Item, Month, and Year combination.`;seen.add(key)}return "";
+}
+function saveBudget(){
+ const error=validateBudgetRows(budgetRows());if(error)return showError(error);
+ localStorage.setItem("budgetSetup",JSON.stringify(budget));
+ const selected=setupMonth();
+ // Clear the visible month's input rows after save while preserving saved data in storage.
+ budget=JSON.parse(localStorage.getItem("budgetSetup"));
+ renderBudget();
+ updateActionButtons();
+ persistOffline();notify(`Budget Setup for ${selected} ${setupYear()} saved successfully.`);
+}
+
+
+function duplicateMonthEntries(){
+ const source=setupMonth();
+ const year=setupYear();
+ const target=document.getElementById("duplicateTargetMonth").value;
+ if(!target)return alert("Select a target month.");
+ if(source===target)return alert("Choose a different month to duplicate into.");
+
+ const sourceRows=budgetRows().filter(r=>r.month===source&&r.year===year);
+ if(!sourceRows.length)return alert(`There are no saved entries for ${source} ${year} to duplicate.`);
+
+ const targetHasData=budgetRows().some(r=>r.month===target&&r.year===year);
+ if(targetHasData){
+   const ok=confirm(`${target} already has budget entries. Duplicate entries will be added alongside the existing data. Continue?`);
+   if(!ok)return;
+ }
+
+ sourceRows.forEach(r=>{
+   let cat=budget.find(c=>c.name===r.category);
+   if(!cat){
+     cat={name:r.category,frequency:r.frequency||"Monthly",items:[]};
+     budget.push(cat);
+   }
+   cat.items.push({item:r.item,month:target,year,amount:r.amount});
+ });
+
+ localStorage.setItem("budgetSetup",JSON.stringify(budget));
+ document.getElementById("setupMonth").value=target;
+ toggleDuplicatePanel(false);
+ renderBudget();
+ persistOffline();notify(`Copied all ${source} ${year} entries to ${target} ${year}.`);
+}
+
+function budgetRows(){
+ const rows=[];
+ budget.forEach(c=>c.items.forEach(r=>rows.push({frequency:c.frequency,category:c.name,item:r.item,month:r.month,year:Number(r.year)||CURRENT_YEAR,amount:Number(r.amount)||0})));
+ return rows;
+}
+function expenseRows(){return expenses.map(x=>({...x,year:Number(x.year)||(x.date?Number(String(x.date).slice(0,4)):CURRENT_YEAR),amount:Number(x.amount)||0}))}
+function updateActionButtons(){
+ const ok=hasBudget();
+ ["budgetDataBtn","exportBudgetBtn","expenseDataBtn","exportExpenseBtn"].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=!ok});
+}
+
+function isoToShort(iso){
+ if(!iso)return "";
+ const [y,m,d]=iso.split("-");
+ return `${m}/${d}/${y}`;
+}
+function shortToIso(s){
+ const m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+ if(!m)return "";
+ const month=Number(m[1]),day=Number(m[2]),year=Number(m[3]);if(month<1||month>12||year<2000||year>2100)return "";const probe=new Date(year,month-1,day);if(probe.getFullYear()!==year||probe.getMonth()!==month-1||probe.getDate()!==day)return "";return `${year}-${String(month).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+}
+function setEntryDateIso(iso){
+ document.getElementById("entryDate").value=iso;
+ document.getElementById("entryDateShort").value=isoToShort(iso);
+}
+function onEntryMonthChange(){
+ const m=entryMonth(), idx=MONTHS.indexOf(m);
+ const y=entryYear();
+ const day=m===CURRENT_MONTH&&y===CURRENT_YEAR?String(NOW.getDate()).padStart(2,"0"):"01";
+ setEntryDateIso(`${y}-${String(idx+1).padStart(2,"0")}-${day}`);
+ refreshEntrySelectors();
+}
+function syncDateFromShort(){
+ const short=document.getElementById("entryDateShort").value.trim();
+ const iso=shortToIso(short);
+ if(!iso){showError("Date is invalid. Enter a real calendar date in MM/DD/YYYY format.");return}
+ document.getElementById("entryDate").value=iso;
+ document.getElementById("entryMonth").value=MONTHS[new Date(iso+"T00:00:00").getMonth()];
+ refreshEntrySelectors();
+}
+function prepareEntry(setDate=true){
+ if(setDate){
+   const today=new Date(),iso=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+   document.getElementById("entryMonth").value=MONTHS[today.getMonth()];setEntryDateIso(iso);
+ }else{
+   document.getElementById("entryDateShort").value=isoToShort(document.getElementById("entryDate").value);
+ }
+ refreshEntrySelectors();
+}
+function validBudgetRowsForMonth(month,year=entryYear()){return budgetRows().filter(r=>r.month===month&&r.year===year)}
+function refreshEntrySelectors(){
+ const month=entryMonth(),year=entryYear(),rows=validBudgetRowsForMonth(month,year);
+ const cats=[...new Set(rows.map(r=>r.category).filter(Boolean))];
+ const s=document.getElementById("entryCategory");
+ s.innerHTML=cats.length?`<option value="">Select category</option>`+cats.map(c=>`<option>${esc(c)}</option>`).join(""):`<option value="">No category for ${month} ${year}</option>`;
+ document.getElementById("entryFilterNote").innerHTML=cats.length?`Showing MyBudget choices for <b>${month} ${year}</b>.`:`No MyBudget rows are available for <b>${month} ${year}</b>.`;
+ refreshItems();
+}
+function refreshItems(){
+ const month=entryMonth(),year=entryYear(),cat=document.getElementById("entryCategory").value;
+ const items=[...new Set(validBudgetRowsForMonth(month,year).filter(r=>r.category===cat).map(r=>r.item).filter(Boolean))];
+ const s=document.getElementById("entryItem");
+ s.innerHTML=items.length?`<option value="">Select item</option>`+items.map(i=>`<option>${esc(i)}</option>`).join(""):`<option value="">No item available</option>`;
+}
+function clearExpenseEntry(){
+ document.getElementById("entryDate").value="";
+ document.getElementById("entryDateShort").value="";
+ document.getElementById("paidFor").value="";
+ document.getElementById("entryAmount").value="";
+ document.getElementById("entryCategory").value="";
+ refreshItems();
+}
+function saveExpense(){
+ if(!hasBudget())return alert("Create and save Budget Setup first.");
+ const date=document.getElementById("entryDate").value,paidFor=document.getElementById("paidFor").value.trim(),amount=Number(document.getElementById("entryAmount").value),category=document.getElementById("entryCategory").value,item=document.getElementById("entryItem").value;
+ if(!date||!paidFor||!category||!item)return showError("Complete Date, Paid For, Category, and Item.");
+ if(!Number.isFinite(amount)||amount<=0)return showError("Expense Amount must be greater than zero. Negative, zero, or malformed expenses are not allowed.");
+ const key=[date,paidFor,item,category,amount].map(v=>String(v).trim().toLowerCase()).join("|");if(expenseRows().some(r=>[r.date,r.paidFor,r.item,r.category,r.amount].map(v=>String(v).trim().toLowerCase()).join("|")===key))return showError("This expense duplicates an existing row with the same Date, Paid For, Item, Category, and Amount.");
+ expenses.push({date,year:Number(date.slice(0,4)),paidFor,item,category,amount});
+ localStorage.setItem("expenses",JSON.stringify(expenses));
+ clearExpenseEntry();
+ persistOffline();notify("Expense saved successfully. Entry fields were cleared.");
+}
+
+function showBudgetData(){renderBudgetTable();nav("budgetData")}
+function showExpenseData(){renderExpenseTable();nav("expenseData")}
+function renderBudgetTable(){
+ const h=["Frequency Interval","Category","Item","Month","Year","Budget Amount"];
+ const data=budgetRows().map(r=>[r.frequency,r.category,r.item,r.month,r.year,r.amount]);
+ renderTable("budgetTable",h,data,budgetEditMode,budgetDeleteMode);
+}
+function renderExpenseTable(){
+ const h=["Date","Year","PaidFor","Item","Category","Amount"];
+ const data=expenseRows().map(r=>[r.date,r.year,r.paidFor,r.item,r.category,r.amount]);
+ renderTable("expenseTable",h,data,expenseEditMode,expenseDeleteMode);
+}
+function renderTable(id,h,data,editable,deleteMode){
+ const selectHead=deleteMode?'<th class="select-col">✓</th>':'';
+ const rows=data.length?data.map((r,i)=>"<tr data-row-index='"+i+"'>"+
+   (deleteMode?`<td class="select-col"><input class="row-check" type="checkbox" data-index="${i}"></td>`:"")+
+   r.map(x=>`<td ${editable?'contenteditable="true"':''}>${esc(x)}</td>`).join("")+"</tr>").join(""):
+   `<tr><td colspan="${h.length+(deleteMode?1:0)}">No saved data yet.</td></tr>`;
+ document.getElementById(id).innerHTML="<tr>"+selectHead+h.map(x=>`<th>${x}</th>`).join("")+"</tr>"+rows;
+}
+function toggleDeleteMode(type){
+ if(type==="budget"){
+   budgetDeleteMode=!budgetDeleteMode;
+   if(budgetDeleteMode && budgetEditMode){budgetEditMode=false;}
+   renderBudgetTable();
+   document.getElementById("budgetDeleteNote").style.display=budgetDeleteMode?"block":"none";
+   document.getElementById("budgetDeleteBtn").style.display=budgetDeleteMode?"grid":"none";
+   document.getElementById("budgetEditNote").style.display="none";
+   document.getElementById("budgetInlineSaveBtn").style.display="none";
+ document.getElementById("editBudgetExcelBtn").textContent="Edit Data";
+ }else{
+   expenseDeleteMode=!expenseDeleteMode;
+   if(expenseDeleteMode && expenseEditMode){expenseEditMode=false;}
+   renderExpenseTable();
+   document.getElementById("expenseDeleteNote").style.display=expenseDeleteMode?"block":"none";
+   document.getElementById("expenseDeleteBtn").style.display=expenseDeleteMode?"grid":"none";
+   document.getElementById("expenseEditNote").style.display="none";
+   document.getElementById("expenseInlineSaveBtn").style.display="none";
+   document.getElementById("editExpenseExcelBtn").textContent="Edit Data";
+ }
+}
+function deleteSelectedRows(type){
+ const tableId=type==="budget"?"budgetTable":"expenseTable";
+ const selected=[...document.querySelectorAll(`#${tableId} .row-check:checked`)].map(x=>Number(x.dataset.index));
+ if(!selected.length)return alert("Select at least one row to delete.");
+ if(!confirm(`Delete ${selected.length} selected row${selected.length>1?"s":""}? This cannot be undone.`))return;
+
+ const remove=new Set(selected);
+ if(type==="expense"){
+   expenses=expenseRows().filter((_,i)=>!remove.has(i));
+   localStorage.setItem("expenses",JSON.stringify(expenses));
+   expenseDeleteMode=false;
+   renderExpenseTable();
+   document.getElementById("expenseDeleteNote").style.display="none";
+   document.getElementById("expenseDeleteBtn").style.display="none";
+ }else{
+   const kept=budgetRows().filter((_,i)=>!remove.has(i));
+   const grouped={};
+   kept.forEach(r=>{
+     if(!grouped[r.category])grouped[r.category]={name:r.category,frequency:r.frequency||"Monthly",items:[]};
+     grouped[r.category].items.push({item:r.item,month:r.month,year:r.year,amount:Number(r.amount)||0});
+   });
+   budget=Object.values(grouped);
+   localStorage.setItem("budgetSetup",JSON.stringify(budget));
+   budgetDeleteMode=false;
+   renderBudgetTable();
+   renderBudget();
+   document.getElementById("budgetDeleteNote").style.display="none";
+   document.getElementById("budgetDeleteBtn").style.display="none";
+ }
+ updateActionButtons();
+ persistOffline();notify("Selected row(s) deleted successfully.");
+}
+
+function toggleBudgetEdit(){
+ budgetEditMode=!budgetEditMode;renderBudgetTable();
+ document.getElementById("budgetEditNote").style.display=budgetEditMode?"block":"none";
+ document.getElementById("budgetInlineSaveBtn").style.display=budgetEditMode?"grid":"none";
+ document.getElementById("editBudgetExcelBtn").textContent=budgetEditMode?"Editing Enabled":"Edit Data";
+}
+function toggleExpenseEdit(){
+ expenseEditMode=!expenseEditMode;renderExpenseTable();
+ document.getElementById("expenseEditNote").style.display=expenseEditMode?"block":"none";
+ document.getElementById("expenseInlineSaveBtn").style.display=expenseEditMode?"grid":"none";
+ document.getElementById("editExpenseExcelBtn").textContent=expenseEditMode?"Editing Enabled":"Edit Data";
+}
+function saveBudgetTableEdits(){
+ const rows=[...document.querySelectorAll("#budgetTable tr")].slice(1);
+ const raw=rows.map(tr=>[...tr.children].map(td=>td.innerText.trim())).filter(r=>r.length===6);
+ if(!raw.length)return showError("MyBudget contains no valid data rows to save.");
+ const candidates=raw.map(r=>({frequency:r[0],category:r[1],item:r[2],month:r[3],year:Number(r[4]),amount:Number(r[5])}));
+ const error=validateBudgetRows(candidates);if(error)return showError(error);
+ const allowedFrequency=new Set(["Annual","Monthly","Daily"]);const badFrequency=candidates.findIndex(r=>!allowedFrequency.has(r.frequency));if(badFrequency>=0)return showError(`Budget row ${badFrequency+1}: Frequency must be Annual, Monthly, or Daily.`);
+ const grouped={};
+ raw.forEach(r=>{
+   const [freq,cat,item,month,year,amount]=r;
+   if(!grouped[cat])grouped[cat]={name:cat,frequency:freq||"Monthly",items:[]};
+   grouped[cat].items.push({item,month,year:Number(year)||CURRENT_YEAR,amount:Number(amount)||0});
+ });
+ budget=Object.values(grouped);
+ localStorage.setItem("budgetSetup",JSON.stringify(budget));
+ budgetEditMode=false;renderBudgetTable();document.getElementById("budgetEditNote").style.display="none";document.getElementById("budgetInlineSaveBtn").style.display="none";document.getElementById("editBudgetExcelBtn").textContent="Edit Data";
+ persistOffline();notify("MyBudget changes saved successfully.");
+}
+function saveExpenseTableEdits(){
+ const rows=[...document.querySelectorAll("#expenseTable tr")].slice(1);
+ const raw=rows.map(tr=>[...tr.children].map(td=>td.innerText.trim())).filter(r=>r.length===6);if(!raw.length)return showError("MyExpenses contains no valid data rows to save.");
+ const parsed=[],seen=new Set();for(let i=0;i<raw.length;i++){const r=raw[i],date=r[0],year=Number(r[1]),amount=Number(r[5]);if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||shortToIso(`${date.slice(5,7)}/${date.slice(8,10)}/${date.slice(0,4)}`)!==date)return showError(`Expense row ${i+1}: Date is invalid. Use YYYY-MM-DD.`);if(year!==Number(date.slice(0,4)))return showError(`Expense row ${i+1}: Year must match the Date year.`);if(!r[2]||!r[3]||!r[4])return showError(`Expense row ${i+1}: PaidFor, Item, and Category are required.`);if(!Number.isFinite(amount)||amount<=0)return showError(`Expense row ${i+1}: Amount must be greater than zero.`);const key=r.map(v=>String(v).trim().toLowerCase()).join("|");if(seen.has(key))return showError(`Expense row ${i+1}: Duplicate row detected.`);seen.add(key);parsed.push({date,year,paidFor:r[2],item:r[3],category:r[4],amount})}expenses=parsed;
+ localStorage.setItem("expenses",JSON.stringify(expenses));
+ expenseEditMode=false;renderExpenseTable();document.getElementById("expenseEditNote").style.display="none";document.getElementById("expenseInlineSaveBtn").style.display="none";document.getElementById("editExpenseExcelBtn").textContent="Edit Data";
+ persistOffline();notify("MyExpenses changes saved successfully.");
+}
+function editBudgetOnSetup(){
+ const firstDataRow=budgetRows()[0];
+ const month=firstDataRow?.month||CURRENT_MONTH;
+ const year=firstDataRow?.year||CURRENT_YEAR;
+ document.getElementById("setupMonth").value=month;
+ document.getElementById("setupYear").value=year;
+ nav("setup");
+}
+function editExpenseOnSetup(){
+ // Expenses map back to their date month, then Budget Setup opens for that month.
+ const last=expenseRows()[expenseRows().length-1];
+ const month=last?.date?MONTHS[new Date(last.date+"T00:00:00").getMonth()]:CURRENT_MONTH;
+ const year=last?.year||CURRENT_YEAR;
+ document.getElementById("setupMonth").value=month;
+ document.getElementById("setupYear").value=year;
+ nav("setup");
+}
+
+/* Excel/Sheets export */
+function xmlEscape(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function spreadsheetXml(){
+ const b=[["Frequency Interval","Category","Item","Month","Year","Budget Amount"],...budgetRows().map(r=>[r.frequency,r.category,r.item,r.month,r.year,r.amount])];
+ const e=[["Date","Year","PaidFor","Item","Category","Amount"],...expenseRows().map(r=>[r.date,r.year,r.paidFor,r.item,r.category,r.amount])];
+ const sheet=(name,data)=>`<Worksheet ss:Name="${name}"><Table>${data.map(r=>"<Row>"+r.map(v=>`<Cell><Data ss:Type="String">${xmlEscape(v)}</Data></Cell>`).join("")+"</Row>").join("")}</Table></Worksheet>`;
+ return `<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">${sheet("MyBudget",b)}${sheet("MyExpenses",e)}</Workbook>`;
+}
+async function shareFile(file){
+ if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:"Budget File"});return}catch(e){if(e.name==="AbortError")return}}
+ const a=document.createElement("a");a.href=URL.createObjectURL(file);a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1200);
+}
+async function exportWorkbook(){
+ if(window.XLSX){
+  const book=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(book,XLSX.utils.aoa_to_sheet([["Frequency Interval","Category","Item","Month","Year","Budget Amount"],...budgetRows().map(r=>[r.frequency,r.category,r.item,r.month,r.year,r.amount])]),"MyBudget");
+  XLSX.utils.book_append_sheet(book,XLSX.utils.aoa_to_sheet([["Date","Year","PaidFor","Item","Category","Amount"],...expenseRows().map(r=>[r.date,r.year,r.paidFor,r.item,r.category,r.amount])]),"MyExpenses");
+  const arr=XLSX.write(book,{bookType:"xlsx",type:"array"});
+  return shareFile(new File([arr],"Budget File.xlsx",{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));
+ }
+ return shareFile(new File([spreadsheetXml()],"Budget File.xls",{type:"application/vnd.ms-excel"}));
+}
+async function downloadWorkbook(){await exportWorkbook();notify("The latest Budget File download is ready.")}
+
+function analyticsPrintSection(mode){
+ const year=Number(document.getElementById("analyticsYear").value)||CURRENT_YEAR,allB=budgetRows(),allE=expenseRows();
+ const b=mode==="month"?allB.filter(r=>r.year===year):allB,e=mode==="month"?allE.filter(r=>r.year===year):allE,tb=b.reduce((s,r)=>s+r.amount,0),te=e.reduce((s,r)=>s+r.amount,0);
+ let labels,bv,ev,title;if(mode==="month"){labels=MONTHS;bv=labels.map(m=>b.filter(r=>r.month===m).reduce((s,r)=>s+r.amount,0));ev=labels.map((m,i)=>e.filter(r=>new Date(r.date+"T00:00:00").getMonth()===i).reduce((s,r)=>s+r.amount,0));title=`By Month · ${year}`}else{labels=[...new Set([...b.map(r=>r.category),...e.map(r=>r.category)].filter(Boolean))];bv=labels.map(c=>b.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));ev=labels.map(c=>e.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));title="By Category"}return `<section><h2>${title}</h2><div class="summary"><b>Total Budget:</b> ${money(tb)} &nbsp; <b>Total Expenses:</b> ${money(te)} &nbsp; <b>Remaining:</b> ${money(tb-te)} &nbsp; <b>Used:</b> ${tb?Math.round(te/tb*100):0}%</div><table><tr><th>${mode==="month"?"Month":"Category"}</th><th>Budget</th><th>Expenses</th><th>Remaining</th></tr>${labels.map((x,i)=>`<tr><td>${esc(x)}</td><td>${money(bv[i])}</td><td>${money(ev[i])}</td><td>${money(bv[i]-ev[i])}</td></tr>`).join("")}</table></section>`;
+}
+function downloadAnalyticsPdf(option){
+ const parts=option==="both"?[analyticsPrintSection("month"),analyticsPrintSection("category")]:[analyticsPrintSection(option)];const w=window.open("","_blank");if(!w)return showError("The PDF window was blocked. Allow pop-ups for Budget Planner, then try again.");w.document.write(`<!doctype html><title>Budget Planner Analytics</title><style>body{font:14px 'Segoe UI',Arial;color:#30352f;margin:32px}h1{color:#60665a}section{page-break-after:always}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #d9ded9;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#96aca0;color:white}.summary{padding:14px;background:#f3f6f3;border-radius:8px}@media print{button{display:none}}</style><h1>Budget Planner Analytics</h1>${parts.join("")}<button onclick="print()">Save as PDF</button>`);w.document.close();setTimeout(()=>w.print(),300);notify("Analytics report opened. Choose Save as PDF.")
+}
+
+/* Analytics */
+function setAnalyticsMode(mode){
+ analyticsMode=mode;
+ document.getElementById("monthTab").classList.toggle("active",mode==="month");
+ document.getElementById("categoryTab").classList.toggle("active",mode==="category");
+ document.getElementById("analyticsYearControl").style.display=mode==="month"?"block":"none";
+ refreshAnalytics();
+}
+function money(n){return new Intl.NumberFormat("en-PH",{style:"currency",currency:"PHP",maximumFractionDigits:0}).format(n||0)}
+function homeMoney(n){return new Intl.NumberFormat("en-PH",{style:"currency",currency:"PHP",minimumFractionDigits:2,maximumFractionDigits:2}).format(n||0)}
+function refreshHomeSummary(){
+ if(!document.getElementById("homeBudget"))return;
+ const month=document.getElementById("homeMonth")?.value||CURRENT_MONTH;
+ const year=Number(document.getElementById("homeYear")?.value)||CURRENT_YEAR;
+ const monthIndex=MONTHS.indexOf(month);
+ const totalBudget=budgetRows().filter(r=>r.month===month&&r.year===year).reduce((sum,r)=>sum+Number(r.amount||0),0);
+ const totalExpenses=expenseRows().filter(r=>{
+   const d=new Date(r.date+"T00:00:00");
+   return !Number.isNaN(d.getTime())&&d.getMonth()===monthIndex&&r.year===year;
+ }).reduce((sum,r)=>sum+Number(r.amount||0),0);
+ document.getElementById("homeBudget").textContent=homeMoney(totalBudget);
+ document.getElementById("homeExpenses").textContent=homeMoney(totalExpenses);
+ document.getElementById("homeRemaining").textContent=homeMoney(totalBudget-totalExpenses);
+}
+function refreshAnalytics(){
+ const reportYear=Number(document.getElementById("analyticsYear")?.value)||CURRENT_YEAR;
+ const allBudget=budgetRows(),allExpenses=expenseRows();
+ const b=analyticsMode==="month"?allBudget.filter(r=>r.year===reportYear):allBudget;
+ const e=analyticsMode==="month"?allExpenses.filter(r=>r.year===reportYear):allExpenses;
+ const tb=b.reduce((s,r)=>s+r.amount,0),te=e.reduce((s,r)=>s+r.amount,0);
+ document.getElementById("kpiBudget").textContent=money(tb);document.getElementById("kpiExpense").textContent=money(te);document.getElementById("kpiRemaining").textContent=money(tb-te);document.getElementById("kpiUsed").textContent=tb?Math.round(te/tb*100)+"%":"0%";
+ if(analyticsMode==="month"){
+  document.getElementById("chartTitle").textContent=`Amounts per Month · ${reportYear}`;
+  drawComboChart(MONTHS.map(m=>m.slice(0,3)),MONTHS.map(m=>b.filter(r=>r.month===m).reduce((s,r)=>s+r.amount,0)),MONTHS.map((m,i)=>e.filter(r=>new Date(r.date+"T00:00:00").getMonth()===i).reduce((s,r)=>s+r.amount,0)));
+ }else{
+  document.getElementById("chartTitle").textContent="Amounts by Category";
+  const cats=[...new Set([...b.map(r=>r.category),...e.map(r=>r.category)].filter(Boolean))];
+  drawComboChart(cats,cats.map(c=>b.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0)),cats.map(c=>e.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0)));
+ }
+}
+function drawComboChart(labels,budgetVals,expenseVals){
+ const canvas=document.getElementById("analyticsCanvas"),rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+ canvas.width=Math.max(320,rect.width)*dpr;canvas.height=Math.max(250,rect.height)*dpr;const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
+ const W=rect.width,H=rect.height,pad={l:42,r:12,t:18,b:58},max=Math.max(1,...budgetVals,...expenseVals)*1.15,y=v=>pad.t+(H-pad.t-pad.b)*(1-v/max),step=(W-pad.l-pad.r)/Math.max(labels.length,1);
+ ctx.clearRect(0,0,W,H);ctx.strokeStyle="#E3E7E3";ctx.fillStyle="#8A908A";ctx.font="10px Century Gothic";
+ for(let i=0;i<=4;i++){let val=max*i/4,yy=y(val);ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();ctx.fillText(Math.round(val).toLocaleString(),2,yy+3)}
+ const barW=Math.min(26,step*.52);
+ budgetVals.forEach((v,i)=>{let x=pad.l+step*i+step/2-barW/2,yy=y(v),h=H-pad.b-yy;ctx.fillStyle=(expenseVals[i]>v&&expenseVals[i]>0)?"#C69491":"#96ACA0";ctx.fillRect(x,yy,barW,Math.max(0,h))});
+ ctx.strokeStyle="#7D9094";ctx.lineWidth=3;ctx.beginPath();expenseVals.forEach((v,i)=>{let x=pad.l+step*i+step/2,yy=y(v);i?ctx.lineTo(x,yy):ctx.moveTo(x,yy)});ctx.stroke();
+ ctx.fillStyle="#6E756E";ctx.font="10px Century Gothic";ctx.textAlign="center";labels.forEach((lab,i)=>{let x=pad.l+step*i+step/2;ctx.save();ctx.translate(x,H-pad.b+13);if(labels.length>8){ctx.rotate(-Math.PI/4);ctx.textAlign="right"}ctx.fillText(String(lab).slice(0,13),0,0);ctx.restore()});ctx.textAlign="left";
+}
+
+
+function updateDailyMessage(){
+ const now=new Date(),hour=now.getHours();
+ const greeting=hour<12?"Good Morning!":hour<18?"Good Afternoon!":"Good Evening!";
+ const quotes=[
+  "Small steps today lead to big changes tomorrow.",
+  "Spend with intention. Save with purpose.",
+  "Every mindful choice brings you closer to your goals.",
+  "A little progress each day adds up beautifully.",
+  "You are building a calmer, stronger financial future.",
+  "Discipline today creates freedom tomorrow.",
+  "Your money should support the life you want to live.",
+  "Progress matters more than perfection.",
+  "Today is another chance to choose what matters most.",
+  "Clarity grows one thoughtful expense at a time."
+ ];
+ const dayKey=Math.floor(new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime()/86400000);
+ const dailyGreeting=document.getElementById("dailyGreeting"),dailyQuote=document.getElementById("dailyQuote");
+ if(dailyGreeting)dailyGreeting.textContent=greeting;
+ if(dailyQuote)dailyQuote.textContent="“"+quotes[dayKey%quotes.length]+"”";
+ const homeGreeting=document.getElementById("homeGreeting");
+ const homeQuote=document.getElementById("homeQuote");
+ if(homeGreeting)homeGreeting.innerHTML=greeting.replace("!",", Gigi!")+" <span class=\"home-sun\">☼</span>";
+ if(homeQuote){
+   const quote=quotes[dayKey%quotes.length];
+   homeQuote.innerHTML="“"+quote.replace(/, /,",<br>")+"”";
+ }
+}
+function setDefaultLandingPage(){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById("home").classList.add("active");
+ navStack=["home"];
+ refreshHomeSummary();
+ updateDailyMessage();
+}
+
+async function startApp(){
+ await restoreOffline();initMonthSelectors();renderBudget();updateActionButtons();updateDailyMessage();refreshHomeSummary();setDefaultLandingPage();
+ if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("service-worker.js").catch(()=>notify("Installable offline mode is unavailable in this browser.","error"));
+ if(!localStorage.getItem("budgetPlannerGuideSeen"))setTimeout(()=>document.getElementById("guideModal").hidden=false,350);else setTimeout(openCloudSetup,450);
+}
+function finishGuide(){localStorage.setItem("budgetPlannerGuideSeen","1");document.getElementById("guideModal").hidden=true;setTimeout(openCloudSetup,200)}
+startApp();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</body>
+</html>
