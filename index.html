@@ -751,7 +751,7 @@ function refreshItems(){
 }
 function clearExpenseEntry(){
  document.getElementById("entryDate").value="";
- document.getElementById("entryDateShort").value="";
+ document.getElementById("entryDateShort").value=new Date().toISOString().split('T')[0];
  document.getElementById("paidFor").value="";
  document.getElementById("entryAmount").value="";
  document.getElementById("entryCategory").value="";
