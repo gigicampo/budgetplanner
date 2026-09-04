@@ -1,0 +1,23 @@
+BUDGET PLANNER — CLOUD SYNC SETUP
+
+Before selling or publishing the app, register the deployed HTTPS domain with the cloud providers you want to offer.
+
+GOOGLE DRIVE (default)
+1. Create a Web OAuth Client in Google Cloud Console.
+2. Enable Google Drive API.
+3. Add the final HTTPS app domain to Authorized JavaScript origins.
+4. Open the HTML file and place the client ID in:
+   <meta name="google-client-id" content="YOUR_CLIENT_ID">
+
+MICROSOFT ONEDRIVE (secondary)
+1. Register a Single Page Application in Microsoft Entra.
+2. Add the final HTTPS app URL as a redirect URI.
+3. Place the application ID in:
+   <meta name="microsoft-client-id" content="YOUR_APPLICATION_ID">
+
+Dropbox and other providers require their own publisher app registrations. Until configured, customers can use the built-in offline recovery and Download Budget File action, then save the file through their device's Files or cloud-storage app.
+
+IMPORTANT
+- OAuth credentials must never include a client secret in this HTML package.
+- Serve the package over HTTPS. Cloud login and installable-app features do not work correctly when the HTML is opened directly from a local file.
+- Test the final OAuth consent screen and authorized domain before distribution.
