@@ -15,9 +15,12 @@ MICROSOFT ONEDRIVE (secondary)
 3. Place the application ID in:
    <meta name="microsoft-client-id" content="YOUR_APPLICATION_ID">
 
-Dropbox and other providers require their own publisher app registrations. Until configured, customers can use the built-in offline recovery and Download Budget File action, then save the file through their device's Files or cloud-storage app.
+Dropbox is displayed as Coming Soon and is intentionally disabled. Customers can use the built-in offline recovery and Download Budget File action, then save the .xlsx file through their device's Files or cloud-storage app.
 
 IMPORTANT
 - OAuth credentials must never include a client secret in this HTML package.
 - Serve the package over HTTPS. Cloud login and installable-app features do not work correctly when the HTML is opened directly from a local file.
 - Test the final OAuth consent screen and authorized domain before distribution.
+- The app stores one genuine, editable Budget File.xlsx inside one Budget Planner folder per connected account.
+- Older Budget File.xls or Budget File.json data created by a previous version is migrated in place to Budget File.xlsx during the next successful connection.
+- If old duplicate folders already exist, review and remove the unused duplicates manually after confirming which folder contains the latest workbook. The app will not delete cloud folders automatically.

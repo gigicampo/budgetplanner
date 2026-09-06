@@ -8,6 +8,8 @@
   "background_color": "#F7F5F1",
   "theme_color": "#F7F5F1",
   "icons": [
-    {"src": "Budget-Planner-App-Icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+    {"src": "Budget-Planner-App-Icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "Budget-Planner-App-Icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "Budget-Planner-App-Icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}
   ]
 }

@@ -4,10 +4,11 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#F7F5F1"/>
-<meta name="google-client-id" content="544803549549-94pkuarje378i7fs1u70g9frt7qrbd7n.apps.googleusercontent.com"/>
+<meta name="google-client-id" content=""/>
 <meta name="microsoft-client-id" content=""/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
+<link rel="apple-touch-icon" href="Budget-Planner-App-Icon-192.png"/>
 <title>Budget Planner</title>
 <style>
 :root{
@@ -239,8 +240,31 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 .toast-stack{position:fixed;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));z-index:100;display:grid;gap:8px;max-width:min(360px,calc(100vw - 32px))}.toast{padding:12px 14px;border-radius:14px;background:#315B47;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.18);font-size:14px}.toast.error{background:#A33F45}
 .modal{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:18px;background:rgba(40,45,41,.42);backdrop-filter:blur(5px)}.modal[hidden]{display:none}.modal-card{width:min(520px,100%);max-height:90vh;overflow:auto;padding:22px;border-radius:24px;background:#FFFDFB;box-shadow:0 24px 70px rgba(0,0,0,.24)}.modal-card h2{margin-bottom:8px}.provider-list{display:grid;gap:10px;margin:18px 0}.provider{width:100%;display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--ink);font:inherit;text-align:left}.provider.primary{border-color:#96ACA0;background:#F3F8F5}.provider strong{display:block}.provider small{display:block;color:var(--muted);margin-top:2px}.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:16px}.modal-actions button,.pdf-actions button{border:0;border-radius:13px;padding:11px 14px;font:inherit;font-weight:800}.primary-btn{background:var(--olive);color:#fff}.secondary-btn{background:#EEF1ED;color:var(--olive)}.error-text{color:#B3262D!important;font-weight:700}.pdf-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.pdf-actions button{background:var(--blue);color:#fff}
 .guide-link{display:flex;align-items:center;justify-content:center;gap:7px;width:max-content;margin:18px auto 4px;padding:9px 14px;border:1px solid rgba(96,102,90,.2);border-radius:999px;background:rgba(255,255,255,.72);color:var(--olive);font-size:13px;font-weight:800;text-decoration:none}.guide-intro{display:grid;gap:10px;margin:16px 0}.guide-step{padding:12px 14px;border-radius:14px;background:#F3F7F4}.guide-step strong{display:block;margin-bottom:3px}.guide-step span{font-size:13px;line-height:1.45;color:var(--muted)}
+.home-file-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:15px auto 0}.home-file-actions .guide-link{margin:0}.home-file-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;border:1px solid rgba(96,102,90,.22);border-radius:999px;background:rgba(255,255,255,.82);color:var(--olive);font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}.home-file-link.secondary{background:rgba(237,243,239,.92)}
+.provider:disabled{cursor:not-allowed;opacity:.58;background:#F3F3F1}.coming-soon{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#F4D8D4;color:#8E5555;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.import-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.import-stat{padding:11px;border-radius:13px;background:#F3F7F4;text-align:center}.import-stat strong{display:block;font-size:21px;color:var(--olive)}.import-stat small{color:var(--muted)}.name-field{font-size:18px;margin-top:8px}
 .cloud-more{margin-top:8px;border-top:1px solid var(--line);padding-top:10px}.cloud-more summary{cursor:pointer;padding:11px 4px;color:var(--olive);font-weight:800}.cloud-more .provider-list{margin:8px 0 0}
 @media(max-width:560px){.data-actions{grid-template-columns:1fr}.sync-bar{margin-left:0;margin-right:0}.modal-card{padding:18px}.pdf-actions button{flex:1 1 100%}}
+
+/* Analytics — calm financial snapshot inspired by the supplied reference. */
+#analytics.active{max-width:1120px;margin:auto}
+.analytics-heading{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px;padding:5px 0 14px;border-bottom:1px solid rgba(96,102,90,.12)}
+.analytics-heading-copy{flex:1}.analytics-heading-copy h2{margin:0;font-size:clamp(27px,4vw,36px);font-weight:700;letter-spacing:-.035em;color:#303630}.analytics-heading-copy p{margin:4px 0 0;font-size:14px}
+.analytics-period{width:126px;flex:0 0 auto}.analytics-period label{margin:0 0 5px;font-size:10px}.analytics-period select{height:44px;padding:0 11px;background:#FFFDFB;box-shadow:0 5px 15px rgba(96,102,90,.07)}
+.analytics-kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.analytics-kpis .metric{min-height:156px;padding:17px;border:0;border-radius:20px;box-shadow:0 8px 22px rgba(96,102,90,.055)}
+.analytics-kpis .metric.blush{background:linear-gradient(145deg,#FBE1DF,#F8CECB)}.analytics-kpis .metric.sage{background:linear-gradient(145deg,#E2EEE7,#CFE2D7)}.analytics-kpis .metric.blue{background:linear-gradient(145deg,#E0E9EE,#C9D9E2)}.analytics-kpis .metric.sand{background:linear-gradient(145deg,#F2ECE0,#E8DFCF)}
+.metric-icon{width:38px;height:38px;display:grid;place-items:center;margin-bottom:10px;border-radius:12px;background:rgba(255,255,255,.62);color:#65786C}.metric-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.analytics-kpis .metric small{font-size:12px;color:#4D554E}.analytics-kpis .metric strong{font-size:clamp(19px,2.3vw,25px);line-height:1.1;color:#303630}
+.kpi-progress{height:8px;margin-top:14px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.7)}.kpi-progress span{display:block;width:0;height:100%;border-radius:inherit;background:#8E6C6A;transition:width .35s ease}.metric.sage .kpi-progress span{background:#5D8B72}.metric.blue .kpi-progress span{background:#5F7E89}.metric.sand .kpi-progress span{background:#7B947F}.kpi-caption{display:block;margin-top:7px;font-size:11px;color:#566058;font-weight:700}
+.analytics-view-tabs{max-width:360px;margin:0 0 12px}
+.analytics-lower{display:grid;grid-template-columns:minmax(0,2fr) minmax(250px,.82fr);gap:16px;align-items:stretch}
+.analytics-report{margin:0;padding:20px;border:1px solid rgba(96,102,90,.14);border-radius:22px;background:rgba(255,255,255,.9)}
+.analytics-report .canvas-wrap{height:320px}.analytics-report .legend{display:flex;gap:14px;align-items:center;text-align:left}.legend-dot{display:inline-block;width:9px;height:9px;margin-right:5px;border-radius:50%}.legend-dot.budget{background:#79A08B}.legend-dot.expense{background:#D9878A}
+.quick-card{padding:20px;border:1px solid rgba(96,102,90,.14);border-radius:22px;background:rgba(255,255,255,.9);box-shadow:0 8px 24px rgba(96,102,90,.07)}.quick-card h3{font-size:18px;margin-bottom:14px}.quick-actions-list{display:grid;gap:10px}.quick-action{width:100%;display:grid;grid-template-columns:42px 1fr 18px;align-items:center;gap:10px;padding:12px;border:1px solid #E5E9E5;border-radius:15px;background:#FFFDFB;color:var(--ink);font:inherit;font-size:13px;font-weight:800;text-align:left;cursor:pointer}.quick-action:hover{background:#F2F7F4;border-color:#C9D8CF}.quick-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#DDEAE2;color:#5F846E}.quick-icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.quick-arrow{font-size:22px;color:#9AA19A}
+.analytics-affirmation{display:flex;align-items:center;gap:11px;margin:16px 0 0;padding:14px 18px;border-radius:18px;background:linear-gradient(90deg,#EEF4EF,#F6F2EC);color:#536157;font-size:14px;font-style:italic}.analytics-affirmation svg{width:26px;height:26px;flex:0 0 auto;fill:none;stroke:#70917C;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:820px){.analytics-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-lower{grid-template-columns:1fr}.quick-actions-list{grid-template-columns:repeat(3,minmax(0,1fr))}.quick-action{grid-template-columns:38px 1fr}.quick-arrow{display:none}}
+@media(max-width:560px){.analytics-heading{align-items:center}.analytics-heading-copy h2{font-size:27px}.analytics-period{width:108px}.analytics-kpis{gap:10px}.analytics-kpis .metric{min-height:145px;padding:14px}.analytics-report{padding:14px}.analytics-report .canvas-wrap{height:280px}.quick-actions-list{grid-template-columns:1fr}.quick-action{grid-template-columns:42px 1fr 18px}.quick-arrow{display:block}.chart-head{display:block}.analytics-report .legend{margin-top:8px}.analytics-affirmation{font-size:13px}}
 </style>
 </head>
 <body>
@@ -254,7 +278,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
   </header>
 
   <div class="home-welcome">
-    <div id="homeGreeting" class="home-greeting">Good Morning, Gigi! <span class="home-sun">☼</span></div>
+    <div id="homeGreeting" class="home-greeting">Good Morning! <span class="home-sun">☼</span></div>
     <div id="homeQuote" class="home-quote">“Discipline today,<br>freedom tomorrow.”</div>
   </div>
 
@@ -263,7 +287,11 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
     <button class="home-nav-card analytics" onclick="nav('analytics')" aria-label="Open Analytics"><span class="home-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7M3 20h18"/></svg></span><span class="home-nav-copy"><strong>Analytics</strong><small>Track your budget and spending performance.</small></span><span class="home-chevron" aria-hidden="true">›</span></button>
     <button class="home-nav-card setup" onclick="nav('setup')" aria-label="Open Budget Setup"><span class="home-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h18v13H3zM5 7V4h9l2 3M15 12h6v5h-6a2.5 2.5 0 0 1 0-5Z"/><circle cx="16" cy="14.5" r=".7" fill="currentColor" stroke="none"/></svg></span><span class="home-nav-copy"><strong>Budget Setup</strong><small>Manage monthly budgets and categories.</small></span><span class="home-chevron" aria-hidden="true">›</span></button>
   </div>
-  <a class="guide-link" href="user-guide.html" target="_blank" rel="noopener">? Open User Guide</a>
+  <div class="home-file-actions">
+    <a class="guide-link" href="user-guide.html" target="_blank" rel="noopener">? Open User Guide</a>
+    <a id="homeWorkbookLink" class="home-file-link" href="#" onclick="return openLocalWorkbook(event)">▦ Budget File.xlsx</a>
+    <button class="home-file-link secondary" type="button" onclick="chooseImportFile()">⇧ Import Budget File</button>
+  </div>
 
   <div class="page-signature">RCCampo | PH | 2026</div>
 </section>
@@ -303,7 +331,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
   <div class="toolbar">
     <button class="tool" title="Save Budget Setup" onclick="saveBudget()">✓</button>
     <button id="budgetDataBtn" class="tool blue" title="Show MyBudget data" onclick="showBudgetData()" disabled>▦</button>
-    <button id="exportBudgetBtn" class="tool sage" title="Save/Export Budget File" onclick="exportWorkbook()" disabled>⇩</button>
+    <button id="exportBudgetBtn" class="tool sage" title="Save/Export Budget File.xlsx" onclick="exportWorkbook()" disabled>⇩</button>
   </div>
 
   <div class="page-signature">RCCampo | PH | 2026</div>
@@ -341,7 +369,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
   <div class="toolbar">
     <button class="tool" title="Save Expense" onclick="saveExpense()">✓</button>
     <button id="expenseDataBtn" class="tool blue" title="Show MyExpenses data" onclick="showExpenseData()" disabled>▦</button>
-    <button id="exportExpenseBtn" class="tool sage" title="Save/Export Budget File" onclick="exportWorkbook()" disabled>⇩</button>
+    <button id="exportExpenseBtn" class="tool sage" title="Save/Export Budget File.xlsx" onclick="exportWorkbook()" disabled>⇩</button>
   </div>
 
   <div class="page-signature">RCCampo | PH | 2026</div>
@@ -360,7 +388,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
   <div class="toolbar">
     <button id="budgetDeleteBtn" class="tool rose" title="Delete Selected Rows" onclick="deleteSelectedRows('budget')" style="display:none">🗑</button>
     <button id="budgetInlineSaveBtn" class="tool rose" title="Save Data" onclick="saveBudgetTableEdits()" style="display:none">✓</button>
-    <button class="tool sage" title="Download latest Budget File" onclick="downloadWorkbook()">⇩</button>
+    <button class="tool sage" title="Download latest Budget File.xlsx" onclick="downloadWorkbook()">⇩</button>
   </div>
 
   <div class="page-signature">RCCampo | PH | 2026</div>
@@ -379,37 +407,43 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
   <div class="toolbar">
     <button id="expenseDeleteBtn" class="tool rose" title="Delete Selected Rows" onclick="deleteSelectedRows('expense')" style="display:none">🗑</button>
     <button id="expenseInlineSaveBtn" class="tool rose" title="Save Data" onclick="saveExpenseTableEdits()" style="display:none">✓</button>
-    <button class="tool sage" title="Download latest Budget File" onclick="downloadWorkbook()">⇩</button>
+    <button class="tool sage" title="Download latest Budget File.xlsx" onclick="downloadWorkbook()">⇩</button>
   </div>
 
   <div class="page-signature">RCCampo | PH | 2026</div>
 </section>
 
 <section id="analytics" class="screen">
-  <div class="topbar"><button class="back" onclick="goBack()">‹</button><div><div class="brand">KPI Report</div><h2>Analytics</h2></div></div>
-  <div class="metric-grid">
-    <div class="metric"><small>Total Budget</small><strong id="kpiBudget">₱0</strong></div>
-    <div class="metric"><small>Total Expenses</small><strong id="kpiExpense">₱0</strong></div>
-    <div class="metric"><small>Remaining</small><strong id="kpiRemaining">₱0</strong></div>
-    <div class="metric"><small>Budget Used</small><strong id="kpiUsed">0%</strong></div>
+  <div class="analytics-heading">
+    <button class="back" onclick="goBack()" title="Back" aria-label="Go back">‹</button>
+    <div class="analytics-heading-copy"><h2 id="analyticsGreeting">Your financial snapshot</h2><p>Small steps. A brighter tomorrow.</p></div>
+    <div id="analyticsYearControl" class="analytics-period"><label for="analyticsYear">Report Year</label><select id="analyticsYear" onchange="refreshAnalytics()"></select></div>
   </div>
-  <div class="segmented">
+  <div class="metric-grid analytics-kpis">
+    <div class="metric blush"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h15a2 2 0 0 1 2 2v9H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h12v3"/><path d="M15 11h6v4h-6a2 2 0 0 1 0-4Z"/></svg></span><small>Total Budget</small><strong id="kpiBudget">₱0</strong><div class="kpi-progress"><span id="kpiBudgetBar"></span></div><span id="kpiBudgetCaption" class="kpi-caption">Monthly plan</span></div>
+    <div class="metric sage"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h3"/></svg></span><small>Total Expenses</small><strong id="kpiExpense">₱0</strong><div class="kpi-progress"><span id="kpiExpenseBar"></span></div><span id="kpiExpenseCaption" class="kpi-caption">0% of budget</span></div>
+    <div class="metric blue"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 20V11M10 20V7M15 20V4M20 20v-6"/></svg></span><small>Remaining</small><strong id="kpiRemaining">₱0</strong><div class="kpi-progress"><span id="kpiRemainingBar"></span></div><span id="kpiRemainingCaption" class="kpi-caption">0% left</span></div>
+    <div class="metric sand"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 4c-7 1-11 5-11 11 6 0 10-4 11-11Z"/><path d="M5 20c1-5 5-9 11-12"/></svg></span><small>Budget Used</small><strong id="kpiUsed">0%</strong><div class="kpi-progress"><span id="kpiUsedBar"></span></div><span id="kpiUsedCaption" class="kpi-caption">On track</span></div>
+  </div>
+  <div class="segmented analytics-view-tabs">
     <button id="monthTab" class="active" onclick="setAnalyticsMode('month')">By Month</button>
     <button id="categoryTab" onclick="setAnalyticsMode('category')">By Category</button>
   </div>
-  <div id="analyticsYearControl" class="month-card">
-    <label>Report Year</label>
-    <select id="analyticsYear" onchange="refreshAnalytics()"></select>
+  <div class="analytics-lower">
+    <div class="chart-card analytics-report">
+      <div class="chart-head"><div><div class="brand">Budget vs. Expenses</div><h3 id="chartTitle">Amounts per Month</h3></div><div class="legend"><span><i class="legend-dot budget"></i>Budget</span><span><i class="legend-dot expense"></i>Expenses</span></div></div>
+      <div class="canvas-wrap"><canvas id="analyticsCanvas"></canvas></div>
+    </div>
+    <aside class="quick-card" aria-label="Quick Actions">
+      <h3>Quick Actions</h3>
+      <div class="quick-actions-list">
+        <button class="quick-action" onclick="downloadAnalyticsPdf('month')"><span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h10v4H7zM6 17H4V9h16v8h-2M7 14h10v7H7z"/></svg></span><span>Print / Save By Month as PDF</span><span class="quick-arrow">›</span></button>
+        <button class="quick-action" onclick="downloadAnalyticsPdf('category')"><span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V9h4v10M10 19V5h4v14M16 19v-7h4v7M3 19h18"/></svg></span><span>Print / Save By Category as PDF</span><span class="quick-arrow">›</span></button>
+        <button class="quick-action" onclick="downloadAnalyticsPdf('both')"><span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3h9l3 3v15H8zM4 7h4v14H4zM16 3v4h4"/></svg></span><span>Print / Save Both as PDF</span><span class="quick-arrow">›</span></button>
+      </div>
+    </aside>
   </div>
-  <div class="chart-card">
-    <div class="chart-head"><div><div class="brand">Budget vs Expenses</div><h3 id="chartTitle">Amounts per Month</h3></div><div class="legend">Columns = Budget<br>Line = Expenses<br><span style="color:#C69491;font-weight:900">Rose = over budget</span></div></div>
-    <div class="canvas-wrap"><canvas id="analyticsCanvas"></canvas></div>
-  </div>
-  <div class="pdf-actions" aria-label="Analytics PDF downloads">
-    <button onclick="downloadAnalyticsPdf('month')">Download By Month PDF</button>
-    <button onclick="downloadAnalyticsPdf('category')">Download By Category PDF</button>
-    <button onclick="downloadAnalyticsPdf('both')">Download Both PDF</button>
-  </div>
+  <div class="analytics-affirmation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9M12 15c-5 0-8-3-8-8 5 0 8 3 8 8ZM12 12c0-5 3-8 8-8 0 5-3 8-8 8Z"/></svg><span>A healthier financial you is a happier you.</span></div>
 
   <div class="page-signature">RCCampo | PH | 2026</div>
 </section>
@@ -426,7 +460,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
   </div>
   <details class="cloud-more"><summary>Other cloud options</summary><div class="provider-list">
    <button class="provider" onclick="connectCloud('onedrive')"><span>▦</span><span><strong>Microsoft OneDrive</strong><small>Secondary option for Excel users</small></span></button>
-   <button class="provider" onclick="connectCloud('dropbox')"><span>◇</span><span><strong>Dropbox</strong><small>Available when configured by the publisher</small></span></button>
+   <button class="provider" type="button" disabled aria-disabled="true"><span>◇</span><span><strong>Dropbox <span class="coming-soon">Coming Soon</span></strong><small>Cloud connection is not available yet</small></span></button>
    <button class="provider" onclick="connectCloud('other')"><span>⇩</span><span><strong>Other cloud storage</strong><small>Download and store through Files, Box, iCloud Drive, or another app</small></span></button>
   </div></details>
   <p id="cloudError" class="error-text" hidden></p>
@@ -450,6 +484,31 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
  </div>
 </div>
 
+<div id="nameModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="nameTitle">
+ <div class="modal-card">
+  <div class="brand">Welcome</div><h2 id="nameTitle">What should we call you?</h2>
+  <p>Your name is saved only on this device and used in your greeting.</p>
+  <label for="userNameInput">Name</label><input id="userNameInput" class="name-field" type="text" maxlength="40" autocomplete="name" placeholder="Enter your name" onkeydown="if(event.key==='Enter')saveUserName()">
+  <p id="nameError" class="error-text" hidden>Please enter a name.</p>
+  <div class="modal-actions"><button class="primary-btn" onclick="saveUserName()">Continue</button></div>
+ </div>
+</div>
+<div id="importModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="importTitle">
+ <div class="modal-card">
+  <div class="brand">Import review</div><h2 id="importTitle">Review Budget File changes</h2>
+  <p id="importFileName"></p>
+  <div class="import-summary">
+   <div class="import-stat"><strong id="importAdded">0</strong><small>Added</small></div>
+   <div class="import-stat"><strong id="importChanged">0</strong><small>Changed</small></div>
+   <div class="import-stat"><strong id="importRemoved">0</strong><small>Missing</small></div>
+  </div>
+  <p id="importDetails" class="note"></p>
+  <div class="modal-actions"><button class="secondary-btn" onclick="cancelImport()">Cancel</button><button class="secondary-btn" onclick="applyImportedData('merge')">Merge</button><button class="primary-btn" onclick="applyImportedData('replace')">Replace</button></div>
+ </div>
+</div>
+<input id="importFileInput" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden onchange="reviewImportedFile(event)">
+
+<script src="jszip.min.js"></script>
 <script>
 const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DEFAULTS=["Basic Necessities","Bills","School","Events","Goals"];
@@ -459,6 +518,17 @@ const CURRENT_YEAR=NOW.getFullYear();
 const YEARS=Array.from({length:11},(_,i)=>CURRENT_YEAR-5+i);
 let navStack=["home"], analyticsMode="month", budgetEditMode=false, expenseEditMode=false, budgetDeleteMode=false, expenseDeleteMode=false;
 let cloudToken="", cloudFolderId="", cloudFileId="", cloudProvider=sessionStorage.getItem("cloudProvider")||"", msalApp=null, cloudPreparing=false;
+let pendingImport=null, workbookObjectUrl="";
+
+function userName(){return (localStorage.getItem("budgetPlannerUserName")||"").trim()}
+function saveUserName(){
+ const input=document.getElementById("userNameInput"),name=input.value.trim(),error=document.getElementById("nameError");
+ if(!name){error.hidden=false;input.focus();return}
+ localStorage.setItem("budgetPlannerUserName",name.slice(0,40));error.hidden=true;document.getElementById("nameModal").hidden=true;updateDailyMessage();continueFirstRun();
+}
+function continueFirstRun(){
+ if(!localStorage.getItem("budgetPlannerGuideSeen"))setTimeout(()=>document.getElementById("guideModal").hidden=false,180);else setTimeout(openCloudSetup,220);
+}
 
 function notify(message,type="success"){
  const host=document.getElementById("toastStack"),el=document.createElement("div");
@@ -475,8 +545,8 @@ function openCloudSetup(){document.getElementById("cloudError").hidden=true;docu
 function closeCloudSetup(){document.getElementById("cloudModal").hidden=true;setSyncStatus(navigator.onLine?"Offline copy ready":"Offline · changes queued",navigator.onLine?"ok":"busy")}
 
 function openOfflineDb(){return new Promise((resolve,reject)=>{const req=indexedDB.open("BudgetPlannerOffline",1);req.onupgradeneeded=()=>req.result.createObjectStore("state");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
-async function persistOffline(){
- try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction("state","readwrite");tx.objectStore("state").put({budget,expenses,updatedAt:new Date().toISOString()},"latest");tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});setSyncStatus(navigator.onLine?"Saved offline · syncing":"Saved offline · sync queued","busy");if(navigator.onLine&&cloudToken){if(cloudProvider==="google")await syncToGoogleDrive();if(cloudProvider==="onedrive")await syncToOneDrive()}}catch(e){showError("Offline recovery could not be updated: "+e.message)}
+async function persistOffline(syncCloud=true){
+ try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction("state","readwrite");tx.objectStore("state").put({budget,expenses,updatedAt:new Date().toISOString()},"latest");tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});setSyncStatus(navigator.onLine?(syncCloud?"Saved offline · syncing":"Cloud copy loaded"):"Saved offline · sync queued",syncCloud?"busy":"ok");if(syncCloud&&navigator.onLine&&cloudToken){if(cloudProvider==="google")await syncToGoogleDrive();if(cloudProvider==="onedrive")await syncToOneDrive()}}catch(e){showError("Offline recovery could not be updated: "+e.message)}
 }
 async function restoreOffline(){
  try{const db=await openOfflineDb();const saved=await new Promise((resolve,reject)=>{const tx=db.transaction("state");const req=tx.objectStore("state").get("latest");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});if(saved&&!localStorage.getItem("budgetSetup")){budget=saved.budget||freshBudget();expenses=saved.expenses||[];localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));notify("Recovered the latest offline copy.")}}catch(e){console.warn(e)}
@@ -488,7 +558,7 @@ async function connectCloud(provider){
  if(provider==="google")return connectGoogleDrive();
  if(provider==="onedrive")return connectOneDrive();
  if(provider==="other"){closeCloudSetup();downloadWorkbook();return}
- providerError("Dropbox needs its publisher App Key before customer sign-in can be activated. Google Drive remains the default; manual download works with any cloud-storage app.")
+ providerError("Dropbox sync is coming soon. Google Drive remains the default; manual download works with any cloud-storage app.")
 }
 function loadScript(src){return new Promise((resolve,reject)=>{if(document.querySelector(`script[src="${src}"]`))return resolve();const s=document.createElement("script");s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error("Sign-in service could not be reached."));document.head.appendChild(s)})}
 async function connectGoogleDrive(){
@@ -509,13 +579,12 @@ async function prepareGoogleFolder(){
  }catch(e){providerError(e.message);openCloudSetup()}finally{cloudPreparing=false}
 }
 async function loadFromGoogleDrive(){
- const fileQuery=encodeURIComponent(`name='Budget File.xls' and '${cloudFolderId}' in parents and trashed=false`);let found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${fileQuery}&orderBy=createdTime&fields=files(id,name,createdTime,modifiedTime)`)).json();
- if(found.files.length){cloudFileId=found.files[0].id;if(found.files.length>1)notify("Multiple older Budget File.xls files were found. The original file will be reused; no duplicate was created.","error");const text=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).text();applyCloudWorkbook(text);return}
- const oldQuery=encodeURIComponent(`name='Budget File.json' and '${cloudFolderId}' in parents and trashed=false`);found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${oldQuery}&orderBy=createdTime&fields=files(id,name,createdTime)`)).json();
- if(found.files.length){cloudFileId=found.files[0].id;const text=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).text();applyCloudWorkbook(text);await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xls",mimeType:"application/vnd.ms-excel"})});notify("Budget File.json was migrated to Budget File.xls.")}
+ const query=encodeURIComponent(`name='Budget File.xlsx' and '${cloudFolderId}' in parents and trashed=false`);let found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${query}&orderBy=createdTime&fields=files(id,name,createdTime,modifiedTime)`)).json();
+ if(found.files.length){cloudFileId=found.files[0].id;if(found.files.length>1)notify("Multiple older Budget File.xlsx files were found. The original file will be reused; no duplicate was created.","error");const bytes=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).arrayBuffer();await applyCloudWorkbook(bytes);return}
+ for(const legacyName of ["Budget File.xls","Budget File.json"]){const oldQuery=encodeURIComponent(`name='${legacyName}' and '${cloudFolderId}' in parents and trashed=false`);found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${oldQuery}&orderBy=createdTime&fields=files(id,name,createdTime)`)).json();if(found.files.length){cloudFileId=found.files[0].id;const text=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).text();await applyCloudWorkbook(text);await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME})});await syncToGoogleDrive();notify(`${legacyName} was migrated to Budget File.xlsx.`);return}}
 }
 async function syncToGoogleDrive(){
- if(!cloudToken||!cloudFolderId)return;try{setSyncStatus("Syncing Budget File.xls to Google Drive","busy");const payload=spreadsheetXml();const boundary="budget_planner_boundary";const metadata={name:"Budget File.xls",mimeType:"application/vnd.ms-excel",parents:cloudFileId?undefined:[cloudFolderId]};const body=`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(metadata)}\r\n--${boundary}\r\nContent-Type: application/vnd.ms-excel\r\n\r\n${payload}\r\n--${boundary}--`;const url=cloudFileId?`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=multipart&fields=id,name`:`https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name`;const saved=await (await driveFetch(url,{method:cloudFileId?"PATCH":"POST",headers:{"Content-Type":`multipart/related; boundary=${boundary}`},body})).json();cloudFileId=saved.id||cloudFileId;setSyncStatus("Budget File.xls saved to Google Drive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}
+ if(!cloudToken||!cloudFolderId)return;try{setSyncStatus("Syncing Budget File.xlsx to Google Drive","busy");if(!cloudFileId){const created=await (await driveFetch("https://www.googleapis.com/drive/v3/files?fields=id,name",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME,parents:[cloudFolderId]})})).json();cloudFileId=created.id}const payload=await workbookBlob();await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=media`,{method:"PATCH",headers:{"Content-Type":XLSX_MIME},body:payload});setSyncStatus("Budget File.xlsx saved to Google Drive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}
 }
 async function connectOneDrive(){
  const clientId=document.querySelector('meta[name="microsoft-client-id"]')?.content;if(!clientId)return providerError("OneDrive sign-in needs the publisher's Microsoft application ID. Add it before distributing the app.");
@@ -523,9 +592,10 @@ async function connectOneDrive(){
 }
 async function graphFetch(url,options={}){const r=await fetch(url,{...options,headers:{Authorization:`Bearer ${cloudToken}`,...(options.headers||{})}});if(!r.ok&&r.status!==404)throw new Error(`OneDrive returned ${r.status}. Please sign in again.`);return r}
 async function prepareOneDriveFolder(){let r=await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner");if(r.status===404)await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root/children",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget Planner",folder:{},"@microsoft.graph.conflictBehavior":"fail"})})}
-async function loadFromOneDrive(){let r=await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.xls:/content");if(r.status!==404){applyCloudWorkbook(await r.text());return}const oldMeta=await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.json");if(oldMeta.status!==404){const meta=await oldMeta.json();const old=await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.json:/content");applyCloudWorkbook(await old.text());await graphFetch(`https://graph.microsoft.com/v1.0/me/drive/items/${meta.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xls"})});notify("Budget File.json was migrated to Budget File.xls.")}}
-async function syncToOneDrive(){if(!cloudToken)return;try{setSyncStatus("Syncing Budget File.xls to OneDrive","busy");await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.xls:/content",{method:"PUT",headers:{"Content-Type":"application/vnd.ms-excel"},body:spreadsheetXml()});setSyncStatus("Budget File.xls saved to OneDrive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}}
+async function loadFromOneDrive(){let r=await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.xlsx:/content");if(r.status!==404){await applyCloudWorkbook(await r.arrayBuffer());return}for(const legacyName of ["Budget File.xls","Budget File.json"]){const metaResponse=await graphFetch(`https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/${legacyName}`);if(metaResponse.status!==404){const meta=await metaResponse.json(),old=await graphFetch(`https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/${legacyName}:/content`);await applyCloudWorkbook(await old.text());await graphFetch(`https://graph.microsoft.com/v1.0/me/drive/items/${meta.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx"})});await syncToOneDrive();notify(`${legacyName} was migrated to Budget File.xlsx.`);return}}}
+async function syncToOneDrive(){if(!cloudToken)return;try{setSyncStatus("Syncing Budget File.xlsx to OneDrive","busy");await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.xlsx:/content",{method:"PUT",headers:{"Content-Type":XLSX_MIME},body:await workbookBlob()});setSyncStatus("Budget File.xlsx saved to OneDrive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}}
 window.addEventListener("offline",()=>setSyncStatus("Offline · changes queued","busy"));window.addEventListener("online",()=>{setSyncStatus("Connection restored · syncing","busy");if(cloudToken){if(cloudProvider==="google")syncToGoogleDrive();if(cloudProvider==="onedrive")syncToOneDrive()}else notify("Connection restored. Sign in to resume cloud sync.")});
+let analyticsResizeTimer;window.addEventListener("resize",()=>{clearTimeout(analyticsResizeTimer);analyticsResizeTimer=setTimeout(()=>{if(document.getElementById("analytics").classList.contains("active"))refreshAnalytics()},120)});
 
 function freshBudget(){
  return DEFAULTS.map((name,i)=>({name,frequency:i===3?"Annual":"Monthly",items:[{item:"",month:CURRENT_MONTH,year:CURRENT_YEAR,amount:""}]}));
@@ -751,7 +821,7 @@ function refreshItems(){
 }
 function clearExpenseEntry(){
  document.getElementById("entryDate").value="";
- document.getElementById("entryDateShort").value=isoToShort(document.getElementById("entryDate").value);
+ document.getElementById("entryDateShort").value="";
  document.getElementById("paidFor").value="";
  document.getElementById("entryAmount").value="";
  document.getElementById("entryCategory").value="";
@@ -899,47 +969,90 @@ function editExpenseOnSetup(){
  nav("setup");
 }
 
-/* Excel/Sheets export */
-function xmlEscape(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;")}
-function applyCloudWorkbook(text){
- let parsedBudget=[],parsedExpenses=[];
- const trimmed=String(text||"").trim();
- if(trimmed.startsWith("{")){
-  let old;try{old=JSON.parse(trimmed)}catch(e){throw new Error("The existing Budget File.json is malformed and was not changed.")}
-  if(!Array.isArray(old.budget)||!Array.isArray(old.expenses))throw new Error("The existing Budget File.json does not contain valid Budget Planner data.");parsedBudget=old.budget;parsedExpenses=old.expenses;
- }else{
-  const doc=new DOMParser().parseFromString(trimmed,"application/xml");if(doc.querySelector("parsererror"))throw new Error("Budget File.xls contains malformed spreadsheet data and was not overwritten.");
-  const sheets=[...doc.getElementsByTagNameNS("*","Worksheet")];const tableFor=name=>{const sheet=sheets.find(s=>(s.getAttributeNS("urn:schemas-microsoft-com:office:spreadsheet","Name")||s.getAttribute("ss:Name")||s.getAttribute("Name"))===name);if(!sheet)return [];return [...sheet.getElementsByTagNameNS("*","Row")].map(row=>[...row.getElementsByTagNameNS("*","Cell")].map(cell=>cell.getElementsByTagNameNS("*","Data")[0]?.textContent||""))};
-  const b=tableFor("MyBudget"),e=tableFor("MyExpenses");if(!b.length||!e.length)throw new Error("Budget File.xls must contain both MyBudget and MyExpenses worksheets.");
-  if(b[0].join("|")!=="Frequency Interval|Category|Item|Month|Year|Budget Amount")throw new Error("MyBudget has missing or malformed columns.");if(e[0].join("|")!=="Date|Year|PaidFor|Item|Category|Amount")throw new Error("MyExpenses has missing or malformed columns.");
-  const candidates=b.slice(1).filter(r=>r.some(Boolean)).map(r=>({frequency:r[0],category:r[1],item:r[2],month:r[3],year:Number(r[4]),amount:Number(r[5])}));const budgetError=validateBudgetRows(candidates);if(budgetError)throw new Error(budgetError);
-  const grouped={};candidates.forEach(r=>{if(!grouped[r.category])grouped[r.category]={name:r.category,frequency:r.frequency||"Monthly",items:[]};grouped[r.category].items.push({item:r.item,month:r.month,year:r.year,amount:r.amount})});parsedBudget=Object.values(grouped);
-  parsedExpenses=e.slice(1).filter(r=>r.some(Boolean)).map((r,i)=>{const amount=Number(r[5]),year=Number(r[1]);if(!/^\d{4}-\d{2}-\d{2}$/.test(r[0])||!r[2]||!r[3]||!r[4]||!Number.isFinite(amount)||amount<=0)throw new Error(`MyExpenses row ${i+2} is malformed.`);return {date:r[0],year,paidFor:r[2],item:r[3],category:r[4],amount}});
- }
- budget=parsedBudget;expenses=parsedExpenses;localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));renderBudget();refreshHomeSummary();
+/* Genuine XLSX export, cloud storage, and validated local import */
+const XLSX_MIME="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+function xlsxEscape(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;")}
+function xlsxColumn(index){let name="";for(index++;index;index=Math.floor((index-1)/26))name=String.fromCharCode(65+(index-1)%26)+name;return name}
+function xlsxSheet(rows,widths){
+ const cols=widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("");
+ const body=rows.map((row,ri)=>`<row r="${ri+1}">${row.map((value,ci)=>{const ref=xlsxColumn(ci)+(ri+1),style=ri===0?1:(ci===5?2:0);return typeof value==="number"&&Number.isFinite(value)?`<c r="${ref}" s="${style}"><v>${value}</v></c>`:`<c r="${ref}" s="${style}" t="inlineStr"><is><t xml:space="preserve">${xlsxEscape(value)}</t></is></c>`}).join("")}</row>`).join("");
+ return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"/></sheetViews><cols>${cols}</cols><sheetData>${body}</sheetData><autoFilter ref="A1:F${Math.max(rows.length,1)}"/></worksheet>`;
 }
-function spreadsheetXml(){
- const b=[["Frequency Interval","Category","Item","Month","Year","Budget Amount"],...budgetRows().map(r=>[r.frequency,r.category,r.item,r.month,r.year,r.amount])];
- const e=[["Date","Year","PaidFor","Item","Category","Amount"],...expenseRows().map(r=>[r.date,r.year,r.paidFor,r.item,r.category,r.amount])];
- const sheet=(name,data)=>`<Worksheet ss:Name="${name}"><Table>${data.map(r=>"<Row>"+r.map(v=>`<Cell><Data ss:Type="String">${xmlEscape(v)}</Data></Cell>`).join("")+"</Row>").join("")}</Table></Worksheet>`;
- return `<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">${sheet("MyBudget",b)}${sheet("MyExpenses",e)}</Workbook>`;
+function workbookTables(sourceBudget=budgetRows(),sourceExpenses=expenseRows()){
+ return {budget:[["Frequency Interval","Category","Item","Month","Year","Budget Amount"],...sourceBudget.map(r=>[r.frequency,r.category,r.item,r.month,Number(r.year),Number(r.amount)])],expenses:[["Date","Year","PaidFor","Item","Category","Amount"],...sourceExpenses.map(r=>[r.date,Number(r.year),r.paidFor,r.item,r.category,Number(r.amount)])]};
+}
+async function workbookBlob(sourceBudget=budgetRows(),sourceExpenses=expenseRows()){
+ if(typeof JSZip==="undefined")throw new Error("The Excel component did not load. Reopen the app and try again.");
+ const zip=new JSZip(),tables=workbookTables(sourceBudget,sourceExpenses),created=new Date().toISOString();
+ zip.file("[Content_Types].xml",`<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>`);
+ zip.folder("_rels").file(".rels",`<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/></Relationships>`);
+ zip.folder("docProps").file("core.xml",`<?xml version="1.0" encoding="UTF-8"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"><dc:title>Budget Planner</dc:title><dc:creator>RCCampo</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${created}</dcterms:created></cp:coreProperties>`).file("app.xml",`<?xml version="1.0" encoding="UTF-8"?><Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"><Application>Budget Planner</Application></Properties>`);
+ zip.folder("xl").file("workbook.xml",`<?xml version="1.0" encoding="UTF-8"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="MyBudget" sheetId="1" r:id="rId1"/><sheet name="MyExpenses" sheetId="2" r:id="rId2"/></sheets></workbook>`).file("styles.xml",`<?xml version="1.0" encoding="UTF-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Segoe UI"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Segoe UI"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF60665A"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="4" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`);
+ zip.folder("xl").folder("_rels").file("workbook.xml.rels",`<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`);
+ zip.folder("xl").folder("worksheets").file("sheet1.xml",xlsxSheet(tables.budget,[20,24,28,16,12,18])).file("sheet2.xml",xlsxSheet(tables.expenses,[16,12,24,28,24,18]));
+ return zip.generateAsync({type:"blob",mimeType:XLSX_MIME,compression:"DEFLATE",compressionOptions:{level:6}});
+}
+function cellColumn(ref){const letters=(String(ref).match(/^[A-Z]+/)||[""])[0];let n=0;for(const ch of letters)n=n*26+ch.charCodeAt(0)-64;return Math.max(0,n-1)}
+function excelDate(value){const n=Number(value);if(!Number.isFinite(n))return String(value||"");const d=new Date(Date.UTC(1899,11,30)+Math.round(n)*86400000);return d.toISOString().slice(0,10)}
+async function parseXlsxWorkbook(file){
+ if(typeof JSZip==="undefined")throw new Error("The Excel component did not load. Reopen the app and try again.");
+ let zip;try{zip=await JSZip.loadAsync(file)}catch(e){throw new Error("The selected file is not a valid .xlsx workbook.")}
+ const read=async path=>{const entry=zip.file(path);if(!entry)throw new Error(`The workbook is missing ${path}.`);return entry.async("string")};
+ const xml=text=>{const doc=new DOMParser().parseFromString(text,"application/xml");if(doc.querySelector("parsererror"))throw new Error("The workbook contains malformed XML data.");return doc};
+ const workbook=xml(await read("xl/workbook.xml")),rels=xml(await read("xl/_rels/workbook.xml.rels"));
+ let shared=[];if(zip.file("xl/sharedStrings.xml")){const sharedDoc=xml(await read("xl/sharedStrings.xml"));shared=[...sharedDoc.getElementsByTagNameNS("*","si")].map(si=>[...si.getElementsByTagNameNS("*","t")].map(t=>t.textContent||"").join(""))}
+ const targets={};[...rels.getElementsByTagNameNS("*","Relationship")].forEach(r=>targets[r.getAttribute("Id")]=r.getAttribute("Target"));
+ const sheets={};for(const sheet of workbook.getElementsByTagNameNS("*","sheet")){
+  const name=sheet.getAttribute("name"),id=sheet.getAttributeNS("http://schemas.openxmlformats.org/officeDocument/2006/relationships","id")||sheet.getAttribute("r:id"),target=targets[id];if(!target)continue;
+  const path=target.startsWith("/")?target.slice(1):(target.startsWith("xl/")?target:"xl/"+target.replace(/^\.\//,"")),doc=xml(await read(path));
+  sheets[name]=[...doc.getElementsByTagNameNS("*","row")].map(row=>{const values=[];[...row.getElementsByTagNameNS("*","c")].forEach(c=>{const index=cellColumn(c.getAttribute("r")),type=c.getAttribute("t"),v=c.getElementsByTagNameNS("*","v")[0]?.textContent||"";let value=v;if(type==="s")value=shared[Number(v)]??"";else if(type==="inlineStr")value=[...c.getElementsByTagNameNS("*","t")].map(t=>t.textContent||"").join("");else if(type==="b")value=v==="1";else if(v!==""&&Number.isFinite(Number(v)))value=Number(v);values[index]=value});return values});
+ }
+ return normalizeWorkbookTables(sheets.MyBudget,sheets.MyExpenses);
+}
+function groupBudgetRows(rows){const grouped={};rows.forEach(r=>{if(!grouped[r.category])grouped[r.category]={name:r.category,frequency:r.frequency||"Monthly",items:[]};grouped[r.category].items.push({item:r.item,month:r.month,year:r.year,amount:r.amount})});return Object.values(grouped)}
+function normalizeWorkbookTables(b,e){
+ if(!b?.length||!e?.length)throw new Error("Budget File.xlsx must contain both MyBudget and MyExpenses worksheets.");
+ if(b[0].join("|")!=="Frequency Interval|Category|Item|Month|Year|Budget Amount")throw new Error("MyBudget has missing or malformed columns.");if(e[0].join("|")!=="Date|Year|PaidFor|Item|Category|Amount")throw new Error("MyExpenses has missing or malformed columns.");
+ const budgetRowsImported=b.slice(1).filter(r=>r.some(v=>v!==""&&v!=null)).map(r=>({frequency:String(r[0]||""),category:String(r[1]||"").trim(),item:String(r[2]||"").trim(),month:String(r[3]||""),year:Number(r[4]),amount:Number(r[5])}));
+ const budgetError=validateBudgetRows(budgetRowsImported);if(budgetError)throw new Error(budgetError);
+ const expenseRowsImported=[],seen=new Set();e.slice(1).filter(r=>r.some(v=>v!==""&&v!=null)).forEach((r,i)=>{let date=String(r[0]??"");if(/^\d+(\.\d+)?$/.test(date))date=excelDate(date);const year=Number(r[1])||Number(date.slice(0,4)),amount=Number(r[5]);if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||shortToIso(`${date.slice(5,7)}/${date.slice(8,10)}/${date.slice(0,4)}`)!==date)throw new Error(`MyExpenses row ${i+2}: Date is invalid.`);if(year!==Number(date.slice(0,4)))throw new Error(`MyExpenses row ${i+2}: Year must match Date.`);if(!r[2]||!r[3]||!r[4])throw new Error(`MyExpenses row ${i+2}: PaidFor, Item, and Category are required.`);if(!Number.isFinite(amount)||amount<=0)throw new Error(`MyExpenses row ${i+2}: Amount must be greater than zero.`);const record={date,year,paidFor:String(r[2]).trim(),item:String(r[3]).trim(),category:String(r[4]).trim(),amount},key=JSON.stringify(record).toLowerCase();if(seen.has(key))throw new Error(`MyExpenses row ${i+2}: Duplicate row detected.`);seen.add(key);expenseRowsImported.push(record)});
+ return {budgetRows:budgetRowsImported,expenses:expenseRowsImported};
+}
+function parseLegacySpreadsheetXml(text){const doc=new DOMParser().parseFromString(text,"application/xml");if(doc.querySelector("parsererror"))throw new Error("The legacy Budget File.xls is malformed and was not changed.");const sheets=[...doc.getElementsByTagNameNS("*","Worksheet")];const tableFor=name=>{const sheet=sheets.find(s=>(s.getAttributeNS("urn:schemas-microsoft-com:office:spreadsheet","Name")||s.getAttribute("ss:Name")||s.getAttribute("Name"))===name);if(!sheet)return [];return [...sheet.getElementsByTagNameNS("*","Row")].map(row=>[...row.getElementsByTagNameNS("*","Cell")].map(cell=>cell.getElementsByTagNameNS("*","Data")[0]?.textContent||""))};return normalizeWorkbookTables(tableFor("MyBudget"),tableFor("MyExpenses"))}
+async function applyCloudWorkbook(data){
+ let imported;if(typeof data==="string"&&data.trim().startsWith("{")){let old;try{old=JSON.parse(data)}catch(e){throw new Error("The existing Budget File.json is malformed and was not changed.")}if(!Array.isArray(old.budget)||!Array.isArray(old.expenses))throw new Error("The existing Budget File.json does not contain valid Budget Planner data.");imported={budgetRows:old.budget.flatMap(c=>(c.items||[]).map(r=>({frequency:c.frequency,category:c.name,item:r.item,month:r.month,year:Number(r.year)||CURRENT_YEAR,amount:Number(r.amount)||0}))),expenses:old.expenses}}else if(typeof data==="string"&&data.trim().startsWith("<"))imported=parseLegacySpreadsheetXml(data);else imported=await parseXlsxWorkbook(data);
+ budget=groupBudgetRows(imported.budgetRows);expenses=imported.expenses;localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));await persistOffline(false);renderBudget();refreshHomeSummary();updateActionButtons();
+}
+function budgetKey(r){return [r.category,r.item,r.month,r.year].map(v=>String(v).trim().toLowerCase()).join("|")}
+function expenseKey(r){return [r.date,r.year,r.paidFor,r.item,r.category,r.amount].map(v=>String(v).trim().toLowerCase()).join("|")}
+function importComparison(imported){
+ const currentB=new Map(budgetRows().map(r=>[budgetKey(r),r])),incomingB=new Map(imported.budgetRows.map(r=>[budgetKey(r),r])),currentE=new Set(expenseRows().map(expenseKey)),incomingE=new Set(imported.expenses.map(expenseKey));let added=0,changed=0,removed=0;
+ incomingB.forEach((r,k)=>{if(!currentB.has(k))added++;else{const c=currentB.get(k);if(c.frequency!==r.frequency||Number(c.amount)!==Number(r.amount))changed++}});incomingE.forEach(k=>{if(!currentE.has(k))added++});currentB.forEach((r,k)=>{if(!incomingB.has(k))removed++});currentE.forEach(k=>{if(!incomingE.has(k))removed++});return {added,changed,removed};
+}
+function chooseImportFile(){document.getElementById("importFileInput").click()}
+async function reviewImportedFile(event){const file=event.target.files?.[0];event.target.value="";if(!file)return;try{if(!/\.xlsx$/i.test(file.name))throw new Error("Choose a Budget File in .xlsx format.");const imported=await parseXlsxWorkbook(file),comparison=importComparison(imported);pendingImport={...imported,fileName:file.name};document.getElementById("importFileName").textContent=file.name;document.getElementById("importAdded").textContent=comparison.added;document.getElementById("importChanged").textContent=comparison.changed;document.getElementById("importRemoved").textContent=comparison.removed;document.getElementById("importDetails").textContent="Replace uses the imported workbook exactly. Merge keeps current rows, adds new rows, and uses imported values when the same budget item changed.";document.getElementById("importModal").hidden=false}catch(e){showError(e.message)}}
+function cancelImport(){pendingImport=null;document.getElementById("importModal").hidden=true}
+async function applyImportedData(mode){
+ if(!pendingImport)return;let nextBudget=pendingImport.budgetRows,nextExpenses=pendingImport.expenses;if(mode==="merge"){const bMap=new Map(budgetRows().map(r=>[budgetKey(r),r]));nextBudget.forEach(r=>bMap.set(budgetKey(r),r));nextBudget=[...bMap.values()];const eMap=new Map(expenseRows().map(r=>[expenseKey(r),r]));nextExpenses.forEach(r=>eMap.set(expenseKey(r),r));nextExpenses=[...eMap.values()]}
+ const error=validateBudgetRows(nextBudget);if(error){cancelImport();return showError(error)}budget=groupBudgetRows(nextBudget);expenses=nextExpenses;localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));cancelImport();renderBudget();refreshHomeSummary();updateActionButtons();await persistOffline();notify(`Budget File imported and ${mode==="merge"?"merged":"replaced"} successfully.`);
 }
 async function shareFile(file){
  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:"Budget File"});return}catch(e){if(e.name==="AbortError")return}}
  const a=document.createElement("a");a.href=URL.createObjectURL(file);a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1200);
 }
 async function exportWorkbook(){
- return shareFile(new File([spreadsheetXml()],"Budget File.xls",{type:"application/vnd.ms-excel"}));
+ const blob=await workbookBlob();return shareFile(new File([blob],"Budget File.xlsx",{type:XLSX_MIME}));
 }
-async function downloadWorkbook(){await exportWorkbook();notify("The latest Budget File download is ready.")}
+async function downloadWorkbook(){try{await exportWorkbook();notify("The latest Budget File.xlsx download is ready.")}catch(e){showError(e.message)}}
+async function openLocalWorkbook(event){event.preventDefault();await downloadWorkbook();return false}
 
 function analyticsPrintSection(mode){
  const year=Number(document.getElementById("analyticsYear").value)||CURRENT_YEAR,allB=budgetRows(),allE=expenseRows();
- const b=mode==="month"?allB.filter(r=>r.year===year):allB,e=mode==="month"?allE.filter(r=>r.year===year):allE,tb=b.reduce((s,r)=>s+r.amount,0),te=e.reduce((s,r)=>s+r.amount,0);
- let labels,bv,ev,title;if(mode==="month"){labels=MONTHS;bv=labels.map(m=>b.filter(r=>r.month===m).reduce((s,r)=>s+r.amount,0));ev=labels.map((m,i)=>e.filter(r=>new Date(r.date+"T00:00:00").getMonth()===i).reduce((s,r)=>s+r.amount,0));title=`By Month · ${year}`}else{labels=[...new Set([...b.map(r=>r.category),...e.map(r=>r.category)].filter(Boolean))];bv=labels.map(c=>b.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));ev=labels.map(c=>e.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));title="By Category"}return `<section><h2>${title}</h2><div class="summary"><b>Total Budget:</b> ${money(tb)} &nbsp; <b>Total Expenses:</b> ${money(te)} &nbsp; <b>Remaining:</b> ${money(tb-te)} &nbsp; <b>Used:</b> ${tb?Math.round(te/tb*100):0}%</div><table><tr><th>${mode==="month"?"Month":"Category"}</th><th>Budget</th><th>Expenses</th><th>Remaining</th></tr>${labels.map((x,i)=>`<tr><td>${esc(x)}</td><td>${money(bv[i])}</td><td>${money(ev[i])}</td><td>${money(bv[i]-ev[i])}</td></tr>`).join("")}</table></section>`;
+ const b=allB.filter(r=>r.year===year),e=allE.filter(r=>r.year===year),tb=b.reduce((s,r)=>s+r.amount,0),te=e.reduce((s,r)=>s+r.amount,0);
+ let labels,bv,ev,title;if(mode==="month"){labels=MONTHS;bv=labels.map(m=>b.filter(r=>r.month===m).reduce((s,r)=>s+r.amount,0));ev=labels.map((m,i)=>e.filter(r=>new Date(r.date+"T00:00:00").getMonth()===i).reduce((s,r)=>s+r.amount,0));title=`By Month · ${year}`}else{labels=[...new Set([...b.map(r=>r.category),...e.map(r=>r.category)].filter(Boolean))];bv=labels.map(c=>b.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));ev=labels.map(c=>e.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));title=`By Category · ${year}`}return `<section><h2>${title}</h2><div class="summary"><b>Total Budget:</b> ${money(tb)} &nbsp; <b>Total Expenses:</b> ${money(te)} &nbsp; <b>Remaining:</b> ${money(tb-te)} &nbsp; <b>Used:</b> ${tb?Math.round(te/tb*100):0}%</div><table><tr><th>${mode==="month"?"Month":"Category"}</th><th>Budget</th><th>Expenses</th><th>Remaining</th></tr>${labels.map((x,i)=>`<tr><td>${esc(x)}</td><td>${money(bv[i])}</td><td>${money(ev[i])}</td><td>${money(bv[i]-ev[i])}</td></tr>`).join("")}</table></section>`;
 }
 function downloadAnalyticsPdf(option){
- const parts=option==="both"?[analyticsPrintSection("month"),analyticsPrintSection("category")]:[analyticsPrintSection(option)];const w=window.open("","_blank");if(!w)return showError("The PDF window was blocked. Allow pop-ups for Budget Planner, then try again.");w.document.write(`<!doctype html><title>Budget Planner Analytics</title><style>body{font:14px 'Segoe UI',Arial;color:#30352f;margin:32px}h1{color:#60665a}section{page-break-after:always}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #d9ded9;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#96aca0;color:white}.summary{padding:14px;background:#f3f6f3;border-radius:8px}@media print{button{display:none}}</style><h1>Budget Planner Analytics</h1>${parts.join("")}<button onclick="print()">Save as PDF</button>`);w.document.close();setTimeout(()=>w.print(),300);notify("Analytics report opened. Choose Save as PDF.")
+ const parts=option==="both"?[analyticsPrintSection("month"),analyticsPrintSection("category")]:[analyticsPrintSection(option)];const w=window.open("","_blank");if(!w)return showError("The print window was blocked. Allow pop-ups for Budget Planner, then try again.");w.document.write(`<!doctype html><title>Budget Planner Analytics</title><style>body{font:14px 'Segoe UI',Arial;color:#30352f;margin:32px}h1{color:#60665a}section{page-break-after:always}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #d9ded9;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#96aca0;color:white}.summary{padding:14px;background:#f3f6f3;border-radius:8px}@media print{button{display:none}}</style><h1>Budget Planner Analytics</h1>${parts.join("")}<button onclick="print()">Print / Save Analytics as PDF</button>`);w.document.close();setTimeout(()=>w.print(),300);notify("Analytics report opened. Choose Print or Save as PDF.")
 }
 
 /* Analytics */
@@ -947,7 +1060,6 @@ function setAnalyticsMode(mode){
  analyticsMode=mode;
  document.getElementById("monthTab").classList.toggle("active",mode==="month");
  document.getElementById("categoryTab").classList.toggle("active",mode==="category");
- document.getElementById("analyticsYearControl").style.display=mode==="month"?"block":"none";
  refreshAnalytics();
 }
 function money(n){return new Intl.NumberFormat("en-PH",{style:"currency",currency:"PHP",maximumFractionDigits:0}).format(n||0)}
@@ -969,10 +1081,11 @@ function refreshHomeSummary(){
 function refreshAnalytics(){
  const reportYear=Number(document.getElementById("analyticsYear")?.value)||CURRENT_YEAR;
  const allBudget=budgetRows(),allExpenses=expenseRows();
- const b=analyticsMode==="month"?allBudget.filter(r=>r.year===reportYear):allBudget;
- const e=analyticsMode==="month"?allExpenses.filter(r=>r.year===reportYear):allExpenses;
- const tb=b.reduce((s,r)=>s+r.amount,0),te=e.reduce((s,r)=>s+r.amount,0);
- document.getElementById("kpiBudget").textContent=money(tb);document.getElementById("kpiExpense").textContent=money(te);document.getElementById("kpiRemaining").textContent=money(tb-te);document.getElementById("kpiUsed").textContent=tb?Math.round(te/tb*100)+"%":"0%";
+ const b=allBudget.filter(r=>r.year===reportYear),e=allExpenses.filter(r=>r.year===reportYear);
+ const tb=b.reduce((s,r)=>s+r.amount,0),te=e.reduce((s,r)=>s+r.amount,0),remaining=tb-te,used=tb?te/tb*100:0,left=tb?remaining/tb*100:0,clamp=v=>Math.max(0,Math.min(100,v));
+ document.getElementById("kpiBudget").textContent=money(tb);document.getElementById("kpiExpense").textContent=money(te);document.getElementById("kpiRemaining").textContent=money(remaining);document.getElementById("kpiUsed").textContent=tb?Math.round(used)+"%":"0%";
+ document.getElementById("kpiBudgetBar").style.width=(tb?100:0)+"%";document.getElementById("kpiExpenseBar").style.width=clamp(used)+"%";document.getElementById("kpiRemainingBar").style.width=clamp(left)+"%";document.getElementById("kpiUsedBar").style.width=clamp(used)+"%";
+ document.getElementById("kpiBudgetCaption").textContent=`${reportYear} budget plan`;document.getElementById("kpiExpenseCaption").textContent=tb?`${Math.round(used)}% of budget`:"No budget entered";document.getElementById("kpiRemainingCaption").textContent=remaining<0?`${money(Math.abs(remaining))} over budget`:`${Math.max(0,Math.round(left))}% left`;document.getElementById("kpiUsedCaption").textContent=tb?(used>100?"Over budget":used>85?"Close to limit":"On track"):"Add a budget to begin";
  if(analyticsMode==="month"){
   document.getElementById("chartTitle").textContent=`Amounts per Month · ${reportYear}`;
   drawComboChart(MONTHS.map(m=>m.slice(0,3)),MONTHS.map(m=>b.filter(r=>r.month===m).reduce((s,r)=>s+r.amount,0)),MONTHS.map((m,i)=>e.filter(r=>new Date(r.date+"T00:00:00").getMonth()===i).reduce((s,r)=>s+r.amount,0)));
@@ -985,13 +1098,13 @@ function refreshAnalytics(){
 function drawComboChart(labels,budgetVals,expenseVals){
  const canvas=document.getElementById("analyticsCanvas"),rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
  canvas.width=Math.max(320,rect.width)*dpr;canvas.height=Math.max(250,rect.height)*dpr;const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
- const W=rect.width,H=rect.height,pad={l:42,r:12,t:18,b:58},max=Math.max(1,...budgetVals,...expenseVals)*1.15,y=v=>pad.t+(H-pad.t-pad.b)*(1-v/max),step=(W-pad.l-pad.r)/Math.max(labels.length,1);
- ctx.clearRect(0,0,W,H);ctx.strokeStyle="#E3E7E3";ctx.fillStyle="#8A908A";ctx.font="10px Century Gothic";
- for(let i=0;i<=4;i++){let val=max*i/4,yy=y(val);ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();ctx.fillText(Math.round(val).toLocaleString(),2,yy+3)}
- const barW=Math.min(26,step*.52);
- budgetVals.forEach((v,i)=>{let x=pad.l+step*i+step/2-barW/2,yy=y(v),h=H-pad.b-yy;ctx.fillStyle=(expenseVals[i]>v&&expenseVals[i]>0)?"#C69491":"#96ACA0";ctx.fillRect(x,yy,barW,Math.max(0,h))});
- ctx.strokeStyle="#7D9094";ctx.lineWidth=3;ctx.beginPath();expenseVals.forEach((v,i)=>{let x=pad.l+step*i+step/2,yy=y(v);i?ctx.lineTo(x,yy):ctx.moveTo(x,yy)});ctx.stroke();
- ctx.fillStyle="#6E756E";ctx.font="10px Century Gothic";ctx.textAlign="center";labels.forEach((lab,i)=>{let x=pad.l+step*i+step/2;ctx.save();ctx.translate(x,H-pad.b+13);if(labels.length>8){ctx.rotate(-Math.PI/4);ctx.textAlign="right"}ctx.fillText(String(lab).slice(0,13),0,0);ctx.restore()});ctx.textAlign="left";
+ const W=rect.width,H=rect.height,pad={l:48,r:12,t:20,b:58},max=Math.max(1,...budgetVals,...expenseVals)*1.15,y=v=>pad.t+(H-pad.t-pad.b)*(1-v/max),step=(W-pad.l-pad.r)/Math.max(labels.length,1),rounded=(x,yy,w,h,r,color)=>{ctx.fillStyle=color;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x,yy,w,h,[r,r,2,2]);else ctx.rect(x,yy,w,h);ctx.fill()};
+ ctx.clearRect(0,0,W,H);ctx.lineWidth=1;ctx.strokeStyle="#E8ECE8";ctx.fillStyle="#858D86";ctx.font="10px Century Gothic";
+ for(let i=0;i<=4;i++){const val=max*i/4,yy=y(val);ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();ctx.fillText(Math.round(val).toLocaleString(),3,yy+3)}
+ const barW=Math.max(7,Math.min(20,step*.27)),gap=Math.max(3,Math.min(7,step*.08));
+ budgetVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy),over=expenseVals[i]>v&&expenseVals[i]>0;rounded(center-gap/2-barW,yy,barW,h,6,over?"#C98284":"#86A994")});
+ expenseVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy);rounded(center+gap/2,yy,barW,h,6,"#E2A0A2")});
+ ctx.fillStyle="#6E756E";ctx.font="10px Century Gothic";ctx.textAlign="center";labels.forEach((lab,i)=>{const x=pad.l+step*i+step/2;ctx.save();ctx.translate(x,H-pad.b+15);if(labels.length>8){ctx.rotate(-Math.PI/4);ctx.textAlign="right"}ctx.fillText(String(lab).slice(0,13),0,0);ctx.restore()});ctx.textAlign="left";
 }
 
 
@@ -1016,7 +1129,9 @@ function updateDailyMessage(){
  if(dailyQuote)dailyQuote.textContent="“"+quotes[dayKey%quotes.length]+"”";
  const homeGreeting=document.getElementById("homeGreeting");
  const homeQuote=document.getElementById("homeQuote");
- if(homeGreeting)homeGreeting.innerHTML=greeting.replace("!",", Gigi!")+" <span class=\"home-sun\">☼</span>";
+ const analyticsGreeting=document.getElementById("analyticsGreeting");
+ if(homeGreeting){homeGreeting.textContent=greeting.replace("!",userName()?`, ${userName()}!`:"!")+" ";const sun=document.createElement("span");sun.className="home-sun";sun.textContent="☼";homeGreeting.appendChild(sun)}
+ if(analyticsGreeting)analyticsGreeting.textContent=greeting.replace("!",userName()?`, ${userName()}!`:"!");
  if(homeQuote){
    const quote=quotes[dayKey%quotes.length];
    homeQuote.innerHTML="“"+quote.replace(/, /,",<br>")+"”";
@@ -1033,7 +1148,7 @@ function setDefaultLandingPage(){
 async function startApp(){
  await restoreOffline();initMonthSelectors();renderBudget();updateActionButtons();updateDailyMessage();refreshHomeSummary();setDefaultLandingPage();
  if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("service-worker.js").catch(()=>notify("Installable offline mode is unavailable in this browser.","error"));
- if(!localStorage.getItem("budgetPlannerGuideSeen"))setTimeout(()=>document.getElementById("guideModal").hidden=false,350);else setTimeout(openCloudSetup,450);
+ if(!userName()){setTimeout(()=>{document.getElementById("nameModal").hidden=false;document.getElementById("userNameInput").focus()},250)}else continueFirstRun();
 }
 function finishGuide(){localStorage.setItem("budgetPlannerGuideSeen","1");document.getElementById("guideModal").hidden=true;setTimeout(openCloudSetup,200)}
 startApp();
