@@ -1,4 +1,4 @@
-const CACHE="budget-planner-v6";
+const CACHE="budget-planner-v7";
 const APP_PAGE="./index.html";
 const CORE=["./",APP_PAGE,"./user-guide.html","./manifest.webmanifest","./Budget-Planner-App-Icon.svg","./Budget-Planner-App-Icon-192.png","./Budget-Planner-App-Icon-512.png","./ff1277350113b895c3e20ad27f01a362.jpg","./jszip.min.js"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE))));

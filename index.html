@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#F7F5F1"/>
-<meta name="google-client-id" content="544803549549-94pkuarje378i7fs1u70g9frt7qrbd7n.apps.googleusercontent.com"/>
+<meta name="google-client-id" content=""/>
 <meta name="microsoft-client-id" content=""/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
@@ -25,7 +25,8 @@ body{
    radial-gradient(circle at 92% 22%,rgba(150,172,160,.30),transparent 23%),
    radial-gradient(circle at 15% 82%,rgba(198,148,145,.16),transparent 18%),
    var(--ivory);
- font-family:"Century Gothic","Avenir Next",Arial,sans-serif;
+ font-family:"Arial Unicode MS",Arial,sans-serif;
+ font-size:clamp(14px,13px + .28vw,16px);
 }
 .app{width:100%;max-width:1180px;margin:auto;min-height:100vh;padding:calc(18px + env(safe-area-inset-top)) clamp(16px,3vw,36px) calc(104px + env(safe-area-inset-bottom))}
 .screen{display:none}.screen.active{display:block}
@@ -67,7 +68,7 @@ p{color:var(--muted);line-height:1.5}
 .home-nav-card.setup{background:linear-gradient(110deg,#94AABD,#AABAC8)}
 .home-nav-icon{width:64px;height:64px;display:grid;place-items:center;border-radius:50%;background:#FFFDF9;color:#657163}
 .home-nav-icon svg{width:31px;height:31px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.home-nav-copy strong{display:block;font-size:19px;line-height:1.15}
+.home-nav-copy strong{display:block;font-family:"Segoe UI",Arial,sans-serif;font-size:19px;line-height:1.15}
 .home-nav-copy small{display:block;margin-top:3px;font-size:13px;line-height:1.35;color:inherit;font-weight:700}
 .home-nav-card.analytics .home-nav-copy,.home-nav-card.setup .home-nav-copy{color:#fff}
 .home-chevron{font-size:34px;font-weight:300;color:currentColor;line-height:1}
@@ -78,6 +79,7 @@ p{color:var(--muted);line-height:1.5}
 .actions button{border:0;background:transparent;color:var(--rose);font-size:18px;font-weight:900}
 label{display:block;margin:12px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:var(--blue)}
 input,select{width:100%;border:1px solid var(--line);background:#FFFDFB;color:var(--ink);padding:13px;border-radius:14px;font:inherit;font-size:15px;outline:none}
+button,input,select,textarea,table{font-family:"Arial Unicode MS",Arial,sans-serif}
 input:focus,select:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(150,172,160,.13)}
 .month-card{background:linear-gradient(145deg,#fff,#F7FBF8);border:1px solid rgba(150,172,160,.34);border-radius:20px;padding:15px;margin-bottom:14px}
 .month-card label{margin-top:0}
@@ -252,19 +254,19 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 .analytics-heading-copy{flex:1}.analytics-heading-copy h2{margin:0;font-size:clamp(27px,4vw,36px);font-weight:700;letter-spacing:-.035em;color:#303630}.analytics-heading-copy p{margin:4px 0 0;font-size:14px}
 .analytics-period{width:126px;flex:0 0 auto}.analytics-period label{margin:0 0 5px;font-size:10px}.analytics-period select{height:44px;padding:0 11px;background:#FFFDFB;box-shadow:0 5px 15px rgba(96,102,90,.07)}
 .analytics-kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}
-.analytics-kpis .metric{min-height:156px;padding:17px;border:0;border-radius:20px;box-shadow:0 8px 22px rgba(96,102,90,.055)}
+.analytics-kpis .metric{min-width:0;min-height:156px;padding:17px;border:0;border-radius:20px;overflow:hidden;box-shadow:0 8px 22px rgba(96,102,90,.055)}
 .analytics-kpis .metric.blush{background:linear-gradient(145deg,#FBE1DF,#F8CECB)}.analytics-kpis .metric.sage{background:linear-gradient(145deg,#E2EEE7,#CFE2D7)}.analytics-kpis .metric.blue{background:linear-gradient(145deg,#E0E9EE,#C9D9E2)}.analytics-kpis .metric.sand{background:linear-gradient(145deg,#F2ECE0,#E8DFCF)}
 .metric-icon{width:38px;height:38px;display:grid;place-items:center;margin-bottom:10px;border-radius:12px;background:rgba(255,255,255,.62);color:#65786C}.metric-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.analytics-kpis .metric small{font-size:12px;color:#4D554E}.analytics-kpis .metric strong{font-size:clamp(19px,2.3vw,25px);line-height:1.1;color:#303630}
-.kpi-progress{height:8px;margin-top:14px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.7)}.kpi-progress span{display:block;width:0;height:100%;border-radius:inherit;background:#8E6C6A;transition:width .35s ease}.metric.sage .kpi-progress span{background:#5D8B72}.metric.blue .kpi-progress span{background:#5F7E89}.metric.sand .kpi-progress span{background:#7B947F}.kpi-caption{display:block;margin-top:7px;font-size:11px;color:#566058;font-weight:700}
+.analytics-kpis .metric small{font-size:clamp(9px,1vw,12px);color:#4D554E}.analytics-kpis .metric strong{display:block;max-width:100%;overflow:hidden;font-size:clamp(12px,2.3vw,25px);line-height:1.1;letter-spacing:-.035em;white-space:nowrap;color:#303630}
+.kpi-progress{height:8px;margin-top:14px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.7)}.kpi-progress span{display:block;width:0;height:100%;border-radius:inherit;background:#8E6C6A;transition:width .35s ease}.metric.sage .kpi-progress span{background:#5D8B72}.metric.blue .kpi-progress span{background:#5F7E89}.metric.sand .kpi-progress span{background:#7B947F}.kpi-caption{display:block;margin-top:7px;font-size:clamp(8px,.9vw,11px);line-height:1.25;color:#566058;font-weight:700}
 .analytics-view-tabs{max-width:360px;margin:0 0 12px}
 .analytics-lower{display:grid;grid-template-columns:minmax(0,2fr) minmax(250px,.82fr);gap:16px;align-items:stretch}
 .analytics-report{margin:0;padding:20px;border:1px solid rgba(96,102,90,.14);border-radius:22px;background:rgba(255,255,255,.9)}
 .analytics-report .canvas-wrap{height:320px}.analytics-report .legend{display:flex;gap:14px;align-items:center;text-align:left}.legend-dot{display:inline-block;width:9px;height:9px;margin-right:5px;border-radius:50%}.legend-dot.budget{background:#79A08B}.legend-dot.expense{background:#D9878A}
 .quick-card{padding:20px;border:1px solid rgba(96,102,90,.14);border-radius:22px;background:rgba(255,255,255,.9);box-shadow:0 8px 24px rgba(96,102,90,.07)}.quick-card h3{font-size:18px;margin-bottom:14px}.quick-actions-list{display:grid;gap:10px}.quick-action{width:100%;display:grid;grid-template-columns:42px 1fr 18px;align-items:center;gap:10px;padding:12px;border:1px solid #E5E9E5;border-radius:15px;background:#FFFDFB;color:var(--ink);font:inherit;font-size:13px;font-weight:800;text-align:left;cursor:pointer}.quick-action:hover{background:#F2F7F4;border-color:#C9D8CF}.quick-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#DDEAE2;color:#5F846E}.quick-icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.quick-arrow{font-size:22px;color:#9AA19A}
 .analytics-affirmation{display:flex;align-items:center;gap:11px;margin:16px 0 0;padding:14px 18px;border-radius:18px;background:linear-gradient(90deg,#EEF4EF,#F6F2EC);color:#536157;font-size:14px;font-style:italic}.analytics-affirmation svg{width:26px;height:26px;flex:0 0 auto;fill:none;stroke:#70917C;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:820px){.analytics-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-lower{grid-template-columns:1fr}.quick-actions-list{grid-template-columns:repeat(3,minmax(0,1fr))}.quick-action{grid-template-columns:38px 1fr}.quick-arrow{display:none}}
-@media(max-width:560px){.analytics-heading{align-items:center}.analytics-heading-copy h2{font-size:27px}.analytics-period{width:108px}.analytics-kpis{gap:10px}.analytics-kpis .metric{min-height:145px;padding:14px}.analytics-report{padding:14px}.analytics-report .canvas-wrap{height:280px}.quick-actions-list{grid-template-columns:1fr}.quick-action{grid-template-columns:42px 1fr 18px}.quick-arrow{display:block}.chart-head{display:block}.analytics-report .legend{margin-top:8px}.analytics-affirmation{font-size:13px}}
+@media(max-width:820px){.analytics-lower{grid-template-columns:1fr}.quick-actions-list{grid-template-columns:repeat(3,minmax(0,1fr))}.quick-action{grid-template-columns:38px 1fr}.quick-arrow{display:none}}
+@media(max-width:560px){.analytics-heading{align-items:center}.analytics-heading-copy h2{font-size:27px}.analytics-period{width:108px}.analytics-kpis{gap:6px}.analytics-kpis .metric{min-height:124px;padding:9px 7px;border-radius:14px}.metric-icon{width:clamp(27px,8vw,34px);height:clamp(27px,8vw,34px);margin-bottom:7px;border-radius:9px}.metric-icon svg{width:clamp(15px,4.5vw,19px);height:clamp(15px,4.5vw,19px)}.kpi-progress{height:6px;margin-top:9px}.analytics-report{padding:14px}.analytics-report .canvas-wrap{height:280px}.quick-actions-list{grid-template-columns:1fr}.quick-action{grid-template-columns:42px 1fr 18px}.quick-arrow{display:block}.chart-head{display:block}.analytics-report .legend{margin-top:8px}.analytics-affirmation{font-size:13px}}
 </style>
 </head>
 <body>
@@ -820,12 +822,13 @@ function refreshItems(){
  s.innerHTML=items.length?`<option value="">Select item</option>`+items.map(i=>`<option>${esc(i)}</option>`).join(""):`<option value="">No item available</option>`;
 }
 function clearExpenseEntry(){
- document.getElementById("entryDate").value="";
- document.getElementById("entryDateShort").value="";
  document.getElementById("paidFor").value="";
  document.getElementById("entryAmount").value="";
+ prepareEntry(true);
  document.getElementById("entryCategory").value="";
  refreshItems();
+ window.scrollTo({top:0,behavior:"smooth"});
+ setTimeout(()=>document.getElementById("paidFor").focus(),80);
 }
 function saveExpense(){
  if(!hasBudget())return alert("Create and save Budget Setup first.");
@@ -1049,10 +1052,16 @@ async function openLocalWorkbook(event){event.preventDefault();await downloadWor
 function analyticsPrintSection(mode){
  const year=Number(document.getElementById("analyticsYear").value)||CURRENT_YEAR,allB=budgetRows(),allE=expenseRows();
  const b=allB.filter(r=>r.year===year),e=allE.filter(r=>r.year===year),tb=b.reduce((s,r)=>s+r.amount,0),te=e.reduce((s,r)=>s+r.amount,0);
- let labels,bv,ev,title;if(mode==="month"){labels=MONTHS;bv=labels.map(m=>b.filter(r=>r.month===m).reduce((s,r)=>s+r.amount,0));ev=labels.map((m,i)=>e.filter(r=>new Date(r.date+"T00:00:00").getMonth()===i).reduce((s,r)=>s+r.amount,0));title=`By Month · ${year}`}else{labels=[...new Set([...b.map(r=>r.category),...e.map(r=>r.category)].filter(Boolean))];bv=labels.map(c=>b.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));ev=labels.map(c=>e.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));title=`By Category · ${year}`}return `<section><h2>${title}</h2><div class="summary"><b>Total Budget:</b> ${money(tb)} &nbsp; <b>Total Expenses:</b> ${money(te)} &nbsp; <b>Remaining:</b> ${money(tb-te)} &nbsp; <b>Used:</b> ${tb?Math.round(te/tb*100):0}%</div><table><tr><th>${mode==="month"?"Month":"Category"}</th><th>Budget</th><th>Expenses</th><th>Remaining</th></tr>${labels.map((x,i)=>`<tr><td>${esc(x)}</td><td>${money(bv[i])}</td><td>${money(ev[i])}</td><td>${money(bv[i]-ev[i])}</td></tr>`).join("")}</table></section>`;
+ let labels,bv,ev,title;if(mode==="month"){labels=MONTHS;bv=labels.map(m=>b.filter(r=>r.month===m).reduce((s,r)=>s+r.amount,0));ev=labels.map((m,i)=>e.filter(r=>new Date(r.date+"T00:00:00").getMonth()===i).reduce((s,r)=>s+r.amount,0));title=`By Month · ${year}`}else{labels=[...new Set([...b.map(r=>r.category),...e.map(r=>r.category)].filter(Boolean))];bv=labels.map(c=>b.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));ev=labels.map(c=>e.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0));title=`By Category · ${year}`}return `<section><h2>${title}</h2><div class="summary"><b>Total Budget:</b> ${money(tb)} &nbsp; <b>Total Expenses:</b> ${money(te)} &nbsp; <b>Remaining:</b> ${money(tb-te)} &nbsp; <b>Used:</b> ${tb?Math.round(te/tb*100):0}%</div><div class="report-chart">${analyticsChartSvg(labels,bv,ev)}</div><table><tr><th>${mode==="month"?"Month":"Category"}</th><th>Budget</th><th>Expenses</th><th>Remaining</th></tr>${labels.map((x,i)=>`<tr><td>${esc(x)}</td><td>${money(bv[i])}</td><td>${money(ev[i])}</td><td>${money(bv[i]-ev[i])}</td></tr>`).join("")}</table></section>`;
+}
+function analyticsChartSvg(labels,budgetVals,expenseVals){
+ const W=760,H=320,p={l:58,r:18,t:38,b:66},plotW=W-p.l-p.r,plotH=H-p.t-p.b,max=Math.max(1,...budgetVals,...expenseVals)*1.15,step=plotW/Math.max(labels.length,1),barW=Math.max(5,Math.min(22,step*.28)),gap=Math.max(2,Math.min(7,step*.08)),y=v=>p.t+plotH*(1-v/max);
+ let grid="";for(let i=0;i<=4;i++){const value=max*i/4,yy=y(value);grid+=`<line x1="${p.l}" y1="${yy}" x2="${W-p.r}" y2="${yy}" stroke="#E5EAE5"/><text x="${p.l-8}" y="${yy+4}" text-anchor="end" fill="#747C75" font-size="10">${Math.round(value).toLocaleString()}</text>`}
+ let bars="",ticks="";labels.forEach((label,i)=>{const center=p.l+step*i+step/2,bY=y(budgetVals[i]),eY=y(expenseVals[i]),base=H-p.b,over=expenseVals[i]>budgetVals[i]&&expenseVals[i]>0,x=center-gap/2-barW;bars+=`<rect x="${x}" y="${bY}" width="${barW}" height="${Math.max(0,base-bY)}" rx="5" fill="${over?'#C98284':'#86A994'}"/><rect x="${center+gap/2}" y="${eY}" width="${barW}" height="${Math.max(0,base-eY)}" rx="5" fill="#E2A0A2"/>`;const safe=esc(String(label).slice(0,14));ticks+=labels.length>8?`<text x="${center}" y="${base+18}" transform="rotate(-42 ${center} ${base+18})" text-anchor="end" fill="#687169" font-size="9">${safe}</text>`:`<text x="${center}" y="${base+18}" text-anchor="middle" fill="#687169" font-size="10">${safe}</text>`});
+ return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Budget and expenses chart" xmlns="http://www.w3.org/2000/svg"><rect width="${W}" height="${H}" rx="14" fill="#FFFDFB"/>${grid}${bars}${ticks}<circle cx="${W-185}" cy="18" r="5" fill="#86A994"/><text x="${W-174}" y="22" fill="#4F574F" font-size="11">Budget</text><circle cx="${W-96}" cy="18" r="5" fill="#E2A0A2"/><text x="${W-85}" y="22" fill="#4F574F" font-size="11">Expenses</text></svg>`;
 }
 function downloadAnalyticsPdf(option){
- const parts=option==="both"?[analyticsPrintSection("month"),analyticsPrintSection("category")]:[analyticsPrintSection(option)];const w=window.open("","_blank");if(!w)return showError("The print window was blocked. Allow pop-ups for Budget Planner, then try again.");w.document.write(`<!doctype html><title>Budget Planner Analytics</title><style>body{font:14px 'Segoe UI',Arial;color:#30352f;margin:32px}h1{color:#60665a}section{page-break-after:always}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #d9ded9;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#96aca0;color:white}.summary{padding:14px;background:#f3f6f3;border-radius:8px}@media print{button{display:none}}</style><h1>Budget Planner Analytics</h1>${parts.join("")}<button onclick="print()">Print / Save Analytics as PDF</button>`);w.document.close();setTimeout(()=>w.print(),300);notify("Analytics report opened. Choose Print or Save as PDF.")
+ const parts=option==="both"?[analyticsPrintSection("month"),analyticsPrintSection("category")]:[analyticsPrintSection(option)];const w=window.open("","_blank");if(!w)return showError("The print window was blocked. Allow pop-ups for Budget Planner, then try again.");w.document.write(`<!doctype html><title>Budget Planner Analytics</title><style>body{font:14px 'Arial Unicode MS',Arial,sans-serif;color:#30352f;margin:32px}h1,h2{font-family:'Segoe UI',Arial,sans-serif;color:#60665a}section{page-break-after:always}.report-chart{margin:16px 0;padding:8px;border:1px solid #e0e5e0;border-radius:12px;page-break-inside:avoid}.report-chart svg{display:block;width:100%;height:auto}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #d9ded9;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#96aca0;color:white}.summary{padding:14px;background:#f3f6f3;border-radius:8px}@media print{button{display:none}section:last-of-type{page-break-after:auto}}</style><h1>Budget Planner Analytics</h1>${parts.join("")}<button onclick="print()">Print / Save Analytics as PDF</button>`);w.document.close();setTimeout(()=>w.print(),300);notify("Analytics report with graph opened. Choose Print or Save as PDF.")
 }
 
 /* Analytics */
@@ -1099,12 +1108,12 @@ function drawComboChart(labels,budgetVals,expenseVals){
  const canvas=document.getElementById("analyticsCanvas"),rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
  canvas.width=Math.max(320,rect.width)*dpr;canvas.height=Math.max(250,rect.height)*dpr;const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
  const W=rect.width,H=rect.height,pad={l:48,r:12,t:20,b:58},max=Math.max(1,...budgetVals,...expenseVals)*1.15,y=v=>pad.t+(H-pad.t-pad.b)*(1-v/max),step=(W-pad.l-pad.r)/Math.max(labels.length,1),rounded=(x,yy,w,h,r,color)=>{ctx.fillStyle=color;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x,yy,w,h,[r,r,2,2]);else ctx.rect(x,yy,w,h);ctx.fill()};
- ctx.clearRect(0,0,W,H);ctx.lineWidth=1;ctx.strokeStyle="#E8ECE8";ctx.fillStyle="#858D86";ctx.font="10px Century Gothic";
+ ctx.clearRect(0,0,W,H);ctx.lineWidth=1;ctx.strokeStyle="#E8ECE8";ctx.fillStyle="#858D86";ctx.font="10px Arial Unicode MS, Arial";
  for(let i=0;i<=4;i++){const val=max*i/4,yy=y(val);ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();ctx.fillText(Math.round(val).toLocaleString(),3,yy+3)}
  const barW=Math.max(7,Math.min(20,step*.27)),gap=Math.max(3,Math.min(7,step*.08));
  budgetVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy),over=expenseVals[i]>v&&expenseVals[i]>0;rounded(center-gap/2-barW,yy,barW,h,6,over?"#C98284":"#86A994")});
  expenseVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy);rounded(center+gap/2,yy,barW,h,6,"#E2A0A2")});
- ctx.fillStyle="#6E756E";ctx.font="10px Century Gothic";ctx.textAlign="center";labels.forEach((lab,i)=>{const x=pad.l+step*i+step/2;ctx.save();ctx.translate(x,H-pad.b+15);if(labels.length>8){ctx.rotate(-Math.PI/4);ctx.textAlign="right"}ctx.fillText(String(lab).slice(0,13),0,0);ctx.restore()});ctx.textAlign="left";
+ ctx.fillStyle="#6E756E";ctx.font="10px Arial Unicode MS, Arial";ctx.textAlign="center";labels.forEach((lab,i)=>{const x=pad.l+step*i+step/2;ctx.save();ctx.translate(x,H-pad.b+15);if(labels.length>8){ctx.rotate(-Math.PI/4);ctx.textAlign="right"}ctx.fillText(String(lab).slice(0,13),0,0);ctx.restore()});ctx.textAlign="left";
 }
 
 
