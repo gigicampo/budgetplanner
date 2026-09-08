@@ -1,0 +1,20 @@
+Budget Planner PWA - Pre-Beta Hardening Patch
+Date: 2026-09-08
+
+Changes applied:
+1. Hardened Google Drive synchronization against stale reconnect uploads.
+   - Sync operations are serialized to reduce overlapping uploads.
+   - The app checks the remote file modified time before overwriting it.
+   - If a newer remote copy is detected, remote rows are merged before upload.
+   - Local in-progress values are preserved for matching Budget/Income records.
+2. Bumped the PWA service-worker cache from v14 to v15 so deployed clients receive the patched files.
+3. Polished the on-screen Budget data viewer title from "MyBudget" to "My Budget" while preserving the Excel worksheet name "MyBudget" for workbook compatibility.
+4. Improved New Expense field label associations and the short-date field accessibility without changing the MM/DD/YYYY workflow.
+5. Confirmed the existing MyExpenses action is already "Add / Edit Expense" and the New Expense Home button already targets the main page.
+
+Validation completed:
+- Inline JavaScript passes `node --check`.
+- No duplicate HTML IDs detected.
+- No empty/unlabeled buttons detected.
+- All service-worker core assets are present.
+- Full authenticated Google OAuth sync still requires a real-account/device acceptance test before marketplace release.

@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#F7F5F1"/>
-<meta name="google-client-id" content="544803549549-94pkuarje378i7fs1u70g9frt7qrbd7n.apps.googleusercontent.com"/>
+<meta name="google-client-id" content=""/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
 <link rel="apple-touch-icon" href="Budget-Planner-App-Icon-192.png"/>
@@ -370,7 +370,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 
   <div class="toolbar">
     <button class="tool" title="Save Budget Setup" aria-label="Save Budget Setup" onclick="saveBudget()">✓</button>
-    <button id="budgetDataBtn" class="tool blue" title="Show MyBudget data" aria-label="Show MyBudget data" onclick="showBudgetData()" disabled>▦</button>
+    <button id="budgetDataBtn" class="tool blue" title="Show My Budget data" aria-label="Show My Budget data" onclick="showBudgetData()" disabled>▦</button>
     <button id="exportBudgetBtn" class="tool sage" title="Download Budget File.xlsx" aria-label="Download Budget File Excel workbook" onclick="downloadWorkbook()" disabled>⇩</button>
   </div>
 
@@ -387,21 +387,21 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 
   <div class="card expense-form">
     <div class="field">
-      <label>Date</label>
-      <input id="entryDateShort" type="text" inputmode="numeric" placeholder="MM/DD/YYYY" maxlength="10" onblur="syncDateFromShort()" />
+      <label for="entryDateShort">Date</label>
+      <input id="entryDateShort" aria-label="Expense date in MM/DD/YYYY format" autocomplete="off" type="text" inputmode="numeric" placeholder="MM/DD/YYYY" maxlength="10" onblur="syncDateFromShort()" />
       <input id="entryDate" type="hidden">
     </div>
     <div class="field">
-      <label>Paid For</label><input id="paidFor" type="text" placeholder="e.g. Cash, GCash, BPI">
+      <label for="paidFor">Paid For</label><input id="paidFor" type="text" placeholder="e.g. Cash, GCash, BPI">
     </div>
     <div class="field">
-      <label>Amount</label><input id="entryAmount" type="number" inputmode="decimal" step="0.01" placeholder="₱ 0.00">
+      <label for="entryAmount">Amount</label><input id="entryAmount" type="number" inputmode="decimal" step="0.01" placeholder="₱ 0.00">
     </div>
     <div class="field">
-      <label>Category</label><select id="entryCategory" onchange="refreshItems()"></select>
+      <label for="entryCategory">Category</label><select id="entryCategory" onchange="refreshItems()"></select>
     </div>
     <div class="field">
-      <label>Item</label><select id="entryItem"></select>
+      <label for="entryItem">Item</label><select id="entryItem"></select>
     </div>
   </div>
   <div id="entryFilterNote" class="note"></div>
@@ -462,7 +462,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 </section>
 
 <section id="budgetData" class="screen">
-  <div class="topbar"><button class="back" onclick="goBack()" title="Back" aria-label="Go back">‹</button><div><div class="brand">Budget File</div><h2>MyBudget</h2></div></div>
+  <div class="topbar"><button class="back" onclick="goBack()" title="Back" aria-label="Go back">‹</button><div><div class="brand">Budget File</div><h2>My Budget</h2></div></div>
   <div class="data-actions">
     <button id="editBudgetExcelBtn" class="excel-btn" onclick="toggleBudgetEdit()">Edit Data</button>
     <button class="setup-btn" onclick="editBudgetOnSetup()">Edit on Setup</button>
@@ -609,7 +609,7 @@ const GOOGLE_TOKEN_KEY="budgetPlannerGoogleToken";
 const GOOGLE_TOKEN_EXPIRY_KEY="budgetPlannerGoogleTokenExpiry";
 let navStack=["home"], analyticsMode="month", budgetEditMode=false, expenseEditMode=false, incomeEditMode=false, budgetDeleteMode=false, expenseDeleteMode=false, incomeDeleteMode=false;
 const budgetResetPeriods=new Set(),incomeResetPeriods=new Set();
-let cloudToken=sessionStorage.getItem(GOOGLE_TOKEN_KEY)||"", cloudTokenExpiry=Number(sessionStorage.getItem(GOOGLE_TOKEN_EXPIRY_KEY))||0, cloudFolderId="", cloudFileId="", cloudProvider="", cloudPreparing=false, cloudReady=false;
+let cloudToken=sessionStorage.getItem(GOOGLE_TOKEN_KEY)||"", cloudTokenExpiry=Number(sessionStorage.getItem(GOOGLE_TOKEN_EXPIRY_KEY))||0, cloudFolderId="", cloudFileId="", cloudRemoteModifiedTime="", cloudProvider="", cloudPreparing=false, cloudReady=false, cloudSyncPromise=null;
 let pendingImport=null, workbookObjectUrl="";
 if(cloudTokenExpiry<=Date.now()){cloudToken="";cloudTokenExpiry=0;sessionStorage.removeItem(GOOGLE_TOKEN_KEY);sessionStorage.removeItem(GOOGLE_TOKEN_EXPIRY_KEY)}
 
@@ -650,7 +650,7 @@ function enterMainApp(){
 }
 function openCloudSetup(){document.getElementById("cloudError").hidden=true;document.getElementById("cloudModal").hidden=false}
 function closeCloudSetup(){document.getElementById("cloudModal").hidden=true;if(cloudProvider==="google"&&cloudReady)setSyncStatus("Budget File.xlsx connected to Google Drive","ok");else setSyncStatus(navigator.onLine?"Saved offline":"Saved offline","ok")}
-function clearGoogleSession(){cloudToken="";cloudTokenExpiry=0;cloudFolderId="";cloudFileId="";cloudProvider="";cloudReady=false;sessionStorage.removeItem(GOOGLE_TOKEN_KEY);sessionStorage.removeItem(GOOGLE_TOKEN_EXPIRY_KEY);sessionStorage.removeItem("cloudProvider")}
+function clearGoogleSession(){cloudToken="";cloudTokenExpiry=0;cloudFolderId="";cloudFileId="";cloudRemoteModifiedTime="";cloudProvider="";cloudReady=false;cloudSyncPromise=null;sessionStorage.removeItem(GOOGLE_TOKEN_KEY);sessionStorage.removeItem(GOOGLE_TOKEN_EXPIRY_KEY);sessionStorage.removeItem("cloudProvider")}
 function continueOffline(){clearGoogleSession();localStorage.setItem(LOGIN_MODE_KEY,"offline");localStorage.setItem("budgetPlannerOfflineMode","1");document.getElementById("cloudModal").hidden=true;enterMainApp();setSyncStatus("Saved offline","ok");notify("Offline mode saved for this device.")}
 function logoutApp(){
  const token=cloudToken;if(token&&window.google?.accounts?.oauth2?.revoke)try{google.accounts.oauth2.revoke(token,()=>{})}catch(error){console.warn("Google token revocation was skipped",error)}
@@ -698,12 +698,37 @@ async function prepareGoogleFolder(){
 }
 async function loadFromGoogleDrive(){
  const query=encodeURIComponent(`name='Budget File.xlsx' and '${cloudFolderId}' in parents and trashed=false`);let found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${query}&orderBy=createdTime&fields=files(id,name,createdTime,modifiedTime)`)).json();
- if(found.files.length){cloudFileId=found.files[0].id;if(found.files.length>1)notify("Multiple older Budget File.xlsx files were found. The original file will be reused; no duplicate was created.","error");const bytes=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).arrayBuffer();await applyCloudWorkbook(bytes,{mergeLocal:true});return true}
+ if(found.files.length){cloudFileId=found.files[0].id;cloudRemoteModifiedTime=found.files[0].modifiedTime||"";if(found.files.length>1)notify("Multiple older Budget File.xlsx files were found. The original file will be reused; no duplicate was created.","error");const bytes=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).arrayBuffer();await applyCloudWorkbook(bytes,{mergeLocal:true,localWins:true});return true}
  for(const legacyName of ["Budget File.xls","Budget File.json"]){const oldQuery=encodeURIComponent(`name='${legacyName}' and '${cloudFolderId}' in parents and trashed=false`);found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${oldQuery}&orderBy=createdTime&fields=files(id,name,createdTime)`)).json();if(found.files.length){cloudFileId=found.files[0].id;const text=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).text();await applyCloudWorkbook(text,{mergeLocal:true});await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME})});notify(`${legacyName} was migrated to Budget File.xlsx.`);return true}}
  return false;
 }
 async function syncToGoogleDrive(){
- if(!cloudToken||!cloudFolderId||!cloudReady)return;try{setSyncStatus("Syncing Budget File.xlsx to Google Drive","busy");if(!cloudFileId){const created=await (await driveFetch("https://www.googleapis.com/drive/v3/files?fields=id,name",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME,parents:[cloudFolderId]})})).json();cloudFileId=created.id}const payload=await workbookBlob();await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=media`,{method:"PATCH",headers:{"Content-Type":XLSX_MIME},body:payload});setSyncStatus("Budget File.xlsx saved to Google Drive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}
+ if(!cloudToken||!cloudFolderId||!cloudReady)return;
+ if(cloudSyncPromise)return cloudSyncPromise;
+ cloudSyncPromise=(async()=>{
+  try{
+   setSyncStatus("Syncing Budget File.xlsx to Google Drive","busy");
+   if(!cloudFileId){
+    const created=await (await driveFetch("https://www.googleapis.com/drive/v3/files?fields=id,name,modifiedTime",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME,parents:[cloudFolderId]})})).json();
+    cloudFileId=created.id;cloudRemoteModifiedTime=created.modifiedTime||"";
+   }else{
+    const meta=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?fields=id,modifiedTime`)).json();
+    if(cloudRemoteModifiedTime&&meta.modifiedTime&&meta.modifiedTime!==cloudRemoteModifiedTime){
+     setSyncStatus("Newer Google Drive copy found · merging safely","busy");
+     const bytes=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).arrayBuffer();
+     await applyCloudWorkbook(bytes,{mergeLocal:true,localWins:true});
+     notify("Newer Google Drive changes were merged before sync.");
+    }
+    cloudRemoteModifiedTime=meta.modifiedTime||cloudRemoteModifiedTime;
+   }
+   const payload=await workbookBlob();
+   const updated=await (await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=media&fields=id,modifiedTime`,{method:"PATCH",headers:{"Content-Type":XLSX_MIME},body:payload})).json();
+   cloudRemoteModifiedTime=updated.modifiedTime||cloudRemoteModifiedTime;
+   setSyncStatus("Budget File.xlsx saved to Google Drive","ok");
+  }catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}
+  finally{cloudSyncPromise=null}
+ })();
+ return cloudSyncPromise;
 }
 window.addEventListener("offline",()=>setSyncStatus(cloudToken?"Offline · cloud sync queued":"Saved offline","ok"));window.addEventListener("online",()=>{if(cloudToken&&cloudProvider==="google"&&cloudReady){setSyncStatus("Connection restored · syncing","busy");syncToGoogleDrive()}else setSyncStatus("Saved offline","ok")});
 let analyticsResizeTimer;window.addEventListener("resize",()=>{clearTimeout(analyticsResizeTimer);analyticsResizeTimer=setTimeout(()=>{if(document.getElementById("analytics").classList.contains("active"))refreshAnalytics();if(document.getElementById("home").classList.contains("active"))drawHomeLandscapeAnalytics()},120)});
@@ -954,7 +979,7 @@ function refreshEntrySelectors(){
  const cats=[...new Set(rows.map(r=>r.category).filter(Boolean))];
  const s=document.getElementById("entryCategory");
  s.innerHTML=cats.length?`<option value="">Select category</option>`+cats.map(c=>`<option>${esc(c)}</option>`).join(""):`<option value="">No category for ${month} ${year}</option>`;
- document.getElementById("entryFilterNote").innerHTML=cats.length?`Showing MyBudget choices for <b>${month} ${year}</b>.`:`No MyBudget rows are available for <b>${month} ${year}</b>.`;
+ document.getElementById("entryFilterNote").innerHTML=cats.length?`Showing My Budget choices for <b>${month} ${year}</b>.`:`No My Budget rows are available for <b>${month} ${year}</b>.`;
  refreshItems();
 }
 function refreshItems(){
@@ -1183,13 +1208,14 @@ function normalizeWorkbookTables(b,e,i){
  return {budgetRows:budgetRowsImported,expenses:expenseRowsImported,incomeRows:incomeRowsImported};
 }
 function parseLegacySpreadsheetXml(text){const doc=new DOMParser().parseFromString(text,"application/xml");if(doc.querySelector("parsererror"))throw new Error("The legacy Budget File.xls is malformed and was not changed.");const sheets=[...doc.getElementsByTagNameNS("*","Worksheet")];const tableFor=name=>{const sheet=sheets.find(s=>(s.getAttributeNS("urn:schemas-microsoft-com:office:spreadsheet","Name")||s.getAttribute("ss:Name")||s.getAttribute("Name"))===name);if(!sheet)return [];return [...sheet.getElementsByTagNameNS("*","Row")].map(row=>[...row.getElementsByTagNameNS("*","Cell")].map(cell=>cell.getElementsByTagNameNS("*","Data")[0]?.textContent||""))};return normalizeWorkbookTables(tableFor("MyBudget"),tableFor("MyExpenses"),tableFor("My Income"))}
-async function applyCloudWorkbook(data,{mergeLocal=false}={}){
+async function applyCloudWorkbook(data,{mergeLocal=false,localWins=false}={}){
  let imported;if(typeof data==="string"&&data.trim().startsWith("{")){let old;try{old=JSON.parse(data)}catch(e){throw new Error("The existing Budget File.json is malformed and was not changed.")}if(!Array.isArray(old.budget)||!Array.isArray(old.expenses))throw new Error("The existing Budget File.json does not contain valid Budget Planner data.");imported={budgetRows:old.budget.flatMap(c=>(c.items||[]).map(r=>({frequency:c.frequency,category:c.name,item:r.item,month:r.month,year:Number(r.year)||CURRENT_YEAR,amount:Number(r.amount)||0}))),expenses:old.expenses,incomeRows:Array.isArray(old.incomeRows)?old.incomeRows:[]}}else if(typeof data==="string"&&data.trim().startsWith("<"))imported=parseLegacySpreadsheetXml(data);else imported=await parseXlsxWorkbook(data);
  let nextBudget=imported.budgetRows,nextExpenses=imported.expenses,nextIncome=imported.incomeRows||[];
  if(mergeLocal){
-  const budgetMap=new Map(budgetRows().map(r=>[budgetKey(r),r]));nextBudget.forEach(r=>budgetMap.set(budgetKey(r),r));nextBudget=[...budgetMap.values()];
-  const expenseMap=new Map(expenseRows().map(r=>[expenseKey(r),r]));nextExpenses.forEach(r=>expenseMap.set(expenseKey(r),r));nextExpenses=[...expenseMap.values()];
-  const incomeMap=new Map(incomeRows().map(r=>[incomeKey(r),r]));nextIncome.forEach(r=>incomeMap.set(incomeKey(r),r));nextIncome=[...incomeMap.values()];
+  const currentBudget=budgetRows(),currentExpenses=expenseRows(),currentIncome=incomeRows();
+  const budgetMap=new Map((localWins?nextBudget:currentBudget).map(r=>[budgetKey(r),r]));(localWins?currentBudget:nextBudget).forEach(r=>budgetMap.set(budgetKey(r),r));nextBudget=[...budgetMap.values()];
+  const expenseMap=new Map((localWins?nextExpenses:currentExpenses).map(r=>[expenseKey(r),r]));(localWins?currentExpenses:nextExpenses).forEach(r=>expenseMap.set(expenseKey(r),r));nextExpenses=[...expenseMap.values()];
+  const incomeMap=new Map((localWins?nextIncome:currentIncome).map(r=>[incomeKey(r),r]));(localWins?currentIncome:nextIncome).forEach(r=>incomeMap.set(incomeKey(r),r));nextIncome=[...incomeMap.values()];
  }
  budget=nextBudget.length?groupBudgetRows(nextBudget):freshBudget();expenses=nextExpenses;income=nextIncome.length?groupIncomeRows(nextIncome):freshIncome();localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));localStorage.setItem("incomeSetup",JSON.stringify(income));await persistOffline(false);renderBudget();renderIncome();refreshFinancialViews();
 }
