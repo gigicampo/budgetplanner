@@ -4,8 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#F7F5F1"/>
-<meta name="google-client-id" content="544803549549-94pkuarje378i7fs1u70g9frt7qrbd7n.apps.googleusercontent.com"/>
-<meta name="microsoft-client-id" content=""/>
+<meta name="google-client-id" content=""/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
 <link rel="apple-touch-icon" href="Budget-Planner-App-Icon-192.png"/>
@@ -246,9 +245,8 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 .modal{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:18px;background:rgba(40,45,41,.42);backdrop-filter:blur(5px)}.modal[hidden]{display:none}.modal-card{width:min(520px,100%);max-height:90vh;overflow:auto;padding:22px;border-radius:24px;background:#FFFDFB;box-shadow:0 24px 70px rgba(0,0,0,.24)}.modal-card h2{margin-bottom:8px}.provider-list{display:grid;gap:10px;margin:18px 0}.provider{width:100%;display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--ink);font:inherit;text-align:left}.provider.primary{border-color:#96ACA0;background:#F3F8F5}.provider strong{display:block}.provider small{display:block;color:var(--muted);margin-top:2px}.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:16px}.modal-actions button,.pdf-actions button{border:0;border-radius:13px;padding:11px 14px;font:inherit;font-weight:800}.primary-btn{background:var(--olive);color:#fff}.secondary-btn{background:#EEF1ED;color:var(--olive)}.error-text{color:#B3262D!important;font-weight:700}.pdf-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.pdf-actions button{background:var(--blue);color:#fff}
 .guide-link{display:flex;align-items:center;justify-content:center;gap:7px;width:max-content;min-height:44px;margin:18px auto 4px;padding:9px 14px;border:1px solid rgba(96,102,90,.2);border-radius:999px;background:rgba(255,255,255,.72);color:var(--olive);font:inherit;font-size:13px;font-weight:800;text-decoration:none}.guide-intro{display:grid;gap:10px;margin:16px 0}.guide-step{padding:12px 14px;border-radius:14px;background:#F3F7F4}.guide-step strong{display:block;margin-bottom:3px}.guide-step span{font-size:13px;line-height:1.45;color:var(--muted)}
 .home-file-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:15px auto 0}.home-file-actions .guide-link{margin:0}.home-file-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:10px 14px;border:1px solid rgba(96,102,90,.22);border-radius:999px;background:rgba(255,255,255,.82);color:var(--olive);font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}.home-file-link.secondary{background:rgba(237,243,239,.92)}
-.provider:disabled{cursor:not-allowed;opacity:.58;background:#F3F3F1}.coming-soon{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#F4D8D4;color:#8E5555;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.provider:disabled{cursor:not-allowed;opacity:.58;background:#F3F3F1}
 .import-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.import-stat{padding:11px;border-radius:13px;background:#F3F7F4;text-align:center}.import-stat strong{display:block;font-size:21px;color:var(--olive)}.import-stat small{color:var(--muted)}.name-field{font-size:18px;margin-top:8px}
-.cloud-more{margin-top:8px;border-top:1px solid var(--line);padding-top:10px}.cloud-more summary{cursor:pointer;padding:11px 4px;color:var(--olive);font-weight:800}.cloud-more .provider-list{margin:8px 0 0}
 @media(max-width:560px){.data-actions{grid-template-columns:1fr}.sync-bar{margin-left:0;margin-right:0}.modal-card{padding:18px}.pdf-actions button{flex:1 1 100%}}
 
 /* Analytics — calm financial snapshot inspired by the supplied reference. */
@@ -463,7 +461,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
   <div class="topbar"><button class="back" onclick="goBack()" title="Back" aria-label="Go back">‹</button><div><div class="brand">Budget File</div><h2>MyExpenses</h2></div></div>
   <div class="data-actions">
     <button id="editExpenseExcelBtn" class="excel-btn" onclick="toggleExpenseEdit()">Edit Data</button>
-    <button class="setup-btn" onclick="editExpenseOnSetup()">Edit on Setup</button>
+    <button class="setup-btn" onclick="addOrEditExpense()" aria-label="Open New Expense to add an expense">Add / Edit Expense</button>
     <button class="delete-data-btn" onclick="toggleDeleteMode('expense')">🗑 Delete Rows</button>
   </div>
   <div id="expenseDeleteNote" class="note" style="display:none">Select one or more rows using the checkboxes, then tap the trash button below.</div>
@@ -519,15 +517,10 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 <div id="cloudModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="cloudTitle">
  <div class="modal-card">
   <div class="brand">Secure Sync</div><h2 id="cloudTitle">Connect cloud storage</h2>
-  <p>Choose where Budget Planner should create its <b>Budget Planner</b> folder. Your offline copy remains available during interruptions.</p>
+  <p>Connect Google Drive for automatic cloud sync, or keep a private offline copy on this device.</p>
   <div class="provider-list">
    <button class="provider primary" onclick="connectCloud('google')"><span>G</span><span><strong>Google Drive · Recommended</strong><small>Default automatic sync provider</small></span></button>
   </div>
-  <details class="cloud-more"><summary>Other cloud options</summary><div class="provider-list">
-   <button class="provider" onclick="connectCloud('onedrive')"><span>▦</span><span><strong>Microsoft OneDrive</strong><small>Secondary option for Excel users</small></span></button>
-   <button class="provider" type="button" disabled aria-disabled="true"><span>◇</span><span><strong>Dropbox <span class="coming-soon">Coming Soon</span></strong><small>Cloud connection is not available yet</small></span></button>
-   <button class="provider" onclick="connectCloud('other')"><span>⇩</span><span><strong>Other cloud storage</strong><small>Download and store through Files, Box, iCloud Drive, or another app</small></span></button>
-  </div></details>
   <p id="cloudError" class="error-text" hidden></p>
   <div class="modal-actions"><button class="secondary-btn" onclick="continueOffline()">Continue offline on this device</button></div>
  </div>
@@ -540,7 +533,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
   <div class="brand">Welcome</div><h2 id="guideTitle">Your Budget Planner User Guide</h2>
   <p>Start with these four simple steps. The complete guide stays available offline from the main page.</p>
   <div class="guide-intro">
-   <div class="guide-step"><strong>1. Connect storage</strong><span>Choose Google Drive, OneDrive, or offline use. Cloud sign-in keeps supported devices synchronized.</span></div>
+   <div class="guide-step"><strong>1. Choose storage</strong><span>Connect Google Drive for authenticated cloud sync, or continue offline on this device.</span></div>
    <div class="guide-step"><strong>2. Set your budget</strong><span>Open Budget Setup, choose a month and year, then add categories, items, and amounts. Save resets the entry fields without removing saved data.</span></div>
    <div class="guide-step"><strong>3. Record income and expenses</strong><span>Use My Income for earnings and deductions; Net Income updates instantly. Duplicate Income Month copies saved values, and Save resets the entry fields. The Data Viewer keeps saved rows available.</span></div>
    <div class="guide-step"><strong>4. Review and back up</strong><span>Analytics updates automatically after saved changes and compares Budget, Expenses, Net Income, and Available Balance. In landscape, Home also shows the current-year graph.</span></div>
@@ -590,7 +583,7 @@ const CURRENT_YEAR=NOW.year;
 const YEARS=Array.from({length:11},(_,i)=>CURRENT_YEAR-5+i);
 let navStack=["home"], analyticsMode="month", budgetEditMode=false, expenseEditMode=false, incomeEditMode=false, budgetDeleteMode=false, expenseDeleteMode=false, incomeDeleteMode=false;
 const budgetResetPeriods=new Set(),incomeResetPeriods=new Set();
-let cloudToken="", cloudFolderId="", cloudFileId="", cloudProvider=sessionStorage.getItem("cloudProvider")||"", msalApp=null, cloudPreparing=false;
+let cloudToken="", cloudFolderId="", cloudFileId="", cloudProvider=sessionStorage.getItem("cloudProvider")==="google"?"google":"", cloudPreparing=false;
 let pendingImport=null, workbookObjectUrl="";
 
 function userName(){return (localStorage.getItem("budgetPlannerUserName")||"").trim()}
@@ -623,7 +616,7 @@ function openUserGuide(){document.getElementById("guideModal").hidden=false}
 
 function openOfflineDb(){return new Promise((resolve,reject)=>{const req=indexedDB.open("BudgetPlannerOffline",1);req.onupgradeneeded=()=>req.result.createObjectStore("state");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
 async function persistOffline(syncCloud=true){
- try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction("state","readwrite");tx.objectStore("state").put({budget,expenses,income,updatedAt:new Date().toISOString()},"latest");tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});if(syncCloud&&navigator.onLine&&cloudToken){setSyncStatus("Saved offline · syncing","busy");if(cloudProvider==="google")await syncToGoogleDrive();if(cloudProvider==="onedrive")await syncToOneDrive()}else if(syncCloud&&cloudToken&&!navigator.onLine)setSyncStatus("Saved offline · cloud sync queued","busy");else setSyncStatus(syncCloud?"Saved offline":"Cloud copy loaded","ok")}catch(e){showError("Offline recovery could not be updated: "+e.message)}
+ try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction("state","readwrite");tx.objectStore("state").put({budget,expenses,income,updatedAt:new Date().toISOString()},"latest");tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});if(syncCloud&&navigator.onLine&&cloudToken&&cloudProvider==="google"){setSyncStatus("Saved offline · syncing","busy");await syncToGoogleDrive()}else if(syncCloud&&cloudToken&&!navigator.onLine)setSyncStatus("Saved offline · cloud sync queued","busy");else setSyncStatus(syncCloud?"Saved offline":"Cloud copy loaded","ok")}catch(e){showError("Offline recovery could not be updated: "+e.message)}
 }
 async function restoreOffline(){
  try{const db=await openOfflineDb();const saved=await new Promise((resolve,reject)=>{const tx=db.transaction("state");const req=tx.objectStore("state").get("latest");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});if(saved){let recovered=false;if(!localStorage.getItem("budgetSetup")&&saved.budget){budget=saved.budget;localStorage.setItem("budgetSetup",JSON.stringify(budget));recovered=true}if(!localStorage.getItem("expenses")&&saved.expenses){expenses=saved.expenses;localStorage.setItem("expenses",JSON.stringify(expenses));recovered=true}if(!localStorage.getItem("incomeSetup")&&saved.income){income=saved.income;localStorage.setItem("incomeSetup",JSON.stringify(income));recovered=true}if(recovered)notify("Recovered the latest offline copy.")}}catch(e){console.warn(e)}
@@ -631,12 +624,10 @@ async function restoreOffline(){
 
 function providerError(message){const el=document.getElementById("cloudError");el.textContent=message;el.hidden=false}
 async function connectCloud(provider){
+ if(provider!=="google")return providerError("Choose Google Drive or continue offline on this device.");
  localStorage.removeItem("budgetPlannerOfflineMode");
  cloudProvider=provider;sessionStorage.setItem("cloudProvider",provider);
- if(provider==="google")return connectGoogleDrive();
- if(provider==="onedrive")return connectOneDrive();
- if(provider==="other"){closeCloudSetup();downloadWorkbook();return}
- providerError("Dropbox sync is coming soon. Google Drive remains the default; manual download works with any cloud-storage app.")
+ return connectGoogleDrive();
 }
 function loadScript(src){return new Promise((resolve,reject)=>{if(document.querySelector(`script[src="${src}"]`))return resolve();const s=document.createElement("script");s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error("Sign-in service could not be reached."));document.head.appendChild(s)})}
 async function connectGoogleDrive(){
@@ -664,15 +655,7 @@ async function loadFromGoogleDrive(){
 async function syncToGoogleDrive(){
  if(!cloudToken||!cloudFolderId)return;try{setSyncStatus("Syncing Budget File.xlsx to Google Drive","busy");if(!cloudFileId){const created=await (await driveFetch("https://www.googleapis.com/drive/v3/files?fields=id,name",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME,parents:[cloudFolderId]})})).json();cloudFileId=created.id}const payload=await workbookBlob();await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=media`,{method:"PATCH",headers:{"Content-Type":XLSX_MIME},body:payload});setSyncStatus("Budget File.xlsx saved to Google Drive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}
 }
-async function connectOneDrive(){
- const clientId=document.querySelector('meta[name="microsoft-client-id"]')?.content;if(!clientId)return providerError("OneDrive sign-in needs the publisher's Microsoft application ID. Add it before distributing the app.");
- try{await loadScript("https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.28.1/lib/msal-browser.min.js");msalApp=new msal.PublicClientApplication({auth:{clientId,authority:"https://login.microsoftonline.com/common",redirectUri:location.origin+location.pathname},cache:{cacheLocation:"sessionStorage"}});await msalApp.initialize();const result=await msalApp.loginPopup({scopes:["Files.ReadWrite","User.Read"],prompt:"select_account"});cloudToken=result.accessToken;cloudProvider="onedrive";sessionStorage.setItem("cloudProvider","onedrive");closeCloudSetup();await prepareOneDriveFolder();await loadFromOneDrive();await syncToOneDrive();notify("Connected to the existing Budget Planner workbook in OneDrive.")}catch(e){providerError("OneDrive sign-in failed: "+e.message)}
-}
-async function graphFetch(url,options={}){const r=await fetch(url,{...options,headers:{Authorization:`Bearer ${cloudToken}`,...(options.headers||{})}});if(!r.ok&&r.status!==404)throw new Error(`OneDrive returned ${r.status}. Please sign in again.`);return r}
-async function prepareOneDriveFolder(){let r=await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner");if(r.status===404)await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root/children",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget Planner",folder:{},"@microsoft.graph.conflictBehavior":"fail"})})}
-async function loadFromOneDrive(){let r=await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.xlsx:/content");if(r.status!==404){await applyCloudWorkbook(await r.arrayBuffer());return}for(const legacyName of ["Budget File.xls","Budget File.json"]){const metaResponse=await graphFetch(`https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/${legacyName}`);if(metaResponse.status!==404){const meta=await metaResponse.json(),old=await graphFetch(`https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/${legacyName}:/content`);await applyCloudWorkbook(await old.text());await graphFetch(`https://graph.microsoft.com/v1.0/me/drive/items/${meta.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx"})});await syncToOneDrive();notify(`${legacyName} was migrated to Budget File.xlsx.`);return}}}
-async function syncToOneDrive(){if(!cloudToken)return;try{setSyncStatus("Syncing Budget File.xlsx to OneDrive","busy");await graphFetch("https://graph.microsoft.com/v1.0/me/drive/root:/Budget Planner/Budget File.xlsx:/content",{method:"PUT",headers:{"Content-Type":XLSX_MIME},body:await workbookBlob()});setSyncStatus("Budget File.xlsx saved to OneDrive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}}
-window.addEventListener("offline",()=>setSyncStatus(cloudToken?"Offline · cloud sync queued":"Saved offline","ok"));window.addEventListener("online",()=>{if(cloudToken){setSyncStatus("Connection restored · syncing","busy");if(cloudProvider==="google")syncToGoogleDrive();if(cloudProvider==="onedrive")syncToOneDrive()}else setSyncStatus("Saved offline","ok")});
+window.addEventListener("offline",()=>setSyncStatus(cloudToken?"Offline · cloud sync queued":"Saved offline","ok"));window.addEventListener("online",()=>{if(cloudToken&&cloudProvider==="google"){setSyncStatus("Connection restored · syncing","busy");syncToGoogleDrive()}else setSyncStatus("Saved offline","ok")});
 let analyticsResizeTimer;window.addEventListener("resize",()=>{clearTimeout(analyticsResizeTimer);analyticsResizeTimer=setTimeout(()=>{if(document.getElementById("analytics").classList.contains("active"))refreshAnalytics();if(document.getElementById("home").classList.contains("active"))drawHomeLandscapeAnalytics()},120)});
 
 function freshBudget(){
@@ -1090,14 +1073,9 @@ function editBudgetOnSetup(){
  budgetResetPeriods.delete(`${month}|${year}`);
  nav("setup");
 }
-function editExpenseOnSetup(){
- // Expenses map back to their date month, then Budget Setup opens for that month.
- const last=expenseRows()[expenseRows().length-1];
- const month=last?.date?MONTHS[new Date(last.date+"T00:00:00").getMonth()]:CURRENT_MONTH;
- const year=last?.year||CURRENT_YEAR;
- document.getElementById("setupMonth").value=month;
- document.getElementById("setupYear").value=year;
- nav("setup");
+function addOrEditExpense(){
+ nav("entry");
+ clearExpenseEntry();
 }
 function editIncomeOnSetup(){const first=incomeRows()[0],month=first?.month||CURRENT_MONTH,year=first?.year||CURRENT_YEAR;document.getElementById("incomeMonth").value=month;document.getElementById("incomeYear").value=year;incomeResetPeriods.delete(incomePeriodKey(month,year));nav("income")}
 

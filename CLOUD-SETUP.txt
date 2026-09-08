@@ -1,6 +1,6 @@
 BUDGET PLANNER — CLOUD SYNC SETUP
 
-Before selling or publishing the app, register the deployed HTTPS domain with the cloud providers you want to offer.
+Before selling or publishing the app, register the deployed HTTPS domain with Google Drive. The customer can also choose persistent offline use without signing in.
 
 GOOGLE DRIVE (default)
 1. Create a Web OAuth Client in Google Cloud Console.
@@ -9,18 +9,11 @@ GOOGLE DRIVE (default)
 4. Open the HTML file and place the client ID in:
    <meta name="google-client-id" content="YOUR_CLIENT_ID">
 
-MICROSOFT ONEDRIVE (secondary)
-1. Register a Single Page Application in Microsoft Entra.
-2. Add the final HTTPS app URL as a redirect URI.
-3. Place the application ID in:
-   <meta name="microsoft-client-id" content="YOUR_APPLICATION_ID">
-
-Dropbox is displayed as Coming Soon and is intentionally disabled. Customers can use the built-in offline recovery and Download Budget File action, then save the .xlsx file through their device's Files or cloud-storage app.
-
 IMPORTANT
 - OAuth credentials must never include a client secret in this HTML package.
 - Serve the package over HTTPS. Cloud login and installable-app features do not work correctly when the HTML is opened directly from a local file.
 - Test the final OAuth consent screen and authorized domain before distribution.
 - The app stores one genuine, editable Budget File.xlsx inside one Budget Planner folder per connected account.
+- Google Drive is the only cloud provider offered. Offline mode is saved on the current device and does not require OAuth.
 - Older Budget File.xls or Budget File.json data created by a previous version is migrated in place to Budget File.xlsx during the next successful connection.
 - If old duplicate folders already exist, review and remove the unused duplicates manually after confirming which folder contains the latest workbook. The app will not delete cloud folders automatically.
