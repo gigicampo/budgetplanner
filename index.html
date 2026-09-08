@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#F7F5F1"/>
-<meta name="google-client-id" content="544803549549-94pkuarje378i7fs1u70g9frt7qrbd7n.apps.googleusercontent.com"/>
+<meta name="google-client-id" content=""/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
 <link rel="apple-touch-icon" href="Budget-Planner-App-Icon-192.png"/>
@@ -44,6 +44,7 @@ p{color:var(--muted);line-height:1.5}
 /* Main page — warm editorial dashboard inspired by the supplied reference. */
 #home.active{max-width:430px;min-height:calc(100vh - 122px);margin:0 auto;padding:8px 12px 18px;border-radius:28px;background-image:linear-gradient(rgba(255,255,255,.18),rgba(255,255,255,.18)),url('ff1277350113b895c3e20ad27f01a362.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
 .home-masthead{position:relative;padding:20px 10px 8px}
+.home-logout{position:absolute;top:17px;right:8px;min-width:44px;min-height:44px;padding:0 13px;border:1px solid rgba(96,102,90,.2);border-radius:14px;background:rgba(255,253,249,.82);color:var(--olive);font:800 13px "Arial Unicode MS",Arial,sans-serif;box-shadow:0 5px 14px rgba(96,102,90,.07);cursor:pointer}
 .home-title{font-size:35px;line-height:1.08;font-weight:400;letter-spacing:.005em;color:#202521}
 .home-tagline{margin:7px 0 0;font-family:"Century Gothic",Arial,sans-serif;font-size:15px;font-style:italic;color:#7B8177}
 .home-welcome{text-align:center;margin:27px 0 24px}
@@ -276,16 +277,38 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 .home-landscape-analytics{display:none;margin:0 0 16px;padding:17px;border:1px solid rgba(96,102,90,.13);border-radius:22px;background:rgba(255,253,249,.9);box-shadow:0 8px 24px rgba(96,102,90,.07)}.home-landscape-analytics .chart-head{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-bottom:8px}.home-landscape-analytics .chart-head h3{line-height:1.25;overflow-wrap:anywhere}.home-landscape-canvas{height:clamp(190px,34vh,285px)}.home-landscape-canvas canvas{width:100%;height:100%}
 @media (orientation:landscape){#home.active{max-width:1120px}.home-landscape-analytics{display:block}.home-welcome{margin-bottom:12px}#home .home-nav{margin-top:0}}
 #income>.setup-actions,#incomeDuplicatePanel{max-width:720px;margin-left:auto;margin-right:auto}
+
+/* Login — intentionally quiet, with only the app identity and access choices. */
+#login.active{display:grid;min-height:calc(100vh - 122px);place-items:center;padding:20px}
+.login-card{width:min(100%,390px);padding:34px 26px;border:1px solid rgba(96,102,90,.16);border-radius:30px;background:rgba(255,253,249,.9);box-shadow:0 18px 46px rgba(96,102,90,.14);text-align:center}
+.login-logo{display:block;width:132px;height:132px;margin:0 auto 22px;filter:drop-shadow(0 10px 18px rgba(96,102,90,.14))}
+.login-actions{display:grid;gap:12px}.login-button{width:100%;min-height:52px;display:flex;align-items:center;justify-content:center;gap:11px;padding:12px 16px;border-radius:16px;font:800 15px "Arial Unicode MS",Arial,sans-serif;cursor:pointer}
+.login-button.google{border:0;background:var(--olive);color:#fff}.login-button.offline{border:1px solid #CCD3CC;background:#FFFDF9;color:var(--olive)}.login-button:disabled{cursor:wait;opacity:.68}
+.login-google-mark{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#fff;color:#4285F4;font:900 16px Arial,sans-serif}
+.login-card .error-text{margin:14px 0 0;text-align:left}
+@media(max-width:480px){#login.active{padding:10px}.login-card{padding:28px 20px}.login-logo{width:116px;height:116px}.home-title{padding-right:92px}.home-logout{right:4px}}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="sync-bar"><span><span id="syncDot" class="sync-dot"></span><span id="syncText">Offline copy ready</span></span><button class="sync-action" onclick="openCloudSetup()">Cloud storage</button></div>
+<div id="syncBar" class="sync-bar" hidden><span><span id="syncDot" class="sync-dot"></span><span id="syncText">Offline copy ready</span></span><button class="sync-action" onclick="openCloudSetup()">Cloud storage</button></div>
 
-<section id="home" class="screen active">
+<section id="login" class="screen active" aria-label="Budget Planner login">
+  <div class="login-card">
+    <img class="login-logo" src="Budget-Planner-App-Icon.svg" alt="Budget Planner">
+    <div class="login-actions">
+      <button id="googleLoginBtn" class="login-button google" type="button" onclick="loginWithGoogle()"><span class="login-google-mark" aria-hidden="true">G</span><span>Continue with Google Drive</span></button>
+      <button class="login-button offline" type="button" onclick="continueOffline()">Continue Offline</button>
+    </div>
+    <p id="loginError" class="error-text" role="alert" hidden></p>
+  </div>
+</section>
+
+<section id="home" class="screen">
   <header class="home-masthead">
     <div class="home-title">BUDGET PLANNER</div>
     <div class="home-tagline">Spend Intentionally. Live Freely.</div>
+    <button class="home-logout" type="button" onclick="logoutApp()" aria-label="Log out of Budget Planner">Log out</button>
   </header>
 
   <div class="home-welcome">
@@ -581,10 +604,14 @@ const NOW=philippineDateParts();
 const CURRENT_MONTH=MONTHS[NOW.monthIndex];
 const CURRENT_YEAR=NOW.year;
 const YEARS=Array.from({length:11},(_,i)=>CURRENT_YEAR-5+i);
+const LOGIN_MODE_KEY="budgetPlannerLoginMode";
+const GOOGLE_TOKEN_KEY="budgetPlannerGoogleToken";
+const GOOGLE_TOKEN_EXPIRY_KEY="budgetPlannerGoogleTokenExpiry";
 let navStack=["home"], analyticsMode="month", budgetEditMode=false, expenseEditMode=false, incomeEditMode=false, budgetDeleteMode=false, expenseDeleteMode=false, incomeDeleteMode=false;
 const budgetResetPeriods=new Set(),incomeResetPeriods=new Set();
-let cloudToken="", cloudFolderId="", cloudFileId="", cloudProvider=sessionStorage.getItem("cloudProvider")==="google"?"google":"", cloudPreparing=false;
+let cloudToken=sessionStorage.getItem(GOOGLE_TOKEN_KEY)||"", cloudTokenExpiry=Number(sessionStorage.getItem(GOOGLE_TOKEN_EXPIRY_KEY))||0, cloudFolderId="", cloudFileId="", cloudProvider="", cloudPreparing=false, cloudReady=false;
 let pendingImport=null, workbookObjectUrl="";
+if(cloudTokenExpiry<=Date.now()){cloudToken="";cloudTokenExpiry=0;sessionStorage.removeItem(GOOGLE_TOKEN_KEY);sessionStorage.removeItem(GOOGLE_TOKEN_EXPIRY_KEY)}
 
 function userName(){return (localStorage.getItem("budgetPlannerUserName")||"").trim()}
 function saveUserName(){
@@ -594,8 +621,8 @@ function saveUserName(){
 }
 function continueFirstRun(){
  if(!localStorage.getItem("budgetPlannerGuideSeen"))setTimeout(openUserGuide,180);
- else if(localStorage.getItem("budgetPlannerOfflineMode")==="1")setSyncStatus("Saved offline","ok");
- else setTimeout(openCloudSetup,220);
+ else if(localStorage.getItem(LOGIN_MODE_KEY)==="offline")setSyncStatus("Saved offline","ok");
+ else if(cloudProvider==="google"&&cloudReady)setSyncStatus("Budget File.xlsx loaded from Google Drive","ok");
 }
 
 function notify(message,type="success"){
@@ -609,14 +636,31 @@ function setSyncStatus(text,state=""){
  document.getElementById("syncText").textContent=text;
  document.getElementById("syncDot").className=`sync-dot ${state}`;
 }
+function showLoginPage(message=""){
+ document.getElementById("syncBar").hidden=true;
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById("login").classList.add("active");navStack=["login"];
+ document.querySelectorAll(".modal").forEach(x=>x.hidden=true);
+ const error=document.getElementById("loginError");error.textContent=message;error.hidden=!message;
+ window.scrollTo(0,0);
+}
+function enterMainApp(){
+ document.getElementById("syncBar").hidden=false;setDefaultLandingPage();
+ if(!userName())setTimeout(()=>{document.getElementById("nameModal").hidden=false;document.getElementById("userNameInput").focus()},180);else continueFirstRun();
+}
 function openCloudSetup(){document.getElementById("cloudError").hidden=true;document.getElementById("cloudModal").hidden=false}
-function closeCloudSetup(){document.getElementById("cloudModal").hidden=true;setSyncStatus(navigator.onLine?"Offline copy ready":"Offline · changes queued",navigator.onLine?"ok":"busy")}
-function continueOffline(){localStorage.setItem("budgetPlannerOfflineMode","1");sessionStorage.removeItem("cloudProvider");cloudProvider="";cloudToken="";document.getElementById("cloudModal").hidden=true;setSyncStatus("Saved offline","ok");notify("Offline mode saved for this device.")}
+function closeCloudSetup(){document.getElementById("cloudModal").hidden=true;if(cloudProvider==="google"&&cloudReady)setSyncStatus("Budget File.xlsx connected to Google Drive","ok");else setSyncStatus(navigator.onLine?"Saved offline":"Saved offline","ok")}
+function clearGoogleSession(){cloudToken="";cloudTokenExpiry=0;cloudFolderId="";cloudFileId="";cloudProvider="";cloudReady=false;sessionStorage.removeItem(GOOGLE_TOKEN_KEY);sessionStorage.removeItem(GOOGLE_TOKEN_EXPIRY_KEY);sessionStorage.removeItem("cloudProvider")}
+function continueOffline(){clearGoogleSession();localStorage.setItem(LOGIN_MODE_KEY,"offline");localStorage.setItem("budgetPlannerOfflineMode","1");document.getElementById("cloudModal").hidden=true;enterMainApp();setSyncStatus("Saved offline","ok");notify("Offline mode saved for this device.")}
+function logoutApp(){
+ const token=cloudToken;if(token&&window.google?.accounts?.oauth2?.revoke)try{google.accounts.oauth2.revoke(token,()=>{})}catch(error){console.warn("Google token revocation was skipped",error)}
+ clearGoogleSession();localStorage.removeItem(LOGIN_MODE_KEY);localStorage.removeItem("budgetPlannerOfflineMode");showLoginPage();
+}
 function openUserGuide(){document.getElementById("guideModal").hidden=false}
 
 function openOfflineDb(){return new Promise((resolve,reject)=>{const req=indexedDB.open("BudgetPlannerOffline",1);req.onupgradeneeded=()=>req.result.createObjectStore("state");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
 async function persistOffline(syncCloud=true){
- try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction("state","readwrite");tx.objectStore("state").put({budget,expenses,income,updatedAt:new Date().toISOString()},"latest");tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});if(syncCloud&&navigator.onLine&&cloudToken&&cloudProvider==="google"){setSyncStatus("Saved offline · syncing","busy");await syncToGoogleDrive()}else if(syncCloud&&cloudToken&&!navigator.onLine)setSyncStatus("Saved offline · cloud sync queued","busy");else setSyncStatus(syncCloud?"Saved offline":"Cloud copy loaded","ok")}catch(e){showError("Offline recovery could not be updated: "+e.message)}
+ try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction("state","readwrite");tx.objectStore("state").put({budget,expenses,income,updatedAt:new Date().toISOString()},"latest");tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});if(syncCloud&&navigator.onLine&&cloudToken&&cloudProvider==="google"&&cloudReady){setSyncStatus("Saved offline · syncing","busy");await syncToGoogleDrive()}else if(syncCloud&&cloudToken&&!navigator.onLine)setSyncStatus("Saved offline · cloud sync queued","busy");else setSyncStatus(syncCloud?"Saved offline":"Cloud copy loaded","ok")}catch(e){showError("Offline recovery could not be updated: "+e.message)}
 }
 async function restoreOffline(){
  try{const db=await openOfflineDb();const saved=await new Promise((resolve,reject)=>{const tx=db.transaction("state");const req=tx.objectStore("state").get("latest");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});if(saved){let recovered=false;if(!localStorage.getItem("budgetSetup")&&saved.budget){budget=saved.budget;localStorage.setItem("budgetSetup",JSON.stringify(budget));recovered=true}if(!localStorage.getItem("expenses")&&saved.expenses){expenses=saved.expenses;localStorage.setItem("expenses",JSON.stringify(expenses));recovered=true}if(!localStorage.getItem("incomeSetup")&&saved.income){income=saved.income;localStorage.setItem("incomeSetup",JSON.stringify(income));recovered=true}if(recovered)notify("Recovered the latest offline copy.")}}catch(e){console.warn(e)}
@@ -625,15 +669,18 @@ async function restoreOffline(){
 function providerError(message){const el=document.getElementById("cloudError");el.textContent=message;el.hidden=false}
 async function connectCloud(provider){
  if(provider!=="google")return providerError("Choose Google Drive or continue offline on this device.");
- localStorage.removeItem("budgetPlannerOfflineMode");
- cloudProvider=provider;sessionStorage.setItem("cloudProvider",provider);
- return connectGoogleDrive();
+ return loginWithGoogle(false);
 }
 function loadScript(src){return new Promise((resolve,reject)=>{if(document.querySelector(`script[src="${src}"]`))return resolve();const s=document.createElement("script");s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error("Sign-in service could not be reached."));document.head.appendChild(s)})}
-async function connectGoogleDrive(){
+async function requestGoogleToken(silent=false){
  const clientId=document.querySelector('meta[name="google-client-id"]')?.content;
- if(!clientId)return providerError("Google Drive sign-in needs the publisher's Google OAuth Client ID. Add it before distributing the app.");
- try{await loadScript("https://accounts.google.com/gsi/client");google.accounts.oauth2.initTokenClient({client_id:clientId,scope:"https://www.googleapis.com/auth/drive.file",prompt:"consent",callback:async r=>{if(r.error)return providerError("Google sign-in failed: "+r.error);cloudToken=r.access_token;await prepareGoogleFolder();}}).requestAccessToken()}catch(e){providerError(e.message)}
+ if(!clientId)throw new Error("Google Drive sign-in is not configured for this published site.");
+ await loadScript("https://accounts.google.com/gsi/client");
+ return new Promise((resolve,reject)=>{const client=google.accounts.oauth2.initTokenClient({client_id:clientId,scope:"https://www.googleapis.com/auth/drive.file",prompt:silent?"":"select_account",callback:r=>r.error?reject(new Error(silent?"Your Google session needs to be renewed.":"Google sign-in failed: "+r.error)):resolve(r)});try{client.requestAccessToken({prompt:silent?"":"select_account"})}catch(error){reject(error)}});
+}
+async function loginWithGoogle(silent=false){
+ const button=document.getElementById("googleLoginBtn"),loginError=document.getElementById("loginError");if(button)button.disabled=true;if(loginError)loginError.hidden=true;
+ try{const response=await requestGoogleToken(silent);cloudToken=response.access_token;cloudTokenExpiry=Date.now()+(Number(response.expires_in)||3600)*1000-60000;sessionStorage.setItem(GOOGLE_TOKEN_KEY,cloudToken);sessionStorage.setItem(GOOGLE_TOKEN_EXPIRY_KEY,String(cloudTokenExpiry));sessionStorage.setItem("cloudProvider","google");cloudProvider="google";localStorage.setItem(LOGIN_MODE_KEY,"google");localStorage.removeItem("budgetPlannerOfflineMode");await prepareGoogleFolder();enterMainApp();notify("Google Drive connected. Your latest Budget File.xlsx has been loaded.");return true}catch(error){clearGoogleSession();showLoginPage(silent?"":error.message);if(!silent&&loginError){loginError.textContent=error.message;loginError.hidden=false}return false}finally{if(button)button.disabled=false}
 }
 async function driveFetch(url,options={}){const r=await fetch(url,{...options,headers:{Authorization:`Bearer ${cloudToken}`,...(options.headers||{})}});if(!r.ok)throw new Error(`Google Drive returned ${r.status}. Please sign in again.`);return r}
 async function prepareGoogleFolder(){
@@ -644,18 +691,21 @@ async function prepareGoogleFolder(){
   let data=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&orderBy=createdTime&fields=files(id,name,createdTime)`)).json();
   if(data.files.length){cloudFolderId=data.files[0].id;if(data.files.length>1)notify("Multiple older Budget Planner folders were found. The original folder will be reused; no new folder was created.","error")}
   else{data=await (await driveFetch("https://www.googleapis.com/drive/v3/files?fields=id",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget Planner",mimeType:"application/vnd.google-apps.folder"})})).json();cloudFolderId=data.id}
-  sessionStorage.setItem("cloudProvider","google");closeCloudSetup();await loadFromGoogleDrive();await syncToGoogleDrive();notify("Connected to the existing Budget Planner workbook in Google Drive.");
- }catch(e){providerError(e.message);openCloudSetup()}finally{cloudPreparing=false}
+  const remoteFound=await loadFromGoogleDrive();cloudReady=true;
+  if(!remoteFound)await syncToGoogleDrive();else{setSyncStatus("Google Drive data loaded · securing merged copy","busy");await syncToGoogleDrive()}
+  sessionStorage.setItem("cloudProvider","google");document.getElementById("cloudModal").hidden=true;
+ }catch(e){cloudReady=false;throw e}finally{cloudPreparing=false}
 }
 async function loadFromGoogleDrive(){
  const query=encodeURIComponent(`name='Budget File.xlsx' and '${cloudFolderId}' in parents and trashed=false`);let found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${query}&orderBy=createdTime&fields=files(id,name,createdTime,modifiedTime)`)).json();
- if(found.files.length){cloudFileId=found.files[0].id;if(found.files.length>1)notify("Multiple older Budget File.xlsx files were found. The original file will be reused; no duplicate was created.","error");const bytes=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).arrayBuffer();await applyCloudWorkbook(bytes);return}
- for(const legacyName of ["Budget File.xls","Budget File.json"]){const oldQuery=encodeURIComponent(`name='${legacyName}' and '${cloudFolderId}' in parents and trashed=false`);found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${oldQuery}&orderBy=createdTime&fields=files(id,name,createdTime)`)).json();if(found.files.length){cloudFileId=found.files[0].id;const text=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).text();await applyCloudWorkbook(text);await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME})});await syncToGoogleDrive();notify(`${legacyName} was migrated to Budget File.xlsx.`);return}}
+ if(found.files.length){cloudFileId=found.files[0].id;if(found.files.length>1)notify("Multiple older Budget File.xlsx files were found. The original file will be reused; no duplicate was created.","error");const bytes=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).arrayBuffer();await applyCloudWorkbook(bytes,{mergeLocal:true});return true}
+ for(const legacyName of ["Budget File.xls","Budget File.json"]){const oldQuery=encodeURIComponent(`name='${legacyName}' and '${cloudFolderId}' in parents and trashed=false`);found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${oldQuery}&orderBy=createdTime&fields=files(id,name,createdTime)`)).json();if(found.files.length){cloudFileId=found.files[0].id;const text=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).text();await applyCloudWorkbook(text,{mergeLocal:true});await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME})});notify(`${legacyName} was migrated to Budget File.xlsx.`);return true}}
+ return false;
 }
 async function syncToGoogleDrive(){
- if(!cloudToken||!cloudFolderId)return;try{setSyncStatus("Syncing Budget File.xlsx to Google Drive","busy");if(!cloudFileId){const created=await (await driveFetch("https://www.googleapis.com/drive/v3/files?fields=id,name",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME,parents:[cloudFolderId]})})).json();cloudFileId=created.id}const payload=await workbookBlob();await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=media`,{method:"PATCH",headers:{"Content-Type":XLSX_MIME},body:payload});setSyncStatus("Budget File.xlsx saved to Google Drive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}
+ if(!cloudToken||!cloudFolderId||!cloudReady)return;try{setSyncStatus("Syncing Budget File.xlsx to Google Drive","busy");if(!cloudFileId){const created=await (await driveFetch("https://www.googleapis.com/drive/v3/files?fields=id,name",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME,parents:[cloudFolderId]})})).json();cloudFileId=created.id}const payload=await workbookBlob();await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=media`,{method:"PATCH",headers:{"Content-Type":XLSX_MIME},body:payload});setSyncStatus("Budget File.xlsx saved to Google Drive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}
 }
-window.addEventListener("offline",()=>setSyncStatus(cloudToken?"Offline · cloud sync queued":"Saved offline","ok"));window.addEventListener("online",()=>{if(cloudToken&&cloudProvider==="google"){setSyncStatus("Connection restored · syncing","busy");syncToGoogleDrive()}else setSyncStatus("Saved offline","ok")});
+window.addEventListener("offline",()=>setSyncStatus(cloudToken?"Offline · cloud sync queued":"Saved offline","ok"));window.addEventListener("online",()=>{if(cloudToken&&cloudProvider==="google"&&cloudReady){setSyncStatus("Connection restored · syncing","busy");syncToGoogleDrive()}else setSyncStatus("Saved offline","ok")});
 let analyticsResizeTimer;window.addEventListener("resize",()=>{clearTimeout(analyticsResizeTimer);analyticsResizeTimer=setTimeout(()=>{if(document.getElementById("analytics").classList.contains("active"))refreshAnalytics();if(document.getElementById("home").classList.contains("active"))drawHomeLandscapeAnalytics()},120)});
 
 function freshBudget(){
@@ -1133,9 +1183,15 @@ function normalizeWorkbookTables(b,e,i){
  return {budgetRows:budgetRowsImported,expenses:expenseRowsImported,incomeRows:incomeRowsImported};
 }
 function parseLegacySpreadsheetXml(text){const doc=new DOMParser().parseFromString(text,"application/xml");if(doc.querySelector("parsererror"))throw new Error("The legacy Budget File.xls is malformed and was not changed.");const sheets=[...doc.getElementsByTagNameNS("*","Worksheet")];const tableFor=name=>{const sheet=sheets.find(s=>(s.getAttributeNS("urn:schemas-microsoft-com:office:spreadsheet","Name")||s.getAttribute("ss:Name")||s.getAttribute("Name"))===name);if(!sheet)return [];return [...sheet.getElementsByTagNameNS("*","Row")].map(row=>[...row.getElementsByTagNameNS("*","Cell")].map(cell=>cell.getElementsByTagNameNS("*","Data")[0]?.textContent||""))};return normalizeWorkbookTables(tableFor("MyBudget"),tableFor("MyExpenses"),tableFor("My Income"))}
-async function applyCloudWorkbook(data){
+async function applyCloudWorkbook(data,{mergeLocal=false}={}){
  let imported;if(typeof data==="string"&&data.trim().startsWith("{")){let old;try{old=JSON.parse(data)}catch(e){throw new Error("The existing Budget File.json is malformed and was not changed.")}if(!Array.isArray(old.budget)||!Array.isArray(old.expenses))throw new Error("The existing Budget File.json does not contain valid Budget Planner data.");imported={budgetRows:old.budget.flatMap(c=>(c.items||[]).map(r=>({frequency:c.frequency,category:c.name,item:r.item,month:r.month,year:Number(r.year)||CURRENT_YEAR,amount:Number(r.amount)||0}))),expenses:old.expenses,incomeRows:Array.isArray(old.incomeRows)?old.incomeRows:[]}}else if(typeof data==="string"&&data.trim().startsWith("<"))imported=parseLegacySpreadsheetXml(data);else imported=await parseXlsxWorkbook(data);
- budget=groupBudgetRows(imported.budgetRows);expenses=imported.expenses;income=imported.incomeRows?.length?groupIncomeRows(imported.incomeRows):freshIncome();localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));localStorage.setItem("incomeSetup",JSON.stringify(income));await persistOffline(false);renderBudget();renderIncome();refreshFinancialViews();
+ let nextBudget=imported.budgetRows,nextExpenses=imported.expenses,nextIncome=imported.incomeRows||[];
+ if(mergeLocal){
+  const budgetMap=new Map(budgetRows().map(r=>[budgetKey(r),r]));nextBudget.forEach(r=>budgetMap.set(budgetKey(r),r));nextBudget=[...budgetMap.values()];
+  const expenseMap=new Map(expenseRows().map(r=>[expenseKey(r),r]));nextExpenses.forEach(r=>expenseMap.set(expenseKey(r),r));nextExpenses=[...expenseMap.values()];
+  const incomeMap=new Map(incomeRows().map(r=>[incomeKey(r),r]));nextIncome.forEach(r=>incomeMap.set(incomeKey(r),r));nextIncome=[...incomeMap.values()];
+ }
+ budget=nextBudget.length?groupBudgetRows(nextBudget):freshBudget();expenses=nextExpenses;income=nextIncome.length?groupIncomeRows(nextIncome):freshIncome();localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));localStorage.setItem("incomeSetup",JSON.stringify(income));await persistOffline(false);renderBudget();renderIncome();refreshFinancialViews();
 }
 function budgetKey(r){return [r.category,r.item,r.month,r.year].map(v=>String(v).trim().toLowerCase()).join("|")}
 function expenseKey(r){return [r.date,r.year,r.paidFor,r.item,r.category,r.amount].map(v=>String(v).trim().toLowerCase()).join("|")}
@@ -1280,11 +1336,18 @@ function setDefaultLandingPage(){
 }
 
 async function startApp(){
- await restoreOffline();initMonthSelectors();renderBudget();updateActionButtons();updateDailyMessage();refreshHomeSummary();setDefaultLandingPage();
+ showLoginPage();await restoreOffline();initMonthSelectors();renderBudget();updateActionButtons();updateDailyMessage();refreshHomeSummary();
  if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("service-worker.js").catch(()=>notify("Installable offline mode is unavailable in this browser.","error"));
- if(!userName()){setTimeout(()=>{document.getElementById("nameModal").hidden=false;document.getElementById("userNameInput").focus()},250)}else continueFirstRun();
+ let mode=localStorage.getItem(LOGIN_MODE_KEY)||"";if(!mode&&localStorage.getItem("budgetPlannerOfflineMode")==="1")mode="offline";if(!mode&&sessionStorage.getItem("cloudProvider")==="google")mode="google";
+ if(mode==="offline"){localStorage.setItem(LOGIN_MODE_KEY,"offline");enterMainApp();setSyncStatus("Saved offline","ok");return}
+ if(mode==="google"){
+  cloudProvider="google";
+  if(cloudToken&&cloudTokenExpiry>Date.now()){try{await prepareGoogleFolder();enterMainApp();notify("Google Drive content refreshed.");return}catch(error){clearGoogleSession();showLoginPage("Your Google Drive session needs to be renewed.");return}}
+  await loginWithGoogle(true);return;
+ }
+ showLoginPage();
 }
-function finishGuide(){const firstView=!localStorage.getItem("budgetPlannerGuideSeen");localStorage.setItem("budgetPlannerGuideSeen","1");document.getElementById("guideModal").hidden=true;if(firstView&&localStorage.getItem("budgetPlannerOfflineMode")!=="1")setTimeout(openCloudSetup,200)}
+function finishGuide(){localStorage.setItem("budgetPlannerGuideSeen","1");document.getElementById("guideModal").hidden=true}
 startApp();
 </script>
 </body>

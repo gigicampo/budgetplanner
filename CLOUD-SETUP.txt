@@ -15,5 +15,7 @@ IMPORTANT
 - Test the final OAuth consent screen and authorized domain before distribution.
 - The app stores one genuine, editable Budget File.xlsx inside one Budget Planner folder per connected account.
 - Google Drive is the only cloud provider offered. Offline mode is saved on the current device and does not require OAuth.
+- Google access tokens are kept only for the current browser/app session. A normal page refresh reuses a valid session; an expired or revoked Google session returns the user to the Login page.
+- On connection, the existing workbook is loaded and validated before cloud upload is enabled. Local-only and cloud-only records are merged so an older workbook cannot erase saved Income values.
 - Older Budget File.xls or Budget File.json data created by a previous version is migrated in place to Budget File.xlsx during the next successful connection.
 - If old duplicate folders already exist, review and remove the unused duplicates manually after confirming which folder contains the latest workbook. The app will not delete cloud folders automatically.
