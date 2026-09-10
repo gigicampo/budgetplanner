@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#F7F5F1"/>
-<meta name="google-client-id" content="544803549549-94pkuarje378i7fs1u70g9frt7qrbd7n.apps.googleusercontent.com"/>
+<meta name="google-client-id" content=""/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
 <link rel="apple-touch-icon" href="Budget-Planner-App-Icon-192.png"/>
@@ -1258,7 +1258,31 @@ function analyticsChartSvg(labels,budgetVals,expenseVals,incomeVals=[]){
  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Budget, expenses, and net income chart" xmlns="http://www.w3.org/2000/svg"><rect width="${W}" height="${H}" rx="14" fill="#FFFDFB"/>${grid}${bars}${ticks}<circle cx="${W-285}" cy="18" r="5" fill="#86A994"/><text x="${W-274}" y="22" fill="#4F574F" font-size="11">Budget</text><circle cx="${W-196}" cy="18" r="5" fill="#E2A0A2"/><text x="${W-185}" y="22" fill="#4F574F" font-size="11">Expenses</text><circle cx="${W-88}" cy="18" r="5" fill="#A98BB5"/><text x="${W-77}" y="22" fill="#4F574F" font-size="11">Net Income</text></svg>`;
 }
 function downloadAnalyticsPdf(option){
- const parts=option==="both"?[analyticsPrintSection("month"),analyticsPrintSection("category")]:[analyticsPrintSection(option)];const w=window.open("","_blank");if(!w)return showError("The print window was blocked. Allow pop-ups for Budget Planner, then try again.");w.document.write(`<!doctype html><title>Budget Planner Analytics</title><style>body{font:14px 'Arial Unicode MS',Arial,sans-serif;color:#30352f;margin:32px}h1,h2{font-family:'Segoe UI',Arial,sans-serif;color:#60665a}section{page-break-after:always}.report-chart{margin:16px 0;padding:8px;border:1px solid #e0e5e0;border-radius:12px;page-break-inside:avoid}.report-chart svg{display:block;width:100%;height:auto}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #d9ded9;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#96aca0;color:white}.summary{padding:14px;background:#f3f6f3;border-radius:8px}@media print{button{display:none}section:last-of-type{page-break-after:auto}}</style><h1>Budget Planner Analytics</h1>${parts.join("")}<button onclick="print()">Print / Save Analytics as PDF</button>`);w.document.close();setTimeout(()=>w.print(),300);notify("Analytics report with graph opened. Choose Print or Save as PDF.")
+ const parts=option==="both"?[analyticsPrintSection("month"),analyticsPrintSection("category")]:[analyticsPrintSection(option)];
+ const w=window.open("","_blank");
+ if(!w)return showError("The report window was blocked. Allow pop-ups for Budget Planner, then try again.");
+ w.document.write(`<!doctype html>
+ <html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Budget Planner Analytics</title>
+ <style>
+ *{box-sizing:border-box}body{font:14px 'Arial Unicode MS',Arial,sans-serif;color:#30352f;margin:0;background:#f6f7f5}
+ .report-toolbar{position:sticky;top:0;z-index:50;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px;background:#fffdfb;border-bottom:1px solid #dfe5df;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+ .toolbar-left,.toolbar-right{display:flex;gap:8px;align-items:center}.report-toolbar button{border:0;border-radius:12px;padding:11px 14px;font:inherit;font-weight:800;cursor:pointer}
+ .back-btn{background:#eef1ed;color:#59645b}.print-btn{background:#4f7564;color:#fff}.report-wrap{max-width:1000px;margin:0 auto;padding:24px 28px 40px;background:#fff}
+ h1,h2{font-family:'Segoe UI',Arial,sans-serif;color:#60665a}section{page-break-after:always}
+ .report-chart{margin:16px 0;padding:8px;border:1px solid #e0e5e0;border-radius:12px;page-break-inside:avoid}.report-chart svg{display:block;width:100%;height:auto}
+ table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #d9ded9;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#96aca0;color:white}
+ .summary{padding:14px;background:#f3f6f3;border-radius:8px}
+ @media(max-width:600px){.report-toolbar{padding:10px}.report-toolbar button{padding:10px 11px;font-size:13px}.report-wrap{padding:18px 12px 32px;overflow-x:auto}table{font-size:12px;min-width:720px}}
+ @media print{.report-toolbar{display:none!important}body{background:#fff}.report-wrap{max-width:none;margin:0;padding:0}section:last-of-type{page-break-after:auto}}
+ </style></head><body>
+ <div class="report-toolbar">
+   <div class="toolbar-left"><button class="back-btn" onclick="if(window.opener&&!window.opener.closed){window.opener.focus();window.close()}else if(history.length>1){history.back()}else{window.close()}">← Back to Analytics</button></div>
+   <div class="toolbar-right"><button class="print-btn" onclick="window.print()">Save / Print PDF</button></div>
+ </div>
+ <main class="report-wrap"><h1>Budget Planner Analytics</h1>${parts.join("")}</main>
+ </body></html>`);
+ w.document.close();
+ notify("Analytics report opened. Use the visible Save / Print PDF button, or Back to Analytics when finished.");
 }
 
 /* Analytics */

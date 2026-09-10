@@ -1,0 +1,14 @@
+Budget Planner - Analytics PDF Report UX Fix
+Date: 2026-09-10
+
+User feedback addressed:
+- Analytics report no longer immediately traps the user in the browser print flow.
+- Added a persistent Back to Analytics button at the top of the report.
+- Added a persistent Save / Print PDF button at the top of the same report.
+- Buttons remain visible while scrolling on desktop and mobile.
+- Report controls are automatically hidden from the printed/saved PDF.
+- Mobile report layout improved for smaller screens.
+- Service-worker cache bumped to v16 so deployed/installed clients can receive the update.
+
+New flow:
+Analytics -> Print / Save... -> report preview -> Save / Print PDF OR Back to Analytics.
