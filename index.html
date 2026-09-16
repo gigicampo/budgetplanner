@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#F7F5F1"/>
-<meta name="google-client-id" content="544803549549-94pkuarje378i7fs1u70g9frt7qrbd7n.apps.googleusercontent.com"/>
+<meta name="google-client-id" content=""/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
 <link rel="apple-touch-icon" href="Budget-Planner-App-Icon-192.png"/>
@@ -162,7 +162,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 
 @media(max-width:390px){.itemrow{grid-template-columns:minmax(0,1.4fr) minmax(96px,1fr) 40px}.remove{min-height:42px}.metric-grid{grid-template-columns:1fr}}
 
-#entryDateShort{height:48px;min-height:48px}
+#entryDate{height:48px;min-height:48px}
 
 
 .page-signature{
@@ -318,6 +318,13 @@ body:has(#home.active) .app{padding-bottom:0}
 .currency-setting[hidden]{display:none}.currency-setting small{font-size:12px;line-height:1.4}
 .sync-bar .logout-button{position:static;min-height:44px;border:0;border-radius:10px;background:#F7E9E7;color:var(--olive);padding:6px 10px;font:inherit;flex-shrink:0}
 .home-file-link svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+button,.home-file-link{min-height:48px;min-width:48px;touch-action:manipulation}
+.back,.remove,.actions button,.sync-action,.sync-bar .logout-button{min-width:48px;min-height:48px}
+.itemrow{grid-template-columns:minmax(0,1.4fr) minmax(96px,1fr) 48px}
+.deduction-head,.deduction-row{grid-template-columns:minmax(0,1.5fr) minmax(90px,1fr) 48px}
+#entryDate{height:48px;min-height:48px;min-width:0;width:100%;font:inherit}
+#entryDateHelp{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+:focus-visible{outline:3px solid #526C86;outline-offset:3px}
 .over-budget-note{font-size:14px;color:#A33F45;margin:8px 0}
 </style>
 </head>
@@ -340,7 +347,7 @@ body:has(#home.active) .app{padding-bottom:0}
   <header class="home-masthead">
     <div class="home-title">BUDGET PLANNER</div>
     <div class="home-tagline">Spend Intentionally. Live Freely.</div>
-    <div class="currency-menu"><button id="currencyToggle" class="currency-toggle" type="button" aria-label="Change currency" aria-expanded="false" aria-controls="currencyPanel" onclick="toggleCurrencyPanel()">₱</button><div id="currencyPanel" class="currency-setting" hidden><label for="currencySelect">Currency</label><select id="currencySelect" onchange="changeCurrency(this.value)"></select><small>Changes currency labels only. Amounts are not converted.</small></div></div>
+    <div class="currency-menu"><button id="currencyToggle" class="currency-toggle" type="button" aria-label="Change currency" aria-expanded="false" aria-controls="currencyPanel" onclick="toggleCurrencyPanel()">¤</button><div id="currencyPanel" class="currency-setting" hidden><label for="currencySelect">Currency</label><select id="currencySelect" onchange="changeCurrency(this.value)"></select><small>Changes currency labels only. Amounts are not converted.</small></div></div>
   </header>
 
   <div class="home-welcome">
@@ -402,7 +409,7 @@ body:has(#home.active) .app{padding-bottom:0}
 
   <div class="toolbar">
     <button class="tool" title="Save Budget Setup" aria-label="Save Budget Setup" onclick="saveBudget()">✓</button>
-    <button id="budgetDataBtn" class="tool blue" title="Show MyBudget data" aria-label="Show MyBudget data" onclick="showBudgetData()" disabled>▦</button>
+    <button id="budgetDataBtn" class="tool blue" title="Show My Budget data" aria-label="Show My Budget data" onclick="showBudgetData()" disabled>▦</button>
     <button id="exportBudgetBtn" class="tool sage" title="Download Budget File.xlsx" aria-label="Download Budget File Excel workbook" onclick="downloadWorkbook()" disabled>⇩</button>
   </div>
 
@@ -419,15 +426,15 @@ body:has(#home.active) .app{padding-bottom:0}
 
   <div class="card expense-form">
     <div class="field">
-      <label>Date</label>
-      <input id="entryDateShort" type="text" inputmode="numeric" placeholder="MM/DD/YYYY" maxlength="10" onblur="syncDateFromShort()" />
-      <input id="entryDate" type="hidden">
+      <label for="entryDate">Date</label>
+      <input id="entryDate" type="date" min="2000-01-01" max="2100-12-31" required onchange="syncEntryDate()" aria-describedby="entryDateHelp">
+      <small id="entryDateHelp">Use the date format shown by your device.</small>
     </div>
     <div class="field">
       <label>Paid For</label><input id="paidFor" type="text" placeholder="e.g. Cash, GCash, BPI">
     </div>
     <div class="field">
-      <label>Amount</label><input id="entryAmount" type="number" inputmode="decimal" step="0.01" placeholder="0.00">
+      <label for="entryAmount" id="entryAmountLabel">Amount</label><input id="entryAmount" type="number" inputmode="decimal" step="0.01" placeholder="0.00">
     </div>
     <div class="field">
       <label>Category</label><select id="entryCategory" onchange="refreshItems()"></select>
@@ -440,7 +447,7 @@ body:has(#home.active) .app{padding-bottom:0}
 
   <div class="toolbar">
     <button class="tool" title="Save Expense" aria-label="Save new expense" onclick="saveExpense()">✓</button>
-    <button id="expenseDataBtn" class="tool blue" title="Show MyExpenses data" aria-label="Show MyExpenses data" onclick="showExpenseData()" disabled>▦</button>
+    <button id="expenseDataBtn" class="tool blue" title="Show My Expenses data" aria-label="Show My Expenses data" onclick="showExpenseData()" disabled>▦</button>
     <button id="exportExpenseBtn" class="tool sage" title="Download Budget File.xlsx" aria-label="Download Budget File Excel workbook" onclick="downloadWorkbook()" disabled>⇩</button>
   </div>
 
@@ -466,7 +473,7 @@ body:has(#home.active) .app{padding-bottom:0}
   </div>
   <div id="incomeCategories"></div>
   <button class="addline" onclick="addIncomeCategory()">＋ Add Income Category</button>
-  <div id="incomeNetSummary" class="income-net">Total Net Income <output aria-live="polite">₱0.00</output></div>
+  <div id="incomeNetSummary" class="income-net">Total Net Income <output aria-live="polite">—</output></div>
   <div class="toolbar">
     <button class="tool" title="Save My Income" aria-label="Save My Income" onclick="saveIncome()">✓</button>
     <button id="incomeDataBtn" class="tool blue" title="Show My Income data" aria-label="Show My Income data" onclick="showIncomeData()" disabled>▦</button>
@@ -494,7 +501,7 @@ body:has(#home.active) .app{padding-bottom:0}
 </section>
 
 <section id="budgetData" class="screen">
-  <div class="topbar"><button class="back" onclick="goBack()" title="Back" aria-label="Go back">‹</button><div><div class="brand">Budget File</div><h2>MyBudget</h2></div></div>
+  <div class="topbar"><button class="back" onclick="goBack()" title="Back" aria-label="Go back">‹</button><div><div class="brand">Budget File</div><h2>My Budget</h2></div></div>
   <div class="data-actions">
     <button id="editBudgetExcelBtn" class="excel-btn" onclick="toggleBudgetEdit()">Edit Data</button>
     <button class="setup-btn" onclick="editBudgetOnSetup()">Edit on Setup</button>
@@ -513,7 +520,7 @@ body:has(#home.active) .app{padding-bottom:0}
 </section>
 
 <section id="expenseData" class="screen">
-  <div class="topbar"><button class="back" onclick="goBack()" title="Back" aria-label="Go back">‹</button><div><div class="brand">Budget File</div><h2>MyExpenses</h2></div></div>
+  <div class="topbar"><button class="back" onclick="goBack()" title="Back" aria-label="Go back">‹</button><div><div class="brand">Budget File</div><h2>My Expenses</h2></div></div>
   <div class="data-actions">
     <button id="editExpenseExcelBtn" class="excel-btn" onclick="toggleExpenseEdit()">Edit Data</button>
     <button class="setup-btn" onclick="addOrEditExpense()" aria-label="Open New Expense to add an expense">Add / Edit Expense</button>
@@ -538,10 +545,10 @@ body:has(#home.active) .app{padding-bottom:0}
     <div class="analytics-filters"><div class="analytics-period"><label for="analyticsMonth">Report Month</label><select id="analyticsMonth" onchange="refreshAnalytics()"><option value="">All Months</option></select></div><div id="analyticsYearControl" class="analytics-period"><label for="analyticsYear">Report Year</label><select id="analyticsYear" onchange="refreshAnalytics()"></select></div></div>
   </div>
   <div class="metric-grid analytics-kpis" aria-live="polite" aria-label="Updated financial summary">
-    <div class="metric blush"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h15a2 2 0 0 1 2 2v9H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h12v3"/><path d="M15 11h6v4h-6a2 2 0 0 1 0-4Z"/></svg></span><small>Total Budget</small><strong id="kpiBudget">₱0</strong><div class="kpi-progress"><span id="kpiBudgetBar"></span></div><span id="kpiBudgetCaption" class="kpi-caption">Monthly plan</span></div>
-    <div class="metric lilac"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16v12H4zM7 7V5h10v2M8 12h8"/><circle cx="12" cy="12" r="3"/></svg></span><small>Net Income</small><strong id="kpiIncome">₱0</strong><div class="kpi-progress"><span id="kpiIncomeBar"></span></div><span id="kpiIncomeCaption" class="kpi-caption">After deductions</span></div>
-    <div class="metric sage"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h3"/></svg></span><small>Total Expenses</small><strong id="kpiExpense">₱0</strong><div class="kpi-progress"><span id="kpiExpenseBar"></span></div><span id="kpiExpenseCaption" class="kpi-caption">0% of budget</span></div>
-    <div class="metric blue"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 20V11M10 20V7M15 20V4M20 20v-6"/></svg></span><small>Available Balance</small><strong id="kpiRemaining">₱0</strong><div class="kpi-progress"><span id="kpiRemainingBar"></span></div><span id="kpiRemainingCaption" class="kpi-caption">Income after expenses</span></div>
+    <div class="metric blush"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h15a2 2 0 0 1 2 2v9H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h12v3"/><path d="M15 11h6v4h-6a2 2 0 0 1 0-4Z"/></svg></span><small>Total Budget</small><strong id="kpiBudget">—</strong><div class="kpi-progress"><span id="kpiBudgetBar"></span></div><span id="kpiBudgetCaption" class="kpi-caption">Monthly plan</span></div>
+    <div class="metric lilac"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16v12H4zM7 7V5h10v2M8 12h8"/><circle cx="12" cy="12" r="3"/></svg></span><small>Net Income</small><strong id="kpiIncome">—</strong><div class="kpi-progress"><span id="kpiIncomeBar"></span></div><span id="kpiIncomeCaption" class="kpi-caption">After deductions</span></div>
+    <div class="metric sage"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18M7 15h3"/></svg></span><small>Total Expenses</small><strong id="kpiExpense">—</strong><div class="kpi-progress"><span id="kpiExpenseBar"></span></div><span id="kpiExpenseCaption" class="kpi-caption">0% of budget</span></div>
+    <div class="metric blue"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 20V11M10 20V7M15 20V4M20 20v-6"/></svg></span><small>Available Balance</small><strong id="kpiRemaining">—</strong><div class="kpi-progress"><span id="kpiRemainingBar"></span></div><span id="kpiRemainingCaption" class="kpi-caption">Income after expenses</span></div>
   </div>
   <div class="segmented analytics-view-tabs">
     <button id="monthTab" class="active" onclick="setAnalyticsMode('month')" aria-label="Show Analytics by month">By Month</button>
@@ -624,6 +631,7 @@ body:has(#home.active) .app{padding-bottom:0}
 <script src="currency.js"></script>
 <script src="jszip.min.js"></script>
 <script src="analytics-workbook.js"></script>
+<script src="sync-safety.js"></script>
 <script>
 const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DEFAULTS=["Basic Necessities","Bills","School","Events","Goals"];
@@ -694,7 +702,7 @@ function openUserGuide(){document.getElementById("guideModal").hidden=false}
 
 function openOfflineDb(){return new Promise((resolve,reject)=>{const req=indexedDB.open("BudgetPlannerOffline",1);req.onupgradeneeded=()=>req.result.createObjectStore("state");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
 async function persistOffline(syncCloud=true){
- try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction("state","readwrite");tx.objectStore("state").put({budget,expenses,income,updatedAt:new Date().toISOString()},"latest");tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});if(syncCloud&&navigator.onLine&&cloudToken&&cloudProvider==="google"&&cloudReady){setSyncStatus("Saved offline · syncing","busy");await syncToGoogleDrive()}else if(syncCloud&&cloudToken&&!navigator.onLine)setSyncStatus("Saved offline · cloud sync queued","busy");else setSyncStatus(syncCloud?"Saved offline":"Cloud copy loaded","ok")}catch(e){showError("Offline recovery could not be updated: "+e.message)}
+ try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction("state","readwrite");tx.objectStore("state").put({budget:JSON.parse(localStorage.getItem("budgetSetup")||"[]"),expenses:JSON.parse(localStorage.getItem("expenses")||"[]"),income:JSON.parse(localStorage.getItem("incomeSetup")||"[]"),updatedAt:new Date().toISOString()},"latest");tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});if(syncCloud&&navigator.onLine&&cloudToken&&cloudProvider==="google"&&cloudReady){setSyncStatus("Saved offline · syncing","busy");await syncToGoogleDrive()}else if(syncCloud&&cloudToken&&!navigator.onLine)setSyncStatus("Saved offline · cloud sync queued","busy");else setSyncStatus(syncCloud?"Saved offline":"Cloud copy loaded","ok")}catch(e){showError("Offline recovery could not be updated: "+e.message)}
 }
 async function restoreOffline(){
  try{const db=await openOfflineDb();const saved=await new Promise((resolve,reject)=>{const tx=db.transaction("state");const req=tx.objectStore("state").get("latest");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});if(saved){let recovered=false;if(!localStorage.getItem("budgetSetup")&&saved.budget){budget=saved.budget;localStorage.setItem("budgetSetup",JSON.stringify(budget));recovered=true}if(!localStorage.getItem("expenses")&&saved.expenses){expenses=saved.expenses;localStorage.setItem("expenses",JSON.stringify(expenses));recovered=true}if(!localStorage.getItem("incomeSetup")&&saved.income){income=saved.income;localStorage.setItem("incomeSetup",JSON.stringify(income));recovered=true}if(recovered)notify("Recovered the latest offline copy.")}}catch(e){console.warn(e)}
@@ -732,13 +740,43 @@ async function prepareGoogleFolder(){
 }
 async function loadFromGoogleDrive(){
  const query=encodeURIComponent(`name='Budget File.xlsx' and '${cloudFolderId}' in parents and trashed=false`);let found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${query}&orderBy=createdTime&fields=files(id,name,createdTime,modifiedTime)`)).json();
- if(found.files.length){cloudFileId=found.files[0].id;if(found.files.length>1)notify("Multiple older Budget File.xlsx files were found. The original file will be reused; no duplicate was created.","error");const bytes=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).arrayBuffer();await applyCloudWorkbook(bytes,{mergeLocal:true});return true}
+ if(found.files.length){cloudFileId=found.files[0].id;if(found.files.length>1)notify("Multiple older Budget File.xlsx files were found. The original file will be reused; no duplicate was created.","error");const bytes=await readCurrentDriveWorkbook();await applyCloudWorkbook(bytes,{mergeLocal:true});return true}
  for(const legacyName of ["Budget File.xls","Budget File.json"]){const oldQuery=encodeURIComponent(`name='${legacyName}' and '${cloudFolderId}' in parents and trashed=false`);found=await (await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${oldQuery}&orderBy=createdTime&fields=files(id,name,createdTime)`)).json();if(found.files.length){cloudFileId=found.files[0].id;const text=await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`)).text();await applyCloudWorkbook(text,{mergeLocal:true});await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME})});notify(`${legacyName} was migrated to Budget File.xlsx.`);return true}}
  return false;
 }
-async function syncToGoogleDrive(){
- if(!cloudToken||!cloudFolderId||!cloudReady)return;try{setSyncStatus("Syncing Budget File.xlsx to Google Drive","busy");if(!cloudFileId){const created=await (await driveFetch("https://www.googleapis.com/drive/v3/files?fields=id,name",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Budget File.xlsx",mimeType:XLSX_MIME,parents:[cloudFolderId]})})).json();cloudFileId=created.id}const payload=await workbookBlob();await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=media`,{method:"PATCH",headers:{"Content-Type":XLSX_MIME},body:payload});setSyncStatus("Budget File.xlsx saved to Google Drive","ok")}catch(e){setSyncStatus("Saved offline · cloud sync queued","busy");notify(e.message,"error")}
+let syncInFlight=null,syncAgain=false,cloudReadVersion='';
+function savedFinancialSnapshot(){
+ const storedBudget=JSON.parse(localStorage.getItem('budgetSetup')||'[]'),storedIncome=JSON.parse(localStorage.getItem('incomeSetup')||'[]');
+ return {budgetRows:storedBudget.flatMap(c=>(c.items||[]).filter(r=>!r._draft&&String(r.item||'').trim()).map(r=>({frequency:c.frequency,category:c.name,item:r.item,month:r.month,year:Number(r.year),amount:Number(r.amount)}))),expenses:JSON.parse(localStorage.getItem('expenses')||'[]').map(r=>({...r,year:Number(r.year)||Number(r.date.slice(0,4)),amount:Number(r.amount)})),incomeRows:storedIncome.flatMap(c=>(c.records||[]).filter(r=>!r._draft&&Number(r.amount)>0).map(r=>{const deductions=(r.deductions||[]).filter(d=>d.item).map(d=>({item:d.item,amount:Number(d.amount)}));return {frequency:r.frequency,category:c.name,month:r.month,year:Number(r.year),amount:Number(r.amount),deductions,netIncome:Number(r.amount)-deductions.reduce((s,d)=>s+d.amount,0)}}))};
 }
+function cloudBaseline(){try{return JSON.parse(localStorage.getItem('budgetPlannerSyncBase:'+cloudFileId)||'null')}catch{return null}}
+function rememberCloudBaseline(data){localStorage.setItem('budgetPlannerSyncBase:'+cloudFileId,JSON.stringify(data))}
+async function readDriveVersion(){return String((await (await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?fields=version`)).json()).version||'')}
+async function readCurrentDriveWorkbook(){
+ const before=await readDriveVersion(),response=await driveFetch(`https://www.googleapis.com/drive/v3/files/${cloudFileId}?alt=media`),bytes=await response.arrayBuffer(),after=await readDriveVersion();
+ if(!before||before!==after)throw new Error('Drive changed while being read. Your local records are safe. Try reconnecting.');
+ cloudReadVersion=after;return bytes;
+}
+async function syncToGoogleDrive(){
+ if(!cloudToken||!cloudFolderId||!cloudReady)return;
+ if(syncInFlight){syncAgain=true;return syncInFlight}
+ syncInFlight=(async()=>{try{
+  do{syncAgain=false;setSyncStatus('Checking Drive before saving','busy');
+   if(cloudFileId)await applyCloudWorkbook(await readCurrentDriveWorkbook(),{mergeLocal:true});
+   const snapshot=savedFinancialSnapshot(),payload=await workbookBlob(snapshot.budgetRows,snapshot.expenses,snapshot.incomeRows);
+   if(!cloudToken||!cloudReady)throw new Error('Cloud session ended. Changes remain saved offline.');
+   if(cloudFileId){if(await readDriveVersion()!==cloudReadVersion)throw new Error('Drive changed during export. Upload paused to preserve both copies. Reconnect to review.');}
+   if(cloudFileId)await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${cloudFileId}?uploadType=media`,{method:'PATCH',headers:{'Content-Type':XLSX_MIME},body:payload});
+   else{
+    const boundary='budget_'+crypto.randomUUID(),metadata=JSON.stringify({name:'Budget File.xlsx',mimeType:XLSX_MIME,parents:[cloudFolderId]});
+    const body=new Blob([`--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${metadata}\r\n--${boundary}\r\nContent-Type: ${XLSX_MIME}\r\n\r\n`,payload,`\r\n--${boundary}--`]);
+    const created=await (await driveFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':`multipart/related; boundary=${boundary}`},body})).json();cloudFileId=created.id;
+   }
+   rememberCloudBaseline(snapshot);setSyncStatus('Budget File.xlsx saved to Google Drive','ok');
+  }while(syncAgain&&cloudReady&&cloudToken);
+ }catch(error){setSyncStatus('Saved offline · sync needs attention','busy');showError(error.message)}finally{syncInFlight=null}})();return syncInFlight;
+}
+
 window.addEventListener("offline",()=>setSyncStatus(cloudToken?"Offline · cloud sync queued":"Saved offline","ok"));window.addEventListener("online",()=>{if(cloudToken&&cloudProvider==="google"&&cloudReady){setSyncStatus("Connection restored · syncing","busy");syncToGoogleDrive()}else setSyncStatus("Saved offline","ok")});
 let analyticsResizeTimer;window.addEventListener("resize",()=>{clearTimeout(analyticsResizeTimer);analyticsResizeTimer=setTimeout(()=>{if(document.getElementById("analytics").classList.contains("active"))refreshAnalytics();if(document.getElementById("home").classList.contains("active"))drawHomeLandscapeAnalytics()},120)});
 
@@ -885,7 +923,7 @@ function duplicateMonthEntries(){
 
  const targetHasData=budgetRows().some(r=>r.month===target&&r.year===year);
  if(targetHasData){
-   const ok=confirm(`${target} already has budget entries. Duplicate entries will be added alongside the existing data. Continue?`);
+   const ok=confirm(`${target} already has budget entries. Matching items will be replaced; other items will be kept. Continue?`);
    if(!ok)return;
  }
 
@@ -895,6 +933,7 @@ function duplicateMonthEntries(){
      cat={name:r.category,frequency:r.frequency||"Monthly",items:[]};
      budget.push(cat);
    }
+   cat.items=cat.items.filter(x=>!(String(x.item).trim().toLowerCase()===String(r.item).trim().toLowerCase()&&x.month===target&&Number(x.year)===year));
    cat.items.push({item:r.item,month:target,year,amount:r.amount});
  });
 
@@ -956,7 +995,6 @@ function shortToIso(s){
 }
 function setEntryDateIso(iso){
  document.getElementById("entryDate").value=iso;
- document.getElementById("entryDateShort").value=isoToShort(iso);
 }
 function onEntryMonthChange(){
  const m=entryMonth(), idx=MONTHS.indexOf(m);
@@ -965,12 +1003,10 @@ function onEntryMonthChange(){
  setEntryDateIso(`${y}-${String(idx+1).padStart(2,"0")}-${day}`);
  refreshEntrySelectors();
 }
-function syncDateFromShort(){
- const short=document.getElementById("entryDateShort").value.trim();
- const iso=shortToIso(short);
- if(!iso){showError("Date is invalid. Enter a real calendar date in MM/DD/YYYY format.");return}
- document.getElementById("entryDate").value=iso;
- document.getElementById("entryMonth").value=MONTHS[new Date(iso+"T00:00:00").getMonth()];
+function syncEntryDate(){
+ const field=document.getElementById("entryDate"),iso=field.value;
+ if(!iso||!field.validity.valid)return;
+ document.getElementById("entryMonth").value=MONTHS[Number(iso.slice(5,7))-1];
  refreshEntrySelectors();
 }
 function prepareEntry(setDate=true){
@@ -978,7 +1014,7 @@ function prepareEntry(setDate=true){
    const today=philippineDateParts();
    document.getElementById("entryMonth").value=MONTHS[today.monthIndex];setEntryDateIso(today.iso);
  }else{
-   document.getElementById("entryDateShort").value=isoToShort(document.getElementById("entryDate").value);
+   syncEntryDate();
  }
  refreshEntrySelectors();
 }
@@ -988,7 +1024,7 @@ function refreshEntrySelectors(){
  const cats=[...new Set(rows.map(r=>r.category).filter(Boolean))];
  const s=document.getElementById("entryCategory");
  s.innerHTML=cats.length?`<option value="">Select category</option>`+cats.map(c=>`<option>${esc(c)}</option>`).join(""):`<option value="">No category for ${month} ${year}</option>`;
- document.getElementById("entryFilterNote").innerHTML=cats.length?`Showing MyBudget choices for <b>${month} ${year}</b>.`:`No MyBudget rows are available for <b>${month} ${year}</b>.`;
+ document.getElementById("entryFilterNote").innerHTML=cats.length?`Showing My Budget choices for <b>${month} ${year}</b>.`:`No My Budget rows are available for <b>${month} ${year}</b>.`;
  refreshItems();
 }
 function refreshItems(){
@@ -1008,6 +1044,8 @@ function clearExpenseEntry(){
 }
 function saveExpense(){
  if(!hasBudget())return alert("Create and save Budget Setup first.");
+ const dateField=document.getElementById('entryDate');
+ if(!dateField.value||!dateField.validity.valid||shortToIso(isoToShort(dateField.value))!==dateField.value)return showError('Choose a valid expense date between 2000 and 2100.');
  const date=document.getElementById("entryDate").value,paidFor=document.getElementById("paidFor").value.trim(),amount=Number(document.getElementById("entryAmount").value),category=document.getElementById("entryCategory").value,item=document.getElementById("entryItem").value;
  if(!date||!paidFor||!category||!item)return showError("Complete Date, Paid For, Category, and Item.");
  if(!Number.isFinite(amount)||amount<=0)return showError("Expense Amount must be greater than zero. Negative, zero, or malformed expenses are not allowed.");
@@ -1043,10 +1081,10 @@ function incomeRecordsFromFlatRows(raw,label="My Income"){
 function renderTable(id,h,data,editable,deleteMode){
  const selectHead=deleteMode?'<th class="select-col">✓</th>':'';
  const rows=data.length?data.map((r,i)=>"<tr data-row-index='"+i+"'>"+
-   (deleteMode?`<td class="select-col"><input class="row-check" type="checkbox" data-index="${i}"></td>`:"")+
+   (deleteMode?`<td class="select-col"><input class="row-check" type="checkbox" data-index="${i}" aria-label="Select row ${i+1} for deletion"></td>`:"")+
    r.map(x=>`<td ${editable?'contenteditable="true"':''}>${esc(x)}</td>`).join("")+"</tr>").join(""):
    `<tr><td colspan="${h.length+(deleteMode?1:0)}">No saved data yet.</td></tr>`;
- document.getElementById(id).innerHTML="<tr>"+selectHead+h.map(x=>`<th>${x}</th>`).join("")+"</tr>"+rows;
+ document.getElementById(id).innerHTML=`<caption class="data-currency">Amounts in ${budgetCurrency.code}</caption><tr>`+selectHead+h.map(x=>`<th>${x}</th>`).join("")+"</tr>"+rows;
 }
 function toggleDeleteMode(type){
  if(type==="budget"){
@@ -1124,7 +1162,7 @@ function toggleIncomeEdit(){incomeEditMode=!incomeEditMode;renderIncomeTable();d
 function saveBudgetTableEdits(){
  const rows=[...document.querySelectorAll("#budgetTable tr")].slice(1);
  const raw=rows.map(tr=>[...tr.children].map(td=>td.innerText.trim())).filter(r=>r.length===6);
- if(!raw.length)return showError("MyBudget contains no valid data rows to save.");
+ if(!raw.length)return showError("My Budget contains no valid data rows to save.");
  const candidates=raw.map(r=>({frequency:r[0],category:r[1],item:r[2],month:r[3],year:Number(r[4]),amount:Number(r[5])}));
  const error=validateBudgetRows(candidates);if(error)return showError(error);
  const allowedFrequency=new Set(["Annual","Monthly","Daily"]);const badFrequency=candidates.findIndex(r=>!allowedFrequency.has(r.frequency));if(badFrequency>=0)return showError(`Budget row ${badFrequency+1}: Frequency must be Annual, Monthly, or Daily.`);
@@ -1137,15 +1175,15 @@ function saveBudgetTableEdits(){
  budget=Object.values(grouped);
  localStorage.setItem("budgetSetup",JSON.stringify(budget));
  budgetEditMode=false;renderBudgetTable();document.getElementById("budgetEditNote").style.display="none";document.getElementById("budgetInlineSaveBtn").style.display="none";document.getElementById("editBudgetExcelBtn").textContent="Edit Data";
- refreshFinancialViews();persistOffline();notify("MyBudget changes saved successfully.");
+ refreshFinancialViews();persistOffline();notify("My Budget changes saved successfully.");
 }
 function saveExpenseTableEdits(){
  const rows=[...document.querySelectorAll("#expenseTable tr")].slice(1);
- const raw=rows.map(tr=>[...tr.children].map(td=>td.innerText.trim())).filter(r=>r.length===6);if(!raw.length)return showError("MyExpenses contains no valid data rows to save.");
+ const raw=rows.map(tr=>[...tr.children].map(td=>td.innerText.trim())).filter(r=>r.length===6);if(!raw.length)return showError("My Expenses contains no valid data rows to save.");
  const parsed=[],seen=new Set();for(let i=0;i<raw.length;i++){const r=raw[i],date=r[0],year=Number(r[1]),amount=Number(r[5]);if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||shortToIso(`${date.slice(5,7)}/${date.slice(8,10)}/${date.slice(0,4)}`)!==date)return showError(`Expense row ${i+1}: Date is invalid. Use YYYY-MM-DD.`);if(year!==Number(date.slice(0,4)))return showError(`Expense row ${i+1}: Year must match the Date year.`);if(!r[2]||!r[3]||!r[4])return showError(`Expense row ${i+1}: PaidFor, Item, and Category are required.`);if(!Number.isFinite(amount)||amount<=0)return showError(`Expense row ${i+1}: Amount must be greater than zero.`);const key=r.map(v=>String(v).trim().toLowerCase()).join("|");if(seen.has(key))return showError(`Expense row ${i+1}: Duplicate row detected.`);seen.add(key);parsed.push({date,year,paidFor:r[2],item:r[3],category:r[4],amount})}expenses=parsed;
  localStorage.setItem("expenses",JSON.stringify(expenses));
  expenseEditMode=false;renderExpenseTable();document.getElementById("expenseEditNote").style.display="none";document.getElementById("expenseInlineSaveBtn").style.display="none";document.getElementById("editExpenseExcelBtn").textContent="Edit Data";
- refreshFinancialViews();persistOffline();notify("MyExpenses changes saved successfully.");
+ refreshFinancialViews();persistOffline();notify("My Expenses changes saved successfully.");
 }
 function saveIncomeTableEdits(){const rows=[...document.querySelectorAll("#incomeTable tr")].slice(1),raw=rows.map(tr=>[...tr.children].map(td=>td.innerText.trim())).filter(r=>r.length===8);if(!raw.length)return showError("My Income contains no valid data rows to save.");const parsed=incomeRecordsFromFlatRows(raw,"My Income");if(parsed.error)return showError(parsed.error);income=groupIncomeRows(parsed.rows);localStorage.setItem("incomeSetup",JSON.stringify(income));incomeEditMode=false;renderIncomeTable();renderIncome();document.getElementById("incomeEditNote").style.display="none";document.getElementById("incomeInlineSaveBtn").style.display="none";document.getElementById("editIncomeExcelBtn").textContent="Edit Data";refreshFinancialViews();persistOffline();notify("My Income changes saved successfully.")}
 function editBudgetOnSetup(){
@@ -1224,10 +1262,10 @@ async function applyCloudWorkbook(data,{mergeLocal=false}={}){
  let imported;if(typeof data==="string"&&data.trim().startsWith("{")){let old;try{old=JSON.parse(data)}catch(e){throw new Error("The existing Budget File.json is malformed and was not changed.")}if(!Array.isArray(old.budget)||!Array.isArray(old.expenses))throw new Error("The existing Budget File.json does not contain valid Budget Planner data.");imported={budgetRows:old.budget.flatMap(c=>(c.items||[]).map(r=>({frequency:c.frequency,category:c.name,item:r.item,month:r.month,year:Number(r.year)||CURRENT_YEAR,amount:Number(r.amount)||0}))),expenses:old.expenses,incomeRows:Array.isArray(old.incomeRows)?old.incomeRows:[]}}else if(typeof data==="string"&&data.trim().startsWith("<"))imported=parseLegacySpreadsheetXml(data);else imported=await parseXlsxWorkbook(data);
  let nextBudget=imported.budgetRows,nextExpenses=imported.expenses,nextIncome=imported.incomeRows||[];
  if(mergeLocal){
-  const budgetMap=new Map(budgetRows().map(r=>[budgetKey(r),r]));nextBudget.forEach(r=>budgetMap.set(budgetKey(r),r));nextBudget=[...budgetMap.values()];
-  const expenseMap=new Map(expenseRows().map(r=>[expenseKey(r),r]));nextExpenses.forEach(r=>expenseMap.set(expenseKey(r),r));nextExpenses=[...expenseMap.values()];
-  const incomeMap=new Map(incomeRows().map(r=>[incomeKey(r),r]));nextIncome.forEach(r=>incomeMap.set(incomeKey(r),r));nextIncome=[...incomeMap.values()];
+  const merged=BudgetSync.merge(cloudBaseline(),savedFinancialSnapshot(),imported);
+  nextBudget=merged.budgetRows;nextExpenses=merged.expenses;nextIncome=merged.incomeRows;
  }
+ rememberCloudBaseline(imported);
  budget=nextBudget.length?groupBudgetRows(nextBudget):freshBudget();expenses=nextExpenses;income=nextIncome.length?groupIncomeRows(nextIncome):freshIncome();localStorage.setItem("budgetSetup",JSON.stringify(budget));localStorage.setItem("expenses",JSON.stringify(expenses));localStorage.setItem("incomeSetup",JSON.stringify(income));await persistOffline(false);renderBudget();renderIncome();refreshFinancialViews();
 }
 function budgetKey(r){return [r.category,r.item,r.month,r.year].map(v=>String(v).trim().toLowerCase()).join("|")}
@@ -1266,7 +1304,7 @@ function analyticsChartSvg(labels,budgetVals,expenseVals,incomeVals=[]){
  const W=760,H=320,p={l:58,r:18,t:38,b:66},plotW=W-p.l-p.r,plotH=H-p.t-p.b,max=Math.max(1,...budgetVals,...expenseVals,...incomeVals)*1.15,step=plotW/Math.max(labels.length,1),barW=Math.max(4,Math.min(18,step*.2)),gap=Math.max(2,Math.min(5,step*.06)),y=v=>p.t+plotH*(1-v/max);
  let grid="";for(let i=0;i<=4;i++){const value=max*i/4,yy=y(value);grid+=`<line x1="${p.l}" y1="${yy}" x2="${W-p.r}" y2="${yy}" stroke="#E5EAE5"/><text x="${p.l-8}" y="${yy+4}" text-anchor="end" fill="#747C75" font-size="10">${Math.round(value).toLocaleString()}</text>`}
  let bars="",ticks="";labels.forEach((label,i)=>{const center=p.l+step*i+step/2,bY=y(budgetVals[i]),eY=y(expenseVals[i]),iY=y(incomeVals[i]||0),base=H-p.b,over=expenseVals[i]>budgetVals[i]&&expenseVals[i]>0;bars+=`<rect x="${center-barW*1.5-gap}" y="${bY}" width="${barW}" height="${Math.max(0,base-bY)}" rx="5" fill="${over?'#C98284':'#86A994'}"/><rect x="${center-barW/2}" y="${eY}" width="${barW}" height="${Math.max(0,base-eY)}" rx="5" fill="${over?'#B3262D':'#E2A0A2'}"/><rect x="${center+barW/2+gap}" y="${iY}" width="${barW}" height="${Math.max(0,base-iY)}" rx="5" fill="#A98BB5"/>`;if(over)bars+=`<text x="${center}" y="${eY-7}" text-anchor="middle" fill="#B3262D" font-size="14" font-weight="bold">!</text>`;const safe=esc(String(label).slice(0,14));ticks+=labels.length>8?`<text x="${center}" y="${base+18}" transform="rotate(-42 ${center} ${base+18})" text-anchor="end" fill="#687169" font-size="9">${safe}</text>`:`<text x="${center}" y="${base+18}" text-anchor="middle" fill="#687169" font-size="10">${safe}</text>`});
- return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Budget, expenses, and net income chart" xmlns="http://www.w3.org/2000/svg"><rect width="${W}" height="${H}" rx="14" fill="#FFFDFB"/>${grid}${bars}${ticks}<text x="58" y="22" fill="#B3262D" font-size="11">! Expenses exceed budget</text><circle cx="${W-285}" cy="18" r="5" fill="#86A994"/><text x="${W-274}" y="22" fill="#4F574F" font-size="11">Budget</text><circle cx="${W-196}" cy="18" r="5" fill="#E2A0A2"/><text x="${W-185}" y="22" fill="#4F574F" font-size="11">Expenses</text><circle cx="${W-88}" cy="18" r="5" fill="#A98BB5"/><text x="${W-77}" y="22" fill="#4F574F" font-size="11">Net Income</text></svg>`;
+ return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Budget, expenses, and net income chart" xmlns="http://www.w3.org/2000/svg"><rect width="${W}" height="${H}" rx="14" fill="#FFFDFB"/>${grid}${bars}${ticks}<text x="58" y="22" fill="#B3262D" font-size="11">${esc(budgetCurrency.code)} · ! Expenses exceed budget</text><circle cx="${W-285}" cy="18" r="5" fill="#86A994"/><text x="${W-274}" y="22" fill="#4F574F" font-size="11">Budget</text><circle cx="${W-196}" cy="18" r="5" fill="#E2A0A2"/><text x="${W-185}" y="22" fill="#4F574F" font-size="11">Expenses</text><circle cx="${W-88}" cy="18" r="5" fill="#A98BB5"/><text x="${W-77}" y="22" fill="#4F574F" font-size="11">Net Income</text></svg>`;
 }
 function downloadAnalyticsPdf(option){
  const parts=option==="both"?[analyticsPrintSection("month"),analyticsPrintSection("category")]:[analyticsPrintSection(option)];const w=window.open("","_blank");if(!w)return showError("The print window was blocked. Allow pop-ups for Budget Planner, then try again.");w.document.write(`<!doctype html><title>Budget Planner Analytics</title><style>body{font:14px 'Arial Unicode MS',Arial,sans-serif;color:#30352f;margin:32px}h1,h2{font-family:'Segoe UI',Arial,sans-serif;color:#60665a}section{page-break-after:always}.report-chart{margin:16px 0;padding:8px;border:1px solid #e0e5e0;border-radius:12px;page-break-inside:avoid}.report-chart svg{display:block;width:100%;height:auto}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #d9ded9;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#96aca0;color:white}.summary{padding:14px;background:#f3f6f3;border-radius:8px}@media print{button{display:none}section:last-of-type{page-break-after:auto}}</style><h1>Budget Planner Analytics</h1>${parts.join("")}<button onclick="print()">Print / Save Analytics as PDF</button>`);w.document.close();setTimeout(()=>w.print(),300);notify("Analytics report with graph opened. Choose Print or Save as PDF.")
@@ -1289,6 +1327,8 @@ function initCurrency(){
  select.innerHTML=budgetCurrency.codes.map(code=>`<option value="${code}">${code} — ${esc(names?names.of(code):code)}</option>`).join('');select.value=budgetCurrency.code;
  const button=document.getElementById('currencyToggle');button.textContent=new Intl.NumberFormat(navigator.language,{style:'currency',currency:budgetCurrency.code,currencyDisplay:'narrowSymbol'}).formatToParts(0).find(p=>p.type==='currency').value;button.setAttribute('aria-label',`Change currency (${budgetCurrency.code})`);button.title=budgetCurrency.code;
  document.getElementById('entryAmount').placeholder=money(0);
+ document.getElementById('entryAmountLabel').textContent=`Amount (${budgetCurrency.code})`;
+ document.querySelectorAll('.data-currency').forEach(el=>el.textContent=`Amounts in ${budgetCurrency.code}`);
 }
 function changeCurrency(code){
  if(code===budgetCurrency.code)return;
@@ -1342,7 +1382,7 @@ function drawComboChart(labels,budgetVals,expenseVals,incomeVals=[],canvasId="an
  const barW=Math.max(5,Math.min(17,step*.2)),gap=Math.max(2,Math.min(5,step*.06));
  budgetVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy),over=expenseVals[i]>v&&expenseVals[i]>0;rounded(center-barW*1.5-gap,yy,barW,h,6,over?"#C98284":"#86A994")});
  expenseVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy),over=v>budgetVals[i];rounded(center-barW/2,yy,barW,h,6,over?"#B3262D":"#E2A0A2");if(over){ctx.fillStyle="#B3262D";ctx.font="bold 14px Arial";ctx.textAlign="center";ctx.fillText("!",center,Math.max(14,yy-5));ctx.textAlign="left"}});
- let note=canvas.parentElement.nextElementSibling;if(!note||!note.classList.contains('over-budget-note')){note=document.createElement('p');note.className='over-budget-note';canvas.parentElement.after(note)}const overLabels=labels.filter((_,i)=>expenseVals[i]>budgetVals[i]);note.textContent=overLabels.length?'! Expenses exceed budget: '+overLabels.join(', '):'Expenses are within budget for the displayed groups.';
+ let note=canvas.parentElement.nextElementSibling;if(!note||!note.classList.contains('over-budget-note')){note=document.createElement('p');note.className='over-budget-note';canvas.parentElement.after(note)}const overLabels=labels.filter((_,i)=>expenseVals[i]>budgetVals[i]);note.textContent='Amounts in '+budgetCurrency.code+'. '+(overLabels.length?'! Expenses exceed budget: '+overLabels.join(', '):'Expenses are within budget for the displayed groups.');canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Budget, expenses and net income in '+budgetCurrency.code+'. '+labels.map((x,i)=>x+': budget '+money(budgetVals[i])+', expenses '+money(expenseVals[i])+', net income '+money(incomeVals[i]||0)).join('; '));
  incomeVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy);rounded(center+barW/2+gap,yy,barW,h,6,"#A98BB5")});
  ctx.fillStyle="#6E756E";ctx.font="10px Arial Unicode MS, Arial";ctx.textAlign="center";labels.forEach((lab,i)=>{const x=pad.l+step*i+step/2;ctx.save();ctx.translate(x,H-pad.b+15);if(labels.length>8){ctx.rotate(-Math.PI/4);ctx.textAlign="right"}ctx.fillText(String(lab).slice(0,13),0,0);ctx.restore()});ctx.textAlign="left";
 }
@@ -1388,7 +1428,7 @@ function setDefaultLandingPage(){
 }
 
 async function startApp(){
- showLoginPage();await restoreOffline();initMonthSelectors();initCurrency();renderBudget();updateActionButtons();updateDailyMessage();refreshHomeSummary();
+ showLoginPage();await restoreOffline();initMonthSelectors();initCurrency();renderBudget();renderIncome();updateActionButtons();updateDailyMessage();refreshFinancialViews();
  if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("service-worker.js").catch(()=>notify("Installable offline mode is unavailable in this browser.","error"));
  let mode=localStorage.getItem(LOGIN_MODE_KEY)||"";if(!mode&&localStorage.getItem("budgetPlannerOfflineMode")==="1")mode="offline";if(!mode&&sessionStorage.getItem("cloudProvider")==="google")mode="google";
  if(mode==="offline"){localStorage.setItem(LOGIN_MODE_KEY,"offline");enterMainApp();setSyncStatus("Saved offline","ok");return}
