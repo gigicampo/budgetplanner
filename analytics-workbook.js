@@ -6,9 +6,9 @@ async function createAnalyticsWorkbook(budgetRows, expenseRows, incomeRows, sett
  if(Math.max(budgetRows.length,expenseRows.length,incomeData.length)>1000||categories.length>30)throw new Error('The Analytics workbook supports 1,000 rows per data sheet and 30 categories. Export fewer records or extend the workbook template.');
  const response=await fetch('analytics-template.xlsx');if(!response.ok)throw new Error('The Analytics workbook template could not be loaded. Reopen the app online once.');
  const zip=await JSZip.loadAsync(await response.arrayBuffer()),ns='http://schemas.openxmlformats.org/spreadsheetml/2006/main';
- const xml=text=>new DOMParser().parseFromString(text,'application/xml'),serialize=doc=>new XMLSerializer().serializeToString(doc);
- const wb=xml(await zip.file('xl/workbook.xml').async('string')),rels=xml(await zip.file('xl/_rels/workbook.xml.rels').async('string')),paths={};
- for(const sheet of wb.getElementsByTagNameNS('*','sheet')){const id=sheet.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id');const rel=[...rels.getElementsByTagNameNS('*','Relationship')].find(r=>r.getAttribute('Id')===id);const t=rel.getAttribute('Target');paths[sheet.getAttribute('name')]=t.startsWith('/')?t.slice(1):'xl/'+t;}
+ const xml=parseBudgetWorkbookXml,serialize=doc=>new XMLSerializer().serializeToString(doc);
+ const read=async path=>{const entry=zip.file(path);if(!entry)throw new Error('The Analytics template is incomplete ('+path+'). Please update all app files and reopen the app online.');return entry.async('string')};
+ const wb=xml(await read('xl/workbook.xml')),rels=xml(await read('xl/_rels/workbook.xml.rels')),paths=resolveBudgetWorksheetPaths(wb,rels,zip);
  let calc=wb.getElementsByTagNameNS('*','calcPr')[0];if(!calc){calc=wb.createElementNS(ns,'calcPr');wb.documentElement.appendChild(calc)}calc.setAttribute('calcMode','auto');calc.setAttribute('fullCalcOnLoad','1');calc.setAttribute('forceFullCalc','1');zip.file('xl/workbook.xml',serialize(wb));
  const cellMaps=new WeakMap();
  function cell(doc,ref){let map=cellMaps.get(doc);if(!map){map=new Map([...doc.getElementsByTagNameNS('*','c')].map(c=>[c.getAttribute('r'),c]));cellMaps.set(doc,map)}let c=map.get(ref);if(!c){const n=ref.match(/\d+/)[0];let row=[...doc.getElementsByTagNameNS('*','row')].find(x=>x.getAttribute('r')===n);if(!row){row=doc.createElementNS(ns,'row');row.setAttribute('r',n);doc.getElementsByTagNameNS('*','sheetData')[0].appendChild(row)}c=doc.createElementNS(ns,'c');c.setAttribute('r',ref);row.appendChild(c);map.set(ref,c)}return c}
@@ -33,4 +33,24 @@ async function createAnalyticsWorkbook(budgetRows, expenseRows, incomeRows, sett
    for(let j=0;j<30;j++){const pt=doc.createElementNS(cn,'c:pt'),v=doc.createElementNS(cn,'c:v');pt.setAttribute('idx',j);v.textContent=String(chartRows[j]?.[col]??(isText?'':0));pt.appendChild(v);cache.appendChild(pt)}ref.appendChild(cache);
   }zip.file(path,serialize(doc));}
  return zip.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',compression:'DEFLATE'});
+}
+
+function parseBudgetWorkbookXml(text){
+ // ZIP XML parts can contain a UTF-8 BOM. Strip it before DOMParser sees the declaration.
+ const doc=new DOMParser().parseFromString(String(text).replace(/^\uFEFF/,'').trimStart(),'application/xml');
+ if(doc.getElementsByTagNameNS('*','parsererror').length)throw new Error('The workbook contains invalid XML. No financial records were changed. Please use a valid Budget File or reinstall the complete app package.');
+ return doc;
+}
+function resolveBudgetWorksheetPaths(workbook,relationships,zip){
+ const paths={},rels=[...relationships.getElementsByTagNameNS('*','Relationship')];
+ for(const sheet of workbook.getElementsByTagNameNS('*','sheet')){
+  const name=sheet.getAttribute('name'),id=sheet.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id')||sheet.getAttribute('r:id')||[...sheet.attributes].find(a=>a.localName==='id')?.value;
+  const relationship=rels.find(r=>r.getAttribute('Id')===id),target=relationship?.getAttribute('Target');
+  if(!id||!target||relationship.getAttribute('TargetMode')==='External')throw new Error('The Analytics template has a missing worksheet link for '+(name||'an unnamed sheet')+'. Please update the complete app package; your saved records are unchanged.');
+  const path=target.startsWith('/')?target.slice(1):target.startsWith('xl/')?target:'xl/'+target.replace(/^\.\//,'');
+  if(!zip.file(path))throw new Error('The Analytics template is missing the '+name+' worksheet. Please update the complete app package.');
+  paths[name]=path;
+ }
+ for(const name of ['Analytics','MyBudget','MyExpenses','My Income','Start Here'])if(!paths[name])throw new Error('The Analytics template is missing the '+name+' worksheet. Please update the complete app package.');
+ return paths;
 }
