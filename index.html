@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<meta name="theme-color" content="#F7F5F1"/>
-<meta name="google-client-id" content="544803549549-94pkuarje378i7fs1u70g9frt7qrbd7n.apps.googleusercontent.com"/>
+<meta name="theme-color" content="#FFF8E7"/>
+<meta name="google-client-id" content=""/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
 <link rel="apple-touch-icon" href="Budget-Planner-App-Icon-192.png"/>
@@ -12,18 +12,14 @@
 <style>
 :root{
  --blush:#F9C8C2; --rose:#C69491; --sage:#96ACA0;
- --blue:#7D9094; --olive:#60665A; --ivory:#F7F5F1;
+ --blue:#7D9094; --olive:#60665A; --ivory:#FFF8E7;
  --white:#FFFFFF; --ink:#4F554D; --muted:#7B827B; --line:#DDE2DD;
  --shadow:0 14px 35px rgba(96,102,90,.10);
 }
 *{box-sizing:border-box}
 body{
  margin:0;color:var(--ink);
- background:
-   radial-gradient(circle at 8% 12%,rgba(249,200,194,.45),transparent 20%),
-   radial-gradient(circle at 92% 22%,rgba(150,172,160,.30),transparent 23%),
-   radial-gradient(circle at 15% 82%,rgba(198,148,145,.16),transparent 18%),
-   var(--ivory);
+ background:var(--ivory);
  font-family:"Arial Unicode MS",Arial,sans-serif;
  font-size:clamp(14px,13px + .28vw,16px);
 }
@@ -42,7 +38,7 @@ p{color:var(--muted);line-height:1.5}
 .mainbtn span{font-size:21px;margin-right:9px}
 
 /* Main page — warm editorial dashboard inspired by the supplied reference. */
-#home.active{max-width:430px;min-height:calc(100vh - 122px);margin:0 auto;padding:8px 12px 18px;border-radius:28px;background-image:linear-gradient(rgba(255,255,255,.18),rgba(255,255,255,.18)),url('ff1277350113b895c3e20ad27f01a362.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
+#home.active{max-width:430px;min-height:calc(100vh - 122px);margin:0 auto;padding:8px 12px 18px;border-radius:28px;background:var(--ivory)}
 .home-masthead{position:relative;padding:20px 10px 8px}
 .home-logout{position:absolute;top:17px;right:8px;min-width:44px;min-height:44px;padding:0 13px;border:1px solid rgba(96,102,90,.2);border-radius:14px;background:rgba(255,253,249,.82);color:var(--olive);font:800 13px "Arial Unicode MS",Arial,sans-serif;box-shadow:0 5px 14px rgba(96,102,90,.07);cursor:pointer}
 .home-title{font-size:35px;line-height:1.08;font-weight:400;letter-spacing:.005em;color:#202521}
@@ -207,7 +203,7 @@ td[contenteditable="true"]{background:#FFF9F7;outline:1px dashed var(--rose)}
 .itemrow:before{content:"Item";display:none}
 
 @media(min-width:760px){
- body{background:linear-gradient(135deg,#F8F6F2 0%,#FBF1EF 52%,#EEF3EF 100%)}
+ body{background:var(--ivory)}
  .screen.active{animation:screenIn .22s ease-out}
  #home.active{max-width:960px;margin:2vh auto 0}
  #home .home-masthead{padding-left:20px;padding-right:20px}
