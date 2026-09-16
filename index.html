@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#F7F5F1"/>
-<meta name="google-client-id" content="544803549549-94pkuarje378i7fs1u70g9frt7qrbd7n.apps.googleusercontent.com"/>
+<meta name="google-client-id" content=""/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="icon" href="Budget-Planner-App-Icon.svg" type="image/svg+xml"/>
 <link rel="apple-touch-icon" href="Budget-Planner-App-Icon-192.png"/>
@@ -312,11 +312,18 @@ body:has(#home.active) .app{padding-bottom:0}
 .toolbar{bottom:calc(74px + env(safe-area-inset-bottom))}
 .toast-stack{bottom:calc(166px + env(safe-area-inset-bottom))}
 @media(max-width:759px) and (max-height:740px){#home .home-greeting{font-size:28px}#home .home-quote{font-size:17px}#home .home-welcome{margin:8px 0}#home .home-nav{gap:8px}#home .home-nav-copy small{display:none}}
+.currency-menu{position:relative;grid-column:2;grid-row:1 / span 2;align-self:start}
+.currency-toggle{width:48px;height:48px;border-radius:50%;border:1px solid #CCD3CC;background:#FFFDF9;color:var(--olive);font-size:21px;cursor:pointer}
+.currency-menu .currency-setting{position:absolute;right:0;top:48px;z-index:45;width:min(280px,75vw);padding:12px;background:#FFFDF9;border:1px solid #CCD3CC;border-radius:16px;box-shadow:var(--shadow);flex-direction:column;align-items:stretch}
+.currency-setting[hidden]{display:none}.currency-setting small{font-size:12px;line-height:1.4}
+.sync-bar .logout-button{position:static;min-height:44px;border:0;border-radius:10px;background:#F7E9E7;color:var(--olive);padding:6px 10px;font:inherit;flex-shrink:0}
+.home-file-link svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+.over-budget-note{font-size:14px;color:#A33F45;margin:8px 0}
 </style>
 </head>
 <body>
 <div class="app">
-<div id="syncBar" class="sync-bar" hidden><span><span id="syncDot" class="sync-dot"></span><span id="syncText">Offline copy ready</span></span><button class="sync-action" onclick="openCloudSetup()">Cloud storage</button></div>
+<div id="syncBar" class="sync-bar" hidden><span><span id="syncDot" class="sync-dot"></span><span id="syncText">Offline copy ready</span></span><button class="sync-action" onclick="openCloudSetup()">Cloud storage</button><button class="logout-button" type="button" onclick="logoutApp()">Log out</button></div>
 
 <section id="login" class="screen active" aria-label="Budget Planner login">
   <div class="login-card">
@@ -333,7 +340,7 @@ body:has(#home.active) .app{padding-bottom:0}
   <header class="home-masthead">
     <div class="home-title">BUDGET PLANNER</div>
     <div class="home-tagline">Spend Intentionally. Live Freely.</div>
-    <button class="home-logout" type="button" onclick="logoutApp()" aria-label="Log out of Budget Planner">Log out</button>
+    <div class="currency-menu"><button id="currencyToggle" class="currency-toggle" type="button" aria-label="Change currency" aria-expanded="false" aria-controls="currencyPanel" onclick="toggleCurrencyPanel()">₱</button><div id="currencyPanel" class="currency-setting" hidden><label for="currencySelect">Currency</label><select id="currencySelect" onchange="changeCurrency(this.value)"></select><small>Changes currency labels only. Amounts are not converted.</small></div></div>
   </header>
 
   <div class="home-welcome">
@@ -352,10 +359,9 @@ body:has(#home.active) .app{padding-bottom:0}
     <button class="home-nav-card analytics" onclick="nav('analytics')" aria-label="Open Analytics"><span class="home-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7M3 20h18"/></svg></span><span class="home-nav-copy"><strong>Analytics</strong><small>Track your budget and spending performance.</small></span><span class="home-chevron" aria-hidden="true">›</span></button>
     <button class="home-nav-card setup" onclick="nav('setup')" aria-label="Open Budget Setup"><span class="home-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h18v13H3zM5 7V4h9l2 3M15 12h6v5h-6a2.5 2.5 0 0 1 0-5Z"/><circle cx="16" cy="14.5" r=".7" fill="currentColor" stroke="none"/></svg></span><span class="home-nav-copy"><strong>Budget Setup</strong><small>Manage monthly budgets and categories.</small></span><span class="home-chevron" aria-hidden="true">›</span></button>
   </div>
-  <div class="currency-setting"><label for="currencySelect">Currency</label><select id="currencySelect" onchange="changeCurrency(this.value)" title="Default estimated from device region. Changes labels, not exchange rates."></select></div>
   <div class="home-file-actions">
-    <button class="guide-link" type="button" onclick="openUserGuide()">? Open User Guide</button>
-    <a id="homeWorkbookLink" class="home-file-link" href="#" onclick="return openLocalWorkbook(event)" aria-label="Download the latest Budget File Excel workbook">▦ Budget File.xlsx</a>
+    <button class="guide-link" type="button" onclick="openUserGuide()">User Guide</button>
+    <a id="homeWorkbookLink" class="home-file-link" href="#" onclick="return openLocalWorkbook(event)" aria-label="Export Budget File with Analytics"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h9l5 5v13H5zM14 3v6h5M12 11v7m-3-3 3 3 3-3"/></svg>Export Budget File</a>
     <button class="home-file-link secondary" type="button" onclick="chooseImportFile()" aria-label="Import a Budget File Excel workbook">⇧ Import Budget File</button>
   </div>
 
@@ -617,6 +623,7 @@ body:has(#home.active) .app{padding-bottom:0}
 
 <script src="currency.js"></script>
 <script src="jszip.min.js"></script>
+<script src="analytics-workbook.js"></script>
 <script>
 const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DEFAULTS=["Basic Necessities","Bills","School","Events","Goals"];
@@ -1171,6 +1178,9 @@ function workbookTables(sourceBudget=budgetRows(),sourceExpenses=expenseRows(),s
  return {budget:[["Frequency Interval","Category","Item","Month","Year","Budget Amount"],...sourceBudget.map(r=>[r.frequency,r.category,r.item,r.month,Number(r.year),Number(r.amount)])],expenses:[["Date","Year","PaidFor","Item","Category","Amount"],...sourceExpenses.map(r=>[r.date,Number(r.year),r.paidFor,r.item,r.category,Number(r.amount)])],income,incomeMerges};
 }
 async function workbookBlob(sourceBudget=budgetRows(),sourceExpenses=expenseRows(),sourceIncome=incomeRows()){
+ return createAnalyticsWorkbook(sourceBudget,sourceExpenses,sourceIncome,{name:userName(),currency:budgetCurrency.code,year:Number(document.getElementById('analyticsYear').value)||CURRENT_YEAR,month:document.getElementById('analyticsMonth').value,view:analyticsMode==='category'?'By Category':'By Month',greeting:document.getElementById('homeGreeting').textContent.replace('☼','').trim(),quote:document.getElementById('homeQuote').textContent});
+}
+async function legacyWorkbookBlob(sourceBudget=budgetRows(),sourceExpenses=expenseRows(),sourceIncome=incomeRows()){
  if(typeof JSZip==="undefined")throw new Error("The Excel component did not load. Reopen the app and try again.");
  const zip=new JSZip(),tables=workbookTables(sourceBudget,sourceExpenses,sourceIncome),created=new Date().toISOString();
  zip.file("[Content_Types].xml",`<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet3.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>`);
@@ -1194,7 +1204,7 @@ async function parseXlsxWorkbook(file){
  const sheets={};for(const sheet of workbook.getElementsByTagNameNS("*","sheet")){
   const name=sheet.getAttribute("name"),id=sheet.getAttributeNS("http://schemas.openxmlformats.org/officeDocument/2006/relationships","id")||sheet.getAttribute("r:id"),target=targets[id];if(!target)continue;
   const path=target.startsWith("/")?target.slice(1):(target.startsWith("xl/")?target:"xl/"+target.replace(/^\.\//,"")),doc=xml(await read(path));
-  sheets[name]=[...doc.getElementsByTagNameNS("*","row")].map(row=>{const values=[];[...row.getElementsByTagNameNS("*","c")].forEach(c=>{const index=cellColumn(c.getAttribute("r")),type=c.getAttribute("t"),v=c.getElementsByTagNameNS("*","v")[0]?.textContent||"";let value=v;if(type==="s")value=shared[Number(v)]??"";else if(type==="inlineStr")value=[...c.getElementsByTagNameNS("*","t")].map(t=>t.textContent||"").join("");else if(type==="b")value=v==="1";else if(v!==""&&Number.isFinite(Number(v)))value=Number(v);values[index]=value});return values});
+  sheets[name]=[...doc.getElementsByTagNameNS("*","row")].map(row=>{const values=[];[...row.getElementsByTagNameNS("*","c")].forEach(c=>{const index=cellColumn(c.getAttribute("r")),type=c.getAttribute("t"),v=c.getElementsByTagNameNS("*","v")[0]?.textContent||"";let value=v;if(type==="s")value=shared[Number(v)]??"";else if(type==="inlineStr")value=[...c.getElementsByTagNameNS("*","t")].map(t=>t.textContent||"").join("");else if(type==="b")value=v==="1";else if(v!==""&&Number.isFinite(Number(v)))value=Number(v);values[index]=value});while(values.length && (values[values.length-1]==="" || values[values.length-1]==null))values.pop();return values});
  }
  return normalizeWorkbookTables(sheets.MyBudget,sheets.MyExpenses,sheets["My Income"]);
 }
@@ -1255,8 +1265,8 @@ function analyticsPrintSection(mode){
 function analyticsChartSvg(labels,budgetVals,expenseVals,incomeVals=[]){
  const W=760,H=320,p={l:58,r:18,t:38,b:66},plotW=W-p.l-p.r,plotH=H-p.t-p.b,max=Math.max(1,...budgetVals,...expenseVals,...incomeVals)*1.15,step=plotW/Math.max(labels.length,1),barW=Math.max(4,Math.min(18,step*.2)),gap=Math.max(2,Math.min(5,step*.06)),y=v=>p.t+plotH*(1-v/max);
  let grid="";for(let i=0;i<=4;i++){const value=max*i/4,yy=y(value);grid+=`<line x1="${p.l}" y1="${yy}" x2="${W-p.r}" y2="${yy}" stroke="#E5EAE5"/><text x="${p.l-8}" y="${yy+4}" text-anchor="end" fill="#747C75" font-size="10">${Math.round(value).toLocaleString()}</text>`}
- let bars="",ticks="";labels.forEach((label,i)=>{const center=p.l+step*i+step/2,bY=y(budgetVals[i]),eY=y(expenseVals[i]),iY=y(incomeVals[i]||0),base=H-p.b,over=expenseVals[i]>budgetVals[i]&&expenseVals[i]>0;bars+=`<rect x="${center-barW*1.5-gap}" y="${bY}" width="${barW}" height="${Math.max(0,base-bY)}" rx="5" fill="${over?'#C98284':'#86A994'}"/><rect x="${center-barW/2}" y="${eY}" width="${barW}" height="${Math.max(0,base-eY)}" rx="5" fill="#E2A0A2"/><rect x="${center+barW/2+gap}" y="${iY}" width="${barW}" height="${Math.max(0,base-iY)}" rx="5" fill="#A98BB5"/>`;const safe=esc(String(label).slice(0,14));ticks+=labels.length>8?`<text x="${center}" y="${base+18}" transform="rotate(-42 ${center} ${base+18})" text-anchor="end" fill="#687169" font-size="9">${safe}</text>`:`<text x="${center}" y="${base+18}" text-anchor="middle" fill="#687169" font-size="10">${safe}</text>`});
- return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Budget, expenses, and net income chart" xmlns="http://www.w3.org/2000/svg"><rect width="${W}" height="${H}" rx="14" fill="#FFFDFB"/>${grid}${bars}${ticks}<circle cx="${W-285}" cy="18" r="5" fill="#86A994"/><text x="${W-274}" y="22" fill="#4F574F" font-size="11">Budget</text><circle cx="${W-196}" cy="18" r="5" fill="#E2A0A2"/><text x="${W-185}" y="22" fill="#4F574F" font-size="11">Expenses</text><circle cx="${W-88}" cy="18" r="5" fill="#A98BB5"/><text x="${W-77}" y="22" fill="#4F574F" font-size="11">Net Income</text></svg>`;
+ let bars="",ticks="";labels.forEach((label,i)=>{const center=p.l+step*i+step/2,bY=y(budgetVals[i]),eY=y(expenseVals[i]),iY=y(incomeVals[i]||0),base=H-p.b,over=expenseVals[i]>budgetVals[i]&&expenseVals[i]>0;bars+=`<rect x="${center-barW*1.5-gap}" y="${bY}" width="${barW}" height="${Math.max(0,base-bY)}" rx="5" fill="${over?'#C98284':'#86A994'}"/><rect x="${center-barW/2}" y="${eY}" width="${barW}" height="${Math.max(0,base-eY)}" rx="5" fill="${over?'#B3262D':'#E2A0A2'}"/><rect x="${center+barW/2+gap}" y="${iY}" width="${barW}" height="${Math.max(0,base-iY)}" rx="5" fill="#A98BB5"/>`;if(over)bars+=`<text x="${center}" y="${eY-7}" text-anchor="middle" fill="#B3262D" font-size="14" font-weight="bold">!</text>`;const safe=esc(String(label).slice(0,14));ticks+=labels.length>8?`<text x="${center}" y="${base+18}" transform="rotate(-42 ${center} ${base+18})" text-anchor="end" fill="#687169" font-size="9">${safe}</text>`:`<text x="${center}" y="${base+18}" text-anchor="middle" fill="#687169" font-size="10">${safe}</text>`});
+ return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Budget, expenses, and net income chart" xmlns="http://www.w3.org/2000/svg"><rect width="${W}" height="${H}" rx="14" fill="#FFFDFB"/>${grid}${bars}${ticks}<text x="58" y="22" fill="#B3262D" font-size="11">! Expenses exceed budget</text><circle cx="${W-285}" cy="18" r="5" fill="#86A994"/><text x="${W-274}" y="22" fill="#4F574F" font-size="11">Budget</text><circle cx="${W-196}" cy="18" r="5" fill="#E2A0A2"/><text x="${W-185}" y="22" fill="#4F574F" font-size="11">Expenses</text><circle cx="${W-88}" cy="18" r="5" fill="#A98BB5"/><text x="${W-77}" y="22" fill="#4F574F" font-size="11">Net Income</text></svg>`;
 }
 function downloadAnalyticsPdf(option){
  const parts=option==="both"?[analyticsPrintSection("month"),analyticsPrintSection("category")]:[analyticsPrintSection(option)];const w=window.open("","_blank");if(!w)return showError("The print window was blocked. Allow pop-ups for Budget Planner, then try again.");w.document.write(`<!doctype html><title>Budget Planner Analytics</title><style>body{font:14px 'Arial Unicode MS',Arial,sans-serif;color:#30352f;margin:32px}h1,h2{font-family:'Segoe UI',Arial,sans-serif;color:#60665a}section{page-break-after:always}.report-chart{margin:16px 0;padding:8px;border:1px solid #e0e5e0;border-radius:12px;page-break-inside:avoid}.report-chart svg{display:block;width:100%;height:auto}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{border:1px solid #d9ded9;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#96aca0;color:white}.summary{padding:14px;background:#f3f6f3;border-radius:8px}@media print{button{display:none}section:last-of-type{page-break-after:auto}}</style><h1>Budget Planner Analytics</h1>${parts.join("")}<button onclick="print()">Print / Save Analytics as PDF</button>`);w.document.close();setTimeout(()=>w.print(),300);notify("Analytics report with graph opened. Choose Print or Save as PDF.")
@@ -1271,15 +1281,19 @@ function setAnalyticsMode(mode){
 }
 function money(n){return budgetCurrency.format(n)}
 function homeMoney(n){return money(n)}
+function toggleCurrencyPanel(force){const panel=document.getElementById('currencyPanel');panel.hidden=typeof force==='boolean'?!force:!panel.hidden;document.getElementById('currencyToggle').setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden)document.getElementById('currencySelect').focus()}
+document.addEventListener('keydown',event=>{if(event.key==='Escape')toggleCurrencyPanel(false)});
+document.addEventListener('click',event=>{if(!event.target.closest('.currency-menu'))toggleCurrencyPanel(false)});
 function initCurrency(){
  const select=document.getElementById('currencySelect');let names;try{names=new Intl.DisplayNames([navigator.language||'en'],{type:'currency'})}catch{}
  select.innerHTML=budgetCurrency.codes.map(code=>`<option value="${code}">${code} — ${esc(names?names.of(code):code)}</option>`).join('');select.value=budgetCurrency.code;
+ const button=document.getElementById('currencyToggle');button.textContent=new Intl.NumberFormat(navigator.language,{style:'currency',currency:budgetCurrency.code,currencyDisplay:'narrowSymbol'}).formatToParts(0).find(p=>p.type==='currency').value;button.setAttribute('aria-label',`Change currency (${budgetCurrency.code})`);button.title=budgetCurrency.code;
  document.getElementById('entryAmount').placeholder=money(0);
 }
 function changeCurrency(code){
  if(code===budgetCurrency.code)return;
  if(!confirm(`Display all amounts in ${code}? This changes the currency label only, not saved amounts or exchange rates.`)){document.getElementById('currencySelect').value=budgetCurrency.code;return}
- budgetCurrency.set(code);initCurrency();renderBudget();renderIncome();refreshFinancialViews();notify(`Currency changed to ${code}. Saved amounts are unchanged.`);
+ budgetCurrency.set(code);initCurrency();toggleCurrencyPanel(false);renderBudget();renderIncome();refreshFinancialViews();notify(`Currency changed to ${code}. Saved amounts are unchanged.`);
 }
 function refreshFinancialViews(){refreshHomeSummary();refreshAnalytics();updateActionButtons()}
 function fitAnalyticsKpiText(){document.querySelectorAll(".analytics-kpis .metric strong").forEach(el=>{el.style.fontSize="";let size=parseFloat(getComputedStyle(el).fontSize);while(el.scrollWidth>el.clientWidth&&size>8){size-=.5;el.style.fontSize=size+"px"}})}
@@ -1327,7 +1341,8 @@ function drawComboChart(labels,budgetVals,expenseVals,incomeVals=[],canvasId="an
  for(let i=0;i<=4;i++){const val=max*i/4,yy=y(val);ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();ctx.fillText(Math.round(val).toLocaleString(),3,yy+3)}
  const barW=Math.max(5,Math.min(17,step*.2)),gap=Math.max(2,Math.min(5,step*.06));
  budgetVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy),over=expenseVals[i]>v&&expenseVals[i]>0;rounded(center-barW*1.5-gap,yy,barW,h,6,over?"#C98284":"#86A994")});
- expenseVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy);rounded(center-barW/2,yy,barW,h,6,"#E2A0A2")});
+ expenseVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy),over=v>budgetVals[i];rounded(center-barW/2,yy,barW,h,6,over?"#B3262D":"#E2A0A2");if(over){ctx.fillStyle="#B3262D";ctx.font="bold 14px Arial";ctx.textAlign="center";ctx.fillText("!",center,Math.max(14,yy-5));ctx.textAlign="left"}});
+ let note=canvas.parentElement.nextElementSibling;if(!note||!note.classList.contains('over-budget-note')){note=document.createElement('p');note.className='over-budget-note';canvas.parentElement.after(note)}const overLabels=labels.filter((_,i)=>expenseVals[i]>budgetVals[i]);note.textContent=overLabels.length?'! Expenses exceed budget: '+overLabels.join(', '):'Expenses are within budget for the displayed groups.';
  incomeVals.forEach((v,i)=>{const center=pad.l+step*i+step/2,yy=y(v),h=Math.max(0,H-pad.b-yy);rounded(center+barW/2+gap,yy,barW,h,6,"#A98BB5")});
  ctx.fillStyle="#6E756E";ctx.font="10px Arial Unicode MS, Arial";ctx.textAlign="center";labels.forEach((lab,i)=>{const x=pad.l+step*i+step/2;ctx.save();ctx.translate(x,H-pad.b+15);if(labels.length>8){ctx.rotate(-Math.PI/4);ctx.textAlign="right"}ctx.fillText(String(lab).slice(0,13),0,0);ctx.restore()});ctx.textAlign="left";
 }
